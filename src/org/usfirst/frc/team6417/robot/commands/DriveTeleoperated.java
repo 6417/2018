@@ -13,7 +13,8 @@ public final class DriveTeleoperated extends Command {
 	
 	@Override
 	protected void execute() {
-		Robot.drive.setVelocity(OI.joystickOne.getX(), OI.joystickOne.getY());
+		Robot.drive.setVelocity(OI.getInstance().joystickOne.getX(), 
+								OI.getInstance().joystickOne.getY());
 	}
 	
 	@Override

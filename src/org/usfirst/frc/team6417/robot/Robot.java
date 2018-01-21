@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 		
 		autonomousBehavior = new AutonomousBehavior();
 		
-		oi = new OI();
+		oi = OI.getInstance();
 	}
 
 	/**
