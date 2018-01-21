@@ -14,7 +14,10 @@ public final class FieldInformationRepository {
 	private FieldInformationRepository() {;}
 	
 	public void setFieldInfo(String info) {
-		this.fieldInfo = info;		
+		if(info.trim().length() != 3) {
+			throw new IllegalArgumentException("Field information consists of 3 characters");
+		}
+		this.fieldInfo = info.trim();		
 	}
 	
 	public boolean isFirstSwitchLeft() {
