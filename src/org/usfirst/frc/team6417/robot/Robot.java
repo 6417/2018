@@ -3,25 +3,21 @@ package org.usfirst.frc.team6417.robot;
 
 
 
+import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
+import org.usfirst.frc.team6417.robot.subsystems.Pole;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
-
-	// Controllers
-	public static Joystick joystickOne;
-	public static Joystick joystickTwo;
-	public static JoystickButton shootJoystick, shootXBox, collectJoystick, collectXBox, reverseJoystick, reverseXBox;
-	public static OI oi;
-
 	// Subsystems
 	public static NavX navX;
-
-	// Commands
+	public static Gripper gripper;
+	public static Pole pole;
+	
+	// Controllers
+	public static OI oi;
 
 
 	/**
@@ -30,10 +26,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		joystickOne = new Joystick(RobotMap.CONTROLLER.RIGHT);
-		joystickTwo = new Joystick(RobotMap.CONTROLLER.LEFT);
-
 		navX = new NavX();
+		gripper = new Gripper();
+		pole = new Pole();
+		
 		oi = new OI();
 	}
 

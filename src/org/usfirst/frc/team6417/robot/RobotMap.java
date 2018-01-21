@@ -22,6 +22,9 @@ public class RobotMap {
 	 * In the RobotMap.MOTOR class the motor ports are
 	 */
 	public static class MOTOR {
+		public static final int GRIPPER_LEFT_PORT = 0;
+		public static final int GRIPPER_RIGHT_PORT = 1;
+		public static final int POLE_PORT = 2;
 	}
 
 	/**
@@ -30,6 +33,8 @@ public class RobotMap {
 	 */
 	public static class ENCODER {
 		public static final int PULSE_PER_ROTATION = 512;
+		public static final int POLE_UP_PORT_A = 0;
+		public static final int POLE_UP_PORT_B = 1;
 	}
 
 	/**
