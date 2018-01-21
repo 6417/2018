@@ -2,9 +2,13 @@ package org.usfirst.frc.team6417.robot.subsystems;
 
 import org.usfirst.frc.team6417.robot.Fridolin;
 import org.usfirst.frc.team6417.robot.RobotMap;
+import org.usfirst.frc.team6417.robot.commands.GripperStop;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+/**
+ * The Gripper is able to pull-in or push-out the physical boxes.
+ */
 public final class Gripper extends Subsystem {
 	private final double PUSH_VELOCITY = 0.15;
 	private final double PULL_VELOCITY = -0.15;
@@ -20,7 +24,7 @@ public final class Gripper extends Subsystem {
 	
 	@Override
 	protected void initDefaultCommand() {
-		stop();
+		setDefaultCommand(new GripperStop());
 	}
 	
 	public void push() {

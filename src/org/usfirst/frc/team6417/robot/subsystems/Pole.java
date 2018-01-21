@@ -3,11 +3,15 @@ package org.usfirst.frc.team6417.robot.subsystems;
 import org.usfirst.frc.team6417.robot.Fridolin;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
+import org.usfirst.frc.team6417.robot.commands.PoleResetAltitude;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * The Pole is able to move up and down the Gripper
+ */
 public final class Pole extends Subsystem {
 	private static final double UP_VELOCITY = 0.23;
 	private static final double DOWN_VELOCITY = -0.3;
@@ -45,7 +49,8 @@ public final class Pole extends Subsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		resetEncoders();
+		// TODO What should the pole do at initialisation?
+		setDefaultCommand(new PoleResetAltitude());
 	}
 
 	public boolean isOnSwitchAltitude() {

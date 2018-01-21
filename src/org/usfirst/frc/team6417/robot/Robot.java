@@ -3,11 +3,14 @@ package org.usfirst.frc.team6417.robot;
 
 
 
+import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
 import org.usfirst.frc.team6417.robot.subsystems.Pole;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
@@ -15,9 +18,12 @@ public class Robot extends IterativeRobot {
 	public static NavX navX;
 	public static Gripper gripper;
 	public static Pole pole;
+	public static Drive drive;
 	
 	// Controllers
 	public static OI oi;
+	
+	private Command autonomousBehavior;
 
 
 	/**
@@ -29,6 +35,9 @@ public class Robot extends IterativeRobot {
 		navX = new NavX();
 		gripper = new Gripper();
 		pole = new Pole();
+		drive = new Drive();
+		
+		autonomousBehavior = new AutonomousBehavior();
 		
 		oi = new OI();
 	}
@@ -61,6 +70,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+    	autonomousBehavior.start();
 	}
 
 	/**

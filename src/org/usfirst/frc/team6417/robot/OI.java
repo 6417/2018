@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {	
-	private final Joystick joystickOne;
+	public static final Joystick joystickOne = new Joystick(RobotMap.CONTROLLER.RIGHT);
 	private final JoystickButton gripperPullButton;
 	private final JoystickButton gripperPushButton;
 	
@@ -22,8 +22,6 @@ public class OI {
 	private JoystickButton poleElevateToSwitchAltitudeButton;
 
 	public OI() {
-		joystickOne = new Joystick(RobotMap.CONTROLLER.RIGHT);
-		
 		gripperPullButton = new JoystickButton(joystickOne, 11);
 		gripperPushButton = new JoystickButton(joystickOne, 12);
 		
@@ -37,5 +35,7 @@ public class OI {
 		gripperPushButton.whenReleased(new GripperStop());
 		poleElevateToSwitchAltitudeButton.whenPressed(new PoleToSwitchAltitude());	
 		poleElevateToGroundAltitudeButton.whenPressed(new PoleToGroundAltitude());
+		
 	}
+	
 }
