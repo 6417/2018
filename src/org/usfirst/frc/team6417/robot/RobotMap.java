@@ -25,8 +25,9 @@ public class RobotMap {
 		public static final int GRIPPER_LEFT_PORT = 0;
 		public static final int GRIPPER_RIGHT_PORT = 1;
 		public static final int POLE_PORT = 2;
-		public static final int DRIVE_LEFT_PORT = 3;
-		public static final int DRIVE_RIGHT_PORT = 4;
+		public static final int LOADING_PLATFORM_PORT = 3;
+		public static final int DRIVE_LEFT_PORT = 4;
+		public static final int DRIVE_RIGHT_PORT = 5;
 	}
 
 	/**
