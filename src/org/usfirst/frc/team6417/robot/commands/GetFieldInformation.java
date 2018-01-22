@@ -6,17 +6,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
 public final class GetFieldInformation extends Command {
+	private String gameData = "XXX";
 
 	@Override
 	protected void initialize() {
-		String gameData = DriverStation.getInstance().getGameSpecificMessage();
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+	}
+
+	@Override
+	protected void execute() {
 		FieldInformationRepository.getInstance().setFieldInfo(gameData);
-//		if(gameData.charAt(0) == 'L')
-//		{
-//			//Put left auto code here
-//		} else {
-//			//Put right auto code here
-//		}		
 	}
 	
 	@Override
