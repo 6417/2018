@@ -21,8 +21,8 @@ public final class Gripper extends Subsystem {
 		PUSH,
 		PULL
 	}
-	private final double PUSH_VELOCITY = 0.15;
-	private final double PULL_VELOCITY = -0.15;
+	private final double PUSH_VELOCITY = 0.95;
+	private final double PULL_VELOCITY = -0.95;
 	private final double STOP_VELOCITY = 0;
 	
 	private final Fridolin leftMotor;
@@ -43,7 +43,9 @@ public final class Gripper extends Subsystem {
 		stopped.addTransition(Event.PULL, pulling);
 		stopped.addTransition(Event.STOP, stopped);		
 		pushing.addTransition(Event.STOP, stopped);
-		pulling.addTransition(Event.STOP, stopped);		
+		pulling.addTransition(Event.STOP, stopped);	
+		
+		SmartDashboard.putString("Gripper initial state", currentState.getClass().getSimpleName());
 	}
 	
 	@Override
@@ -53,6 +55,7 @@ public final class Gripper extends Subsystem {
 	
 	public void onEvent(Event event) {
 		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());		
+		SmartDashboard.putString("Gripper event", event.name());		
 		currentState = currentState.transition(event);
 		currentState.init();
 		SmartDashboard.putString("Gripper state (current)", currentState.getClass().getSimpleName());		
@@ -79,8 +82,8 @@ public final class Gripper extends Subsystem {
 	}
 	
 	class SmoothStep extends InterpolationStrategy {
-		int stepCount = 100;
-		int currentStep = 0;
+		double stepCount = 50.0;
+		double currentStep = 0.0;
 
 		private final double startVelocity;
 		private final double endVelocity;
@@ -90,11 +93,17 @@ public final class Gripper extends Subsystem {
 			this.endVelocity = endVelocity; 
 		}
 		
+		SmoothStep(double startVelocity, double endVelocity, int steps){
+			this(startVelocity, endVelocity); 
+			this.stepCount = steps;
+		}
+		
 		@Override
 		public double nextX() {
 			double x = currentStep / stepCount;
 			x = smoothstep(x);
-			double velocity = (this.endVelocity * x) + (this.startVelocity * (1 - x));
+			double velocity = (this.endVelocity * x) + (this.startVelocity * (1.0 - x));
+			SmartDashboard.putNumber("Velocity", velocity);
 			if(currentStep < stepCount) {
 				currentStep++;
 			}
@@ -106,7 +115,7 @@ public final class Gripper extends Subsystem {
 		 * @return smoothened value
 		 */
 		private double smoothstep(double x) {
-			return ((x) * (x) * (3 - 2 * (x)));
+			return ((x) * (x) * (3.0 - 2.0 * (x)));
 		}
 		
 	}
@@ -141,7 +150,7 @@ public final class Gripper extends Subsystem {
 		
 		@Override
 		protected void init() {
-			regulator = new SmoothStep(currentVelocity, STOP_VELOCITY);
+			regulator = new SmoothStep(STOP_VELOCITY, currentVelocity, 10);
 		}
 		
 		@Override
@@ -151,14 +160,26 @@ public final class Gripper extends Subsystem {
 	}
 	
 	class Pushing extends State {
-		private final InterpolationStrategy regulator = new SmoothStep(PUSH_VELOCITY, STOP_VELOCITY);
+		private InterpolationStrategy regulator;
+		
+		@Override
+		protected void init() {
+			regulator = new SmoothStep(STOP_VELOCITY, PUSH_VELOCITY);
+		}
+
 		@Override
 		protected void tick() {
 			setVelocity(regulator.nextX());
 		}		
 	}
 	class Pulling extends State {
-		private final InterpolationStrategy regulator = new SmoothStep(PULL_VELOCITY, STOP_VELOCITY);
+		private InterpolationStrategy regulator;
+		
+		@Override
+		protected void init() {
+			regulator = new SmoothStep(STOP_VELOCITY, PULL_VELOCITY);
+		}
+		
 		@Override
 		protected void tick() {
 			setVelocity(regulator.nextX());
