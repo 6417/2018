@@ -12,12 +12,17 @@ public final class GripperPull extends Command {
 	
 	@Override
 	protected void initialize() {
+		Robot.gripper.initialize();
+	}
+
+	@Override
+	protected void execute() {
 		Robot.gripper.pull();
 	}
 	
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return false;
 	}
 
 }

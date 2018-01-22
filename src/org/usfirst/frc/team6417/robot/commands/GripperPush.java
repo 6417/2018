@@ -12,14 +12,17 @@ public final class GripperPush extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.gripper.push();
+		Robot.gripper.initialize();
 	}
 	
-	// protected void execute() {}
+	@Override	
+	protected void execute() {
+		Robot.gripper.push();
+	}
 
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return false;
 	}
 
 }
