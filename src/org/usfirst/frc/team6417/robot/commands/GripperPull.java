@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6417.robot.commands;
 
 import org.usfirst.frc.team6417.robot.Robot;
+import org.usfirst.frc.team6417.robot.subsystems.Gripper.Event;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -12,12 +13,12 @@ public final class GripperPull extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.gripper.initialize();
+		Robot.gripper.onEvent(Event.PULL);
 	}
 
 	@Override
 	protected void execute() {
-		Robot.gripper.pull();
+		Robot.gripper.tick();
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6417.robot.commands;
 
 import org.usfirst.frc.team6417.robot.Robot;
+import org.usfirst.frc.team6417.robot.subsystems.Gripper.Event;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -12,10 +13,13 @@ public final class GripperStop extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.gripper.stop();
+		Robot.gripper.onEvent(Event.STOP);
 	}
 	
-	// protected void execute() {}
+	@Override
+	protected void execute() {
+		Robot.gripper.tick();
+	}
 
 	@Override
 	protected boolean isFinished() {

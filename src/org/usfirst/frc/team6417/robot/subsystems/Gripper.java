@@ -1,5 +1,8 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.usfirst.frc.team6417.robot.Fridolin;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
@@ -8,25 +11,39 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The Gripper is able to pull-in or push-out the physical boxes.
- * Push and pull are not hard but smoothened between the start- and end-velocity.
- * Stopping is hard.
+ * The Gripper can be in one of three states: Stopped, Pushing or Pulling.
+ * Given an event a state change happens. 
+ * Push, pull and stop movements are smoothened between the start- and end-velocity.
  */
 public final class Gripper extends Subsystem {
+	public enum Event {
+		STOP,
+		PUSH,
+		PULL
+	}
 	private final double PUSH_VELOCITY = 0.15;
 	private final double PULL_VELOCITY = -0.15;
 	private final double STOP_VELOCITY = 0;
-	private final int STEP_COUNT = 100;
 	
 	private final Fridolin leftMotor;
 	private final Fridolin rightMotor;
 
-	int stepCount = STEP_COUNT;
-	int currentStep = 0;
-
+	private State currentState;
+	private double currentVelocity = 0;
+	
 	public Gripper() {
 		leftMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_LEFT_PORT);
-		rightMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_RIGHT_PORT);		
+		rightMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
+		
+		State stopped = currentState = new Stopped();
+		State pushing = new Pushing();
+		State pulling = new Pulling();
+		
+		stopped.addTransition(Event.PUSH, pushing);
+		stopped.addTransition(Event.PULL, pulling);
+		stopped.addTransition(Event.STOP, stopped);		
+		pushing.addTransition(Event.STOP, stopped);
+		pulling.addTransition(Event.STOP, stopped);		
 	}
 	
 	@Override
@@ -34,64 +51,117 @@ public final class Gripper extends Subsystem {
 		setDefaultCommand(new GripperStop());
 	}
 	
-	/**
-	 * Call this initialize method before running the push or pull.
-	 * It sets back the counter so that the push or pull can perform
-	 * a smooth transtion from the start position to the end position.
-	 */
-	public void initialize() {
-		stepCount = STEP_COUNT;
-		currentStep = 0;
+	public void onEvent(Event event) {
+		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());		
+		currentState = currentState.transition(event);
+		currentState.init();
+		SmartDashboard.putString("Gripper state (current)", currentState.getClass().getSimpleName());		
 	}
 	
-	/**
-	 * Increments or keeps the positive velocity
-	 */
-	public void push() {
-		doStep(PUSH_VELOCITY, STOP_VELOCITY);
-	}
-
-	/**
-	 * Increments or keeps the negative velocity
-	 */
-	public void pull() {
-		doStep(PULL_VELOCITY, STOP_VELOCITY);
-	}
-
-	/**
-	 * Calculate the next velocity value using the smoothstep function
-	 * between the start- and end-velocity.
-	 * If the end-velocity is reached it maintains the velocity.
-	 * @param startVelocity
-	 * @param endVelocity
-	 */
-	private void doStep(double startVelocity, double endVelocity) {
-		double v = currentStep / stepCount;
-		v = smoothstep(v);
-		setVelocity((endVelocity * v) + (startVelocity * (1 - v)));
-		if(currentStep < stepCount) {
-			currentStep++;
-		}
-	}
-	
-	public void stop() {
-		setVelocity(STOP_VELOCITY);
+	public void tick() {
+		currentState.tick();
 	}
 	
 	private void setVelocity(double vel) {
+		this.currentVelocity = vel;
 		leftMotor.set(vel);
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
 	}
 	
-
+	
 	/**
-	 * SmoothStep function http://sol.gfxile.net/interpolation/index.html
-	 * @param x
-	 * @return smoothened value
+	 * An interpolation strategy interpolates between two points.
+	 * @author BIN
 	 */
-	private static double smoothstep(double x) {
-		return ((x) * (x) * (3 - 2 * (x)));
+	abstract class InterpolationStrategy {
+		public abstract double nextX();
 	}
 	
+	class SmoothStep extends InterpolationStrategy {
+		int stepCount = 100;
+		int currentStep = 0;
+
+		private final double startVelocity;
+		private final double endVelocity;
+		
+		SmoothStep(double startVelocity, double endVelocity){
+			this.startVelocity = startVelocity;
+			this.endVelocity = endVelocity; 
+		}
+		
+		@Override
+		public double nextX() {
+			double x = currentStep / stepCount;
+			x = smoothstep(x);
+			double velocity = (this.endVelocity * x) + (this.startVelocity * (1 - x));
+			if(currentStep < stepCount) {
+				currentStep++;
+			}
+			return velocity;
+		}
+		/**
+		 * SmoothStep function from http://sol.gfxile.net/interpolation/index.html
+		 * @param x
+		 * @return smoothened value
+		 */
+		private double smoothstep(double x) {
+			return ((x) * (x) * (3 - 2 * (x)));
+		}
+		
+	}
+	
+	/**
+	 * Class that represents a physical state of the gripper
+	 */
+	abstract class State {
+		private final Map<Event, State> eventToStateMap = new HashMap<>();
+
+		protected void init() {;}
+		/**
+		 * Called every ~50ms
+		 */
+		protected void tick() {;}
+		
+		public void addTransition(Event event, State state) {
+			eventToStateMap.put(event, state);
+		}
+		
+		public State transition(Event event) {
+			State nextState = eventToStateMap.get(event);
+			if(nextState == null) {
+				SmartDashboard.putString("Missing transition in gripper", event.name());
+				return this;
+			}
+			return nextState;
+		}
+	}
+	class Stopped extends State {
+		InterpolationStrategy regulator;
+		
+		@Override
+		protected void init() {
+			regulator = new SmoothStep(currentVelocity, STOP_VELOCITY);
+		}
+		
+		@Override
+		protected void tick() {
+			setVelocity(regulator.nextX());
+		}
+	}
+	
+	class Pushing extends State {
+		private final InterpolationStrategy regulator = new SmoothStep(PUSH_VELOCITY, STOP_VELOCITY);
+		@Override
+		protected void tick() {
+			setVelocity(regulator.nextX());
+		}		
+	}
+	class Pulling extends State {
+		private final InterpolationStrategy regulator = new SmoothStep(PULL_VELOCITY, STOP_VELOCITY);
+		@Override
+		protected void tick() {
+			setVelocity(regulator.nextX());
+		}		
+	}
 }
