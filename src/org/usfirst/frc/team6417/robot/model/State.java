@@ -3,7 +3,7 @@ package org.usfirst.frc.team6417.robot.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * Class that represents a physical state of a device
@@ -24,7 +24,7 @@ public class State {
 	public State transition(Event event) {
 		State nextState = eventToStateMap.get(event);
 		if(nextState == null) {
-			SmartDashboard.putString("Missing transition in gripper", event.getClass().getSimpleName());
+			DriverStation.reportError("Missing transition in state machine.", true);
 			return this;
 		}
 		return nextState;
