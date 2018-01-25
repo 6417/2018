@@ -5,4 +5,5 @@ package org.usfirst.frc.team6417.robot.model.interpolation;
  */
 public interface InterpolationStrategy {
 	double nextX();
+	boolean onTarget();
 }
