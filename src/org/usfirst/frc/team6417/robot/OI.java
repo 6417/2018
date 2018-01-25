@@ -40,19 +40,19 @@ public class OI {
 	}
 	
 	private OI() {
-		gripperPullButton = new JoystickButton(joystickOne, 11);
-		gripperPushButton = new JoystickButton(joystickOne, 12);
+		gripperPushButton = new JoystickButton(joystickOne, 1);
+		gripperPullButton = new JoystickButton(joystickOne, 2);
 		
-		poleElevateToGroundAltitudeButton = new JoystickButton(joystickOne, 3);
-		poleElevateToSwitchAltitudeButton = new JoystickButton(joystickOne, 5);
+		poleElevateToGroundAltitudeButton = new JoystickButton(joystickOne, 9);
+		poleElevateToSwitchAltitudeButton = new JoystickButton(joystickOne, 10);
 		
 		loadingPlatformUpButton = new JoystickButton(joystickOne, 8);
 		loadingPlatformDownButton = new JoystickButton(joystickOne, 7);
 		
 		liftingUnitToGroundAltitudeButton = new JoystickButton(joystickOne, 4);
 		liftingUnitToSwitchAltitudeButton = new JoystickButton(joystickOne, 6);
-		liftingUnitToScaleLowAltitudeButton = new JoystickButton(joystickOne, 9);
-		liftingUnitToScaleHighAltitudeButton = new JoystickButton(joystickOne, 10);
+		liftingUnitToScaleLowAltitudeButton = new JoystickButton(joystickOne, 3);
+		liftingUnitToScaleHighAltitudeButton = new JoystickButton(joystickOne, 5);
 		
 		gripperPullButton.whenPressed(new GripperPush());
 		gripperPullButton.whenReleased(new GripperStop());

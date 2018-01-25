@@ -1,5 +1,7 @@
 package org.usfirst.frc.team6417.robot.repository;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public final class FieldInformationRepository {
 	private String fieldInfo = "XXX";
 	
@@ -14,6 +16,7 @@ public final class FieldInformationRepository {
 	private FieldInformationRepository() {;}
 	
 	public void setFieldInfo(String info) {
+		SmartDashboard.putString("Field information", info);
 		if(info.trim().length() != 3) {
 			throw new IllegalArgumentException("Field information consists of 3 characters");
 		}
