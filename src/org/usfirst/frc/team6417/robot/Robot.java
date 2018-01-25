@@ -6,6 +6,7 @@ package org.usfirst.frc.team6417.robot;
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
+import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 import org.usfirst.frc.team6417.robot.subsystems.LoadingPlatform;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
 import org.usfirst.frc.team6417.robot.subsystems.Pole;
@@ -23,6 +24,7 @@ public class Robot extends IterativeRobot {
 	public static LoadingPlatform loadingPlatform;
 	// Controllers
 	public static OI oi;
+	public static LiftingUnit liftingUnit;
 	
 	private Command autonomousBehavior;
 

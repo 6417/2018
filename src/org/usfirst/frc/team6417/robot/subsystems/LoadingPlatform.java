@@ -51,9 +51,16 @@ public final class LoadingPlatform extends Subsystem {
 		}
 		@Override
 		public void tick() {
-			if(System.currentTimeMillis() - startTime > 1000) {
+			if(isTimeUp()) {
 				motor.set(STOP_VELOCITY);
 			}
+		}
+		@Override
+		public boolean isFinished() {
+			return isTimeUp();
+		}
+		private boolean isTimeUp() {
+			return System.currentTimeMillis() - startTime > 1000;
 		}
 	}
 	
@@ -72,6 +79,18 @@ public final class LoadingPlatform extends Subsystem {
 				motor.set(STOP_VELOCITY);
 			}
 		}
+		@Override
+		public boolean isFinished() {
+			return isTimeUp();
+		}
+		
+		private boolean isTimeUp() {
+			return System.currentTimeMillis() - startTime > 1000;
+		}
+	}
+
+	public boolean isFinished() {
+		return currentState.isFinished();
 	}
 
 

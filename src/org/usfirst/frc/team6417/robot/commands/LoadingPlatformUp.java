@@ -23,7 +23,7 @@ public final class LoadingPlatformUp extends Command {
 	
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return Robot.loadingPlatform.isFinished();
 	}
 
 }

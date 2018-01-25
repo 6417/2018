@@ -18,6 +18,14 @@ public class RobotMap {
 	public static class SPEED {
 	}
 
+	
+	public static class DIO {
+		public static final int POLE_UP_PORT_A = 0;
+		public static final int POLE_UP_PORT_B = 1;
+		public static final int LOADING_PLATFORM_DOWN_PORT = 2;
+		public static final int LOADING_PLATFORM_UP_PORT = 3;
+	}
+	
 	/**
 	 * In the RobotMap.MOTOR class the motor ports are
 	 */
@@ -28,6 +36,8 @@ public class RobotMap {
 		public static final int LOADING_PLATFORM_PORT = 3;
 		public static final int DRIVE_LEFT_PORT = 4;
 		public static final int DRIVE_RIGHT_PORT = 5;
+		public static final int LIFTING_UNIT_PORT_A = 6;
+		public static final int LIFTING_UNIT_PORT_B = 7;
 	}
 
 	/**
@@ -36,8 +46,6 @@ public class RobotMap {
 	 */
 	public static class ENCODER {
 		public static final int PULSE_PER_ROTATION = 512;
-		public static final int POLE_UP_PORT_A = 0;
-		public static final int POLE_UP_PORT_B = 1;
 	}
 
 	/**
