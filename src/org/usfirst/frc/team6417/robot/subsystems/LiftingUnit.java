@@ -17,6 +17,10 @@ public final class LiftingUnit extends PIDSubsystem {
 	public static final Event TO_SWITCH = new Event("TO_SWITCH");
 	public static final Event TO_SCALE_LOW = new Event("TO_SCALE_LOW");
 	public static final Event TO_SCALE_HIGH = new Event("TO_SCALE_HIGH");
+
+	private static final double kP = 1.0;
+	private static final double kI = 0.0;
+	private static final double kD = 0.0;
 	
 	private final SpeedController motorA, motorB;
 	private final Encoder altimeter;
@@ -24,10 +28,11 @@ public final class LiftingUnit extends PIDSubsystem {
 	private State currentState;
 	
 	public LiftingUnit() {
-		super("LiftingUnit", 1.0, 0.0, 0.0);
+		super("LiftingUnit", kP, kI, kD);
 
 		setAbsoluteTolerance(5);
-		getPIDController().setContinuous(false);
+		setOutputRange(-1.0, 1.0);
+		getPIDController().setContinuous(false);		
 
 		motorA = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
 		motorB = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
