@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The Pole is able to move up and down the Gripper
  */
 public final class Pole extends Subsystem {
-	public static final Event SCALE_UP = new Event();
-	public static final Event SCALE_DOWN = new Event();
-	public static final Event SWITCH = new Event();
-	public static final Event GROUND = new Event();
+	public static final Event SCALE_UP = new Event("SCALE_UP");
+	public static final Event SCALE_DOWN = new Event("SCALE_DOWN");
+	public static final Event SWITCH = new Event("SWITCH");
+	public static final Event GROUND = new Event("GROUND");
 	
 	private static final double UP_VELOCITY = 0.23;
 	private static final double DOWN_VELOCITY = -0.3;

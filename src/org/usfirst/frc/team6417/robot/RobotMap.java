@@ -20,8 +20,10 @@ public class RobotMap {
 
 	
 	public static class DIO {
-		public static final int POLE_UP_PORT_A = 0;
-		public static final int POLE_UP_PORT_B = 1;
+		public static final int LIFTING_UNIT_PORT_A = 0;
+		public static final int LIFTING_UNIT_PORT_B = 1;
+		public static final int POLE_UP_PORT_A = 4;
+		public static final int POLE_UP_PORT_B = 5;
 		public static final int LOADING_PLATFORM_DOWN_PORT = 2;
 		public static final int LOADING_PLATFORM_UP_PORT = 3;
 	}

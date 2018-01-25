@@ -8,8 +8,8 @@ import org.usfirst.frc.team6417.robot.model.State;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public final class LoadingPlatform extends Subsystem {
-	public static final Event UP = new Event();
-	public static final Event DOWN = new Event();
+	public static final Event UP = new Event("UP");
+	public static final Event DOWN = new Event("DOWN");
 
 	private final double UP_VELOCITY = 0.25;
 	private final double DOWN_VELOCITY = -0.5;

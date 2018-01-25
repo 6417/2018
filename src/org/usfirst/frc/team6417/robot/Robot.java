@@ -11,6 +11,7 @@ import org.usfirst.frc.team6417.robot.subsystems.LoadingPlatform;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
 import org.usfirst.frc.team6417.robot.subsystems.Pole;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,15 +36,20 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		navX = new NavX();
-		gripper = new Gripper();
-		pole = new Pole();
-		drive = new Drive();
-		loadingPlatform = new LoadingPlatform();
-		
-		autonomousBehavior = new AutonomousBehavior();
-		
-		oi = OI.getInstance();
+		try {
+			navX = new NavX();
+			gripper = new Gripper();
+			pole = new Pole();
+			drive = new Drive();
+			loadingPlatform = new LoadingPlatform();
+			liftingUnit = new LiftingUnit();
+			
+			autonomousBehavior = new AutonomousBehavior();
+			
+			oi = OI.getInstance();
+		} catch (Throwable e) {
+			DriverStation.reportError(e.getMessage(),e.getStackTrace());			
+		}
 	}
 
 	/**
@@ -60,6 +66,7 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}
+	
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select

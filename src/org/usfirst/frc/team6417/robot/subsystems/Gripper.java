@@ -17,19 +17,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Push, pull and stop movements are smoothened between the start- and end-velocity.
  */
 public final class Gripper extends Subsystem {
-	public static final Event STOP = new Event();
-	public static final Event PUSH = new Event();
-	public static final Event PULL = new Event();
+	public static final Event STOP = new Event("STOP");
+	public static final Event PUSH = new Event("PUSH");
+	public static final Event PULL = new Event("PULL");
 
-	private final double PUSH_VELOCITY = 0.95;
-	private final double PULL_VELOCITY = -0.95;
+	private final double PUSH_VELOCITY = 0.45;
+	private final double PULL_VELOCITY = -0.45;
 	private final double STOP_VELOCITY = 0;
 	
 	private final Fridolin leftMotor;
 	private final Fridolin rightMotor;
 
 	private State currentState;
-	private double currentVelocity = 0;
 	
 	public Gripper() {
 		leftMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_LEFT_PORT);
@@ -54,8 +53,8 @@ public final class Gripper extends Subsystem {
 	}
 	
 	public void onEvent(Event event) {
-		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());		
 		SmartDashboard.putString("Gripper event", event.getClass().getSimpleName());		
+		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());		
 		currentState = currentState.transition(event);
 		currentState.init();
 		SmartDashboard.putString("Gripper state (current)", currentState.getClass().getSimpleName());		
@@ -65,8 +64,11 @@ public final class Gripper extends Subsystem {
 		currentState.tick();
 	}
 	
+	public boolean isFinished() {
+		return currentState.isFinished();
+	}
+	
 	private void setVelocity(double vel) {
-		this.currentVelocity = vel;
 		leftMotor.set(vel);
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
@@ -74,16 +76,15 @@ public final class Gripper extends Subsystem {
 	
 	
 	class Stopped extends State {
-		InterpolationStrategy regulator;
-		
+
 		@Override
 		public void init() {
-			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, currentVelocity, 10);
+			setVelocity(0.0);
 		}
 		
 		@Override
-		public void tick() {
-			setVelocity(regulator.nextX());
+		public boolean isFinished() {
+			return true;
 		}
 	}
 	
@@ -92,25 +93,34 @@ public final class Gripper extends Subsystem {
 		
 		@Override
 		public void init() {
-			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, PUSH_VELOCITY);
+			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, PUSH_VELOCITY, 10);
 		}
 
 		@Override
 		public void tick() {
 			setVelocity(regulator.nextX());
 		}		
-	}
+
+		@Override
+		public boolean isFinished() {
+			return false;
+		}
+}
 	class Pulling extends State {
 		private InterpolationStrategy regulator;
 		
 		@Override
 		public void init() {
-			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, PULL_VELOCITY);
+			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, PULL_VELOCITY, 20);
 		}
 		
 		@Override
 		public void tick() {
 			setVelocity(regulator.nextX());
-		}		
+		}
+		@Override
+		public boolean isFinished() {
+			return false;
+		}
 	}
 }

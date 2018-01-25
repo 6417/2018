@@ -10,17 +10,17 @@ import org.usfirst.frc.team6417.robot.model.State;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class LiftingUnit extends PIDSubsystem {
-	public static final Event TO_GROUND = new Event();
-	public static final Event TO_SWITCH = new Event();
-	public static final Event TO_SCALE_LOW = new Event();
-	public static final Event TO_SCALE_HIGH = new Event();
+	public static final Event TO_GROUND = new Event("TO_GROUND");
+	public static final Event TO_SWITCH = new Event("TO_SWITCH");
+	public static final Event TO_SCALE_LOW = new Event("TO_SCALE_LOW");
+	public static final Event TO_SCALE_HIGH = new Event("TO_SCALE_HIGH");
 	
 	private final SpeedController motorA, motorB;
 	private final Encoder altimeter;
 	
-	private long altimeterToReach = 0;
 	private State currentState;
 	
 	public LiftingUnit() {
@@ -32,7 +32,7 @@ public final class LiftingUnit extends PIDSubsystem {
 		motorA = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
 		motorB = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
 
-		altimeter = new Encoder(RobotMap.DIO.POLE_UP_PORT_A, RobotMap.DIO.POLE_UP_PORT_B);
+		altimeter = new Encoder(RobotMap.DIO.LIFTING_UNIT_PORT_A, RobotMap.DIO.LIFTING_UNIT_PORT_B);
 		altimeter.setDistancePerPulse(RobotMap.ROBOT.DIST_PER_PULSE);
 		altimeter.setReverseDirection(true);
 		
@@ -42,16 +42,20 @@ public final class LiftingUnit extends PIDSubsystem {
 		State scaleHigh = new Switch();
 
 		Arrays.asList(ground,theSwitch,scaleLow,scaleHigh).stream().forEach( state -> {
-			state.addTransition(TO_GROUND, theSwitch)
-			     .addTransition(TO_SWITCH, scaleLow)
-			     .addTransition(TO_SCALE_LOW, scaleHigh)
-			     .addTransition(TO_SCALE_HIGH, ground);
+			state.addTransition(TO_GROUND, ground)
+			     .addTransition(TO_SWITCH, theSwitch)
+			     .addTransition(TO_SCALE_LOW, scaleLow)
+			     .addTransition(TO_SCALE_HIGH, scaleHigh);
 		} );
 	}
 	
 	public void onEvent(Event event) {
+		SmartDashboard.putString("LiftingUnit event", event.getClass().getSimpleName());		
+		SmartDashboard.putString("LiftingUnit state (prev)", currentState.getClass().getSimpleName());		
 		currentState = currentState.transition(event);
 		currentState.init();
+		SmartDashboard.putString("LiftingUnit state (current)", currentState.getClass().getSimpleName());		
+
 	}
 	
 	@Override
@@ -59,11 +63,13 @@ public final class LiftingUnit extends PIDSubsystem {
 
 	@Override
 	protected double returnPIDInput() {
+		SmartDashboard.putNumber("LiftingUnit altimeter", altimeter.get());		
 		return altimeter.get();
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
+		SmartDashboard.putNumber("LiftingUnit PID output", altimeter.get());		
 		motorA.pidWrite(output);
 		motorB.pidWrite(output);
 	}
@@ -71,25 +77,33 @@ public final class LiftingUnit extends PIDSubsystem {
 	class Ground extends State {
 		@Override
 		public void init() {
+			SmartDashboard.putNumber("LiftingUnit Ground setpoint", 0);
 			setSetpoint(0);
+			enable();
 		}
 	}
 	class Switch extends State {
 		@Override
 		public void init() {
+			SmartDashboard.putNumber("LiftingUnit Switch setpoint", 200);
 			setSetpoint(200);
+			enable();
 		}
 	}
 	class ScaleLow extends State {
 		@Override
 		public void init() {
+			SmartDashboard.putNumber("LiftingUnit ScaleLow setpoint", 400);
 			setSetpoint(400);
+			enable();
 		}
 	}
 	class ScaleHigh extends State {
 		@Override
 		public void init() {
+			SmartDashboard.putNumber("LiftingUnit ScaleHigh setpoint", 600);
 			setSetpoint(600);
+			enable();
 		}
 	}
 
