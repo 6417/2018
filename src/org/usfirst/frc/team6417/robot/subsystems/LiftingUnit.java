@@ -59,8 +59,7 @@ public final class LiftingUnit extends PIDSubsystem {
 
 	@Override
 	protected double returnPIDInput() {
-		// Is changed by the state-machine
-		return altimeterToReach;
+		return altimeter.get();
 	}
 
 	@Override
@@ -72,25 +71,25 @@ public final class LiftingUnit extends PIDSubsystem {
 	class Ground extends State {
 		@Override
 		public void init() {
-			altimeterToReach = 0;
+			setSetpoint(0);
 		}
 	}
 	class Switch extends State {
 		@Override
 		public void init() {
-			altimeterToReach = 200;
+			setSetpoint(200);
 		}
 	}
 	class ScaleLow extends State {
 		@Override
 		public void init() {
-			altimeterToReach = 400;
+			setSetpoint(400);
 		}
 	}
 	class ScaleHigh extends State {
 		@Override
 		public void init() {
-			altimeterToReach = 600;
+			setSetpoint(600);
 		}
 	}
 
