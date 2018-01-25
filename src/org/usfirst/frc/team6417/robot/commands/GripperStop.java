@@ -23,7 +23,7 @@ public final class GripperStop extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return Robot.gripper.isFinished();
 	}
 
 }
