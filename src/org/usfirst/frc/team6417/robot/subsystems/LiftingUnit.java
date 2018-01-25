@@ -24,7 +24,7 @@ public final class LiftingUnit extends PIDSubsystem {
 	private State currentState;
 	
 	public LiftingUnit() {
-		super("LiftingUnit", 1.0, 0, 0);
+		super("LiftingUnit", 1.0, 0.0, 0.0);
 
 		setAbsoluteTolerance(5);
 		getPIDController().setContinuous(false);

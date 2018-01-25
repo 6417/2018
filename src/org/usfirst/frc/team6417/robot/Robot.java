@@ -9,7 +9,6 @@ import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 import org.usfirst.frc.team6417.robot.subsystems.LoadingPlatform;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
-import org.usfirst.frc.team6417.robot.subsystems.Pole;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -20,7 +19,6 @@ public class Robot extends IterativeRobot {
 	// Subsystems
 	public static NavX navX;
 	public static Gripper gripper;
-	public static Pole pole;
 	public static Drive drive;
 	public static LoadingPlatform loadingPlatform;
 	// Controllers
@@ -39,7 +37,6 @@ public class Robot extends IterativeRobot {
 		try {
 			navX = new NavX();
 			gripper = new Gripper();
-			pole = new Pole();
 			drive = new Drive();
 			loadingPlatform = new LoadingPlatform();
 			liftingUnit = new LiftingUnit();

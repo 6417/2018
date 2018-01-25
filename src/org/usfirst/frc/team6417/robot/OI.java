@@ -6,8 +6,6 @@ import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMove;
 import org.usfirst.frc.team6417.robot.commands.LoadingPlatformDown;
 import org.usfirst.frc.team6417.robot.commands.LoadingPlatformUp;
-import org.usfirst.frc.team6417.robot.commands.PoleToGroundAltitude;
-import org.usfirst.frc.team6417.robot.commands.PoleToSwitchAltitude;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -22,8 +20,6 @@ public class OI {
 	private final JoystickButton gripperPullButton;
 	private final JoystickButton gripperPushButton;
 	
-	private JoystickButton poleElevateToGroundAltitudeButton;
-	private JoystickButton poleElevateToSwitchAltitudeButton;
 	private JoystickButton loadingPlatformDownButton, loadingPlatformUpButton;
 	private JoystickButton liftingUnitToGroundAltitudeButton;
 	private JoystickButton liftingUnitToSwitchAltitudeButton;
@@ -43,9 +39,6 @@ public class OI {
 		gripperPushButton = new JoystickButton(joystickOne, 1);
 		gripperPullButton = new JoystickButton(joystickOne, 2);
 		
-		poleElevateToGroundAltitudeButton = new JoystickButton(joystickOne, 9);
-		poleElevateToSwitchAltitudeButton = new JoystickButton(joystickOne, 10);
-		
 		loadingPlatformUpButton = new JoystickButton(joystickOne, 8);
 		loadingPlatformDownButton = new JoystickButton(joystickOne, 7);
 		
@@ -58,9 +51,6 @@ public class OI {
 		gripperPullButton.whenReleased(new GripperStop());
 		gripperPushButton.whenPressed(new GripperPull());
 		gripperPushButton.whenReleased(new GripperStop());
-		
-		poleElevateToSwitchAltitudeButton.whenPressed(new PoleToSwitchAltitude());	
-		poleElevateToGroundAltitudeButton.whenPressed(new PoleToGroundAltitude());
 		
 		loadingPlatformDownButton.whenPressed(new LoadingPlatformDown());
 		loadingPlatformUpButton.whenPressed(new LoadingPlatformUp());

@@ -22,8 +22,6 @@ public class RobotMap {
 	public static class DIO {
 		public static final int LIFTING_UNIT_PORT_A = 0;
 		public static final int LIFTING_UNIT_PORT_B = 1;
-		public static final int POLE_UP_PORT_A = 4;
-		public static final int POLE_UP_PORT_B = 5;
 		public static final int LOADING_PLATFORM_DOWN_PORT = 2;
 		public static final int LOADING_PLATFORM_UP_PORT = 3;
 	}
@@ -34,7 +32,6 @@ public class RobotMap {
 	public static class MOTOR {
 		public static final int GRIPPER_LEFT_PORT = 0;
 		public static final int GRIPPER_RIGHT_PORT = 1;
-		public static final int POLE_PORT = 2;
 		public static final int LOADING_PLATFORM_PORT = 3;
 		public static final int DRIVE_LEFT_PORT = 4;
 		public static final int DRIVE_RIGHT_PORT = 5;
@@ -48,16 +45,6 @@ public class RobotMap {
 	 */
 	public static class ENCODER {
 		public static final int PULSE_PER_ROTATION = 512;
-	}
-
-	/**
-	 * In the RobotMap.PNEUMATICS class you'll find different port definitions
-	 * so you can use your pneumatics
-	 */
-	public static class PNEUMATICS {
-		public static final int COMPRESSOR_PORT = 0;
-		public static final int EXTEND_PORT = 0;
-		public static final int RETRACT_PORT = 1;
 	}
 
 	public static class CONTROLLER {
