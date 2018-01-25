@@ -26,7 +26,7 @@ public class State {
 	public State transition(Event event) {
 		State nextState = eventToStateMap.get(event);
 		if(nextState == null) {
-			DriverStation.reportError("Missing transition in state machine.", true);
+			DriverStation.reportError("Missing transition in state machine from "+this.getClass().getSimpleName()+" with event "+event, true);
 			return this;
 		}
 		return nextState;
