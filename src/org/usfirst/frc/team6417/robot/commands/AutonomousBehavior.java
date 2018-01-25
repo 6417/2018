@@ -10,5 +10,6 @@ public final class AutonomousBehavior extends CommandGroup {
 //	    	addSequential(new GoFromStationToSwitch());
 	    	addSequential(new PoleToSwitchAltitude());
 	    	addSequential(new GripperPush());
+	    	addSequential(new GripperStop());
 	 }
 }
