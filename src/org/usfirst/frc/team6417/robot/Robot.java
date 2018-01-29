@@ -45,10 +45,10 @@ public class Robot extends TimedRobot {
 			loadingPlatform = new LoadingPlatform();
 			liftingUnit = new LiftingUnit();
 			
-			powerManager.addSubsystem(gripper, new SimplePowerManagementStrategy(0.3));
+			powerManager.addSubsystem(gripper, new SimplePowerManagementStrategy(1));
 			powerManager.addSubsystem(drive, new SimplePowerManagementStrategy(1));
-			powerManager.addSubsystem(loadingPlatform, new SimplePowerManagementStrategy(0.6));
-			powerManager.addSubsystem(liftingUnit, new SimplePowerManagementStrategy(0.5));
+			powerManager.addSubsystem(loadingPlatform, new SimplePowerManagementStrategy(1));
+			powerManager.addSubsystem(liftingUnit, new SimplePowerManagementStrategy(1));
 			
 			
 			

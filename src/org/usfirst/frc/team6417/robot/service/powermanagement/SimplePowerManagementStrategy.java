@@ -10,7 +10,7 @@ public final class SimplePowerManagementStrategy extends PowerManagementStrategy
 	
 	@Override
 	public double calculatePower() {
-		return x*x;
+		return x;
 	}
 
 }
