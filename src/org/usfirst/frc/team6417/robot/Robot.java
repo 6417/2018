@@ -4,7 +4,9 @@ package org.usfirst.frc.team6417.robot;
 
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementService;
-import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagementService;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManager;
+import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagement;
+import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
@@ -26,7 +28,7 @@ public class Robot extends TimedRobot {
 	public static OI oi;
 	public static LiftingUnit liftingUnit;
 	// Services
-	public static PowerManagementService powerManagementService;
+	public static PowerManager powerManager;
 	private Command autonomousBehavior;
 
 
@@ -37,13 +39,20 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		try {
-			powerManagementService = new SimplePowerManagementService();
+			powerManager = new PowerManager();
 			
 			navX = new NavX();
-			gripper = new Gripper(powerManagementService);
-			drive = new Drive(powerManagementService);
-			loadingPlatform = new LoadingPlatform(powerManagementService);
-			liftingUnit = new LiftingUnit(powerManagementService);
+			gripper = new Gripper();
+			drive = new Drive();
+			loadingPlatform = new LoadingPlatform();
+			liftingUnit = new LiftingUnit();
+			
+			powerManager.addSubsystem(gripper, new SimplePowerManagementStrategy(0.3));
+			powerManager.addSubsystem(drive, new SimplePowerManagementStrategy(1));
+			powerManager.addSubsystem(loadingPlatform, new SimplePowerManagementStrategy(0.6));
+			powerManager.addSubsystem(liftingUnit, new SimplePowerManagementStrategy(0.5));
+			
+			
 			
 			autonomousBehavior = new AutonomousBehavior();
 
