@@ -13,5 +13,6 @@ public final class AutonomousBehavior extends CommandGroup {
 	    	addSequential(new LiftingUnitMove(LiftingUnit.TO_SWITCH));
 	    	addSequential(new GripperPush());
 	    	addSequential(new GripperStop());
+	    	
 	 }
 }
