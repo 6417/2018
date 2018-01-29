@@ -16,13 +16,11 @@ public final class LoadingPlatform extends Subsystem {
 	private final double DOWN_VELOCITY = -0.5;
 	private final double STOP_VELOCITY = 0;
 
-	private final PowerManagementService powerManagementService;
 	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LOADING_PLATFORM_PORT);
 
 	private State currentState;
 
-	public LoadingPlatform(PowerManagementService powerManagementService) {
-		this.powerManagementService = powerManagementService;
+	public LoadingPlatform() {
 		State up = currentState = new Up();
 		State down = new Down();
 		
@@ -45,7 +43,7 @@ public final class LoadingPlatform extends Subsystem {
 	}
 	
 	private double p() {
-		return powerManagementService.calculatePowerFor(this);
+		return Robot.powerManager.calculatePowerFor(this);
 	}
 	
 	class Up extends State {

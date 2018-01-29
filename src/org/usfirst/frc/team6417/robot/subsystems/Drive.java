@@ -12,11 +12,9 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * This class represents the drive (Fahrwerk) of the robot
  */
 public final class Drive extends Subsystem {
-	private final PowerManagementService powerManagementService;
 	private final DifferentialDrive drive;
 	
-	public Drive(PowerManagementService powerManagementService) {
-		this.powerManagementService = powerManagementService;
+	public Drive() {
 		drive = new DifferentialDrive(
 					new Fridolin(RobotMap.MOTOR.DRIVE_LEFT_PORT), 
 					new Fridolin(RobotMap.MOTOR.DRIVE_RIGHT_PORT));
@@ -31,7 +29,7 @@ public final class Drive extends Subsystem {
 	}
 	
 	private double p() {
-		return powerManagementService.calculatePowerFor(this);
+		return Robot.powerManager.calculatePowerFor(this);
 	}
 	
 	@Override

@@ -25,17 +25,14 @@ public final class Gripper extends Subsystem {
 	private final double PUSH_VELOCITY = 0.45;
 	private final double PULL_VELOCITY = -0.45;
 	private final double STOP_VELOCITY = 0;
-	
-	private final PowerManagementService powerManagementService;
-	
+		
 	private final Fridolin leftMotor;
 	private final Fridolin rightMotor;
 
 	private State currentState;
 	
-	public Gripper(PowerManagementService powerManagementService) {
-		this.powerManagementService = powerManagementService;
-		
+	public Gripper() {
+				
 		leftMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_LEFT_PORT);
 		rightMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
 		
@@ -74,7 +71,7 @@ public final class Gripper extends Subsystem {
 	}
 	
 	private void setVelocity(double vel) {
-		leftMotor.set(powerManagementService.calculatePowerFor(this) * vel);
+		leftMotor.set(Robot.powerManager.calculatePowerFor(this) * vel);
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
 	}
