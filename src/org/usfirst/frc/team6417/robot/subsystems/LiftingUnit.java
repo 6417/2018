@@ -6,6 +6,7 @@ import org.usfirst.frc.team6417.robot.Fridolin;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementService;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -22,14 +23,16 @@ public final class LiftingUnit extends PIDSubsystem {
 	private static final double kI = 0.0;
 	private static final double kD = 0.0;
 	
+	private final PowerManagementService powerManagementService;
 	private final SpeedController motorA, motorB;
 	private final Encoder altimeter;
 	
 	private State currentState;
 	
-	public LiftingUnit() {
+	public LiftingUnit(PowerManagementService powerManagementService) {
 		super("LiftingUnit", kP, kI, kD);
-
+		this.powerManagementService = powerManagementService;
+		
 		setAbsoluteTolerance(5);
 		setOutputRange(-1.0, 1.0);
 		getPIDController().setContinuous(false);		
@@ -60,7 +63,6 @@ public final class LiftingUnit extends PIDSubsystem {
 		currentState = currentState.transition(event);
 		currentState.init();
 		SmartDashboard.putString("LiftingUnit state (current)", currentState.getClass().getSimpleName());		
-
 	}
 	
 	@Override
@@ -74,7 +76,7 @@ public final class LiftingUnit extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		SmartDashboard.putNumber("LiftingUnit PID output", altimeter.get());		
+		SmartDashboard.putNumber("LiftingUnit PID output", output);		
 		motorA.pidWrite(output);
 		motorB.pidWrite(output);
 	}

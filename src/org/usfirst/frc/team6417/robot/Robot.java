@@ -4,6 +4,8 @@ package org.usfirst.frc.team6417.robot;
 
 
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementService;
+import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagementService;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
@@ -24,7 +26,8 @@ public class Robot extends IterativeRobot {
 	// Controllers
 	public static OI oi;
 	public static LiftingUnit liftingUnit;
-	
+	// Services
+	public static PowerManagementService powerManagementService;
 	private Command autonomousBehavior;
 
 
@@ -35,14 +38,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		try {
+			powerManagementService = new SimplePowerManagementService();
+			
 			navX = new NavX();
-			gripper = new Gripper();
-			drive = new Drive();
-			loadingPlatform = new LoadingPlatform();
-			liftingUnit = new LiftingUnit();
+			gripper = new Gripper(powerManagementService);
+			drive = new Drive(powerManagementService);
+			loadingPlatform = new LoadingPlatform(powerManagementService);
+			liftingUnit = new LiftingUnit(powerManagementService);
 			
 			autonomousBehavior = new AutonomousBehavior();
-			
+
 			oi = OI.getInstance();
 		} catch (Throwable e) {
 			DriverStation.reportError(e.getMessage(),e.getStackTrace());			

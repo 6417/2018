@@ -7,6 +7,7 @@ import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
 import org.usfirst.frc.team6417.robot.model.interpolation.InterpolationStrategy;
 import org.usfirst.frc.team6417.robot.model.interpolation.SmoothStepInterpolationStrategy;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementService;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,12 +26,16 @@ public final class Gripper extends Subsystem {
 	private final double PULL_VELOCITY = -0.45;
 	private final double STOP_VELOCITY = 0;
 	
+	private final PowerManagementService powerManagementService;
+	
 	private final Fridolin leftMotor;
 	private final Fridolin rightMotor;
 
 	private State currentState;
 	
-	public Gripper() {
+	public Gripper(PowerManagementService powerManagementService) {
+		this.powerManagementService = powerManagementService;
+		
 		leftMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_LEFT_PORT);
 		rightMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
 		
@@ -69,7 +74,7 @@ public final class Gripper extends Subsystem {
 	}
 	
 	private void setVelocity(double vel) {
-		leftMotor.set(vel);
+		leftMotor.set(powerManagementService.calculatePowerFor(this) * vel);
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
 	}

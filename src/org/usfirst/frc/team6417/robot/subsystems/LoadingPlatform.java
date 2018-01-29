@@ -4,6 +4,7 @@ import org.usfirst.frc.team6417.robot.Fridolin;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementService;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -15,11 +16,13 @@ public final class LoadingPlatform extends Subsystem {
 	private final double DOWN_VELOCITY = -0.5;
 	private final double STOP_VELOCITY = 0;
 
+	private final PowerManagementService powerManagementService;
 	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LOADING_PLATFORM_PORT);
 
 	private State currentState;
 
-	public LoadingPlatform() {
+	public LoadingPlatform(PowerManagementService powerManagementService) {
+		this.powerManagementService = powerManagementService;
 		State up = currentState = new Up();
 		State down = new Down();
 		
@@ -41,12 +44,16 @@ public final class LoadingPlatform extends Subsystem {
 		
 	}
 	
+	private double p() {
+		return powerManagementService.calculatePowerFor(this);
+	}
+	
 	class Up extends State {
 		private long startTime;
 		
 		@Override
 		public void init() {
-			motor.set(UP_VELOCITY);
+			motor.set(p() * UP_VELOCITY);
 			startTime = System.currentTimeMillis();
 		}
 		@Override
@@ -69,7 +76,7 @@ public final class LoadingPlatform extends Subsystem {
 
 		@Override
 		public void init() {
-			motor.set(DOWN_VELOCITY);
+			motor.set(p() * DOWN_VELOCITY);
 			startTime = System.currentTimeMillis();
 		}
 		
