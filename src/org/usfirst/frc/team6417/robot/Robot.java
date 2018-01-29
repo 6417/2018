@@ -3,9 +3,7 @@ package org.usfirst.frc.team6417.robot;
 
 
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
-import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementService;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManager;
-import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagement;
 import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;

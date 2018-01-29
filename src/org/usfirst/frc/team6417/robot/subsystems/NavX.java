@@ -1,9 +1,10 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import com.kauailabs.navx.frc.AHRS;
 
 /**
  * This class activates the NavX Sensor and makes it available to use

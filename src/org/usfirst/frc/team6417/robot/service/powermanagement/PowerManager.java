@@ -1,10 +1,10 @@
 package org.usfirst.frc.team6417.robot.service.powermanagement;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class PowerManager {
 	private Map<Subsystem, PowerManagementStrategy> subsystems = new HashMap<Subsystem, PowerManagementStrategy>();
