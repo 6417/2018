@@ -1,8 +1,8 @@
 package org.usfirst.frc.team6417.robot;
 
-import edu.wpi.first.wpilibj.Talon;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-public class Fridolin extends Talon {
+public class Fridolin extends WPI_TalonSRX {
 	
 	private double maxSpeed = 1;
 	
