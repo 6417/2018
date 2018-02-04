@@ -1,10 +1,11 @@
 package org.usfirst.frc.team6417.robot;
 
-
-
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
+import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
+import org.usfirst.frc.team6417.robot.service.powermanagement.AdaptivePowerManagementStrategy;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManager;
-import org.usfirst.frc.team6417.robot.service.powermanagement.SimplePowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
@@ -29,42 +30,53 @@ public class Robot extends TimedRobot {
 	public static PowerManager powerManager;
 	private Command autonomousBehavior;
 
-
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
 		try {
 			powerManager = new PowerManager();
-			
+
 			navX = new NavX();
 			gripper = new Gripper();
 			drive = new Drive();
 			loadingPlatform = new LoadingPlatform();
 			liftingUnit = new LiftingUnit();
-			
-			powerManager.addSubsystem(gripper, new SimplePowerManagementStrategy(1));
-			powerManager.addSubsystem(drive, new SimplePowerManagementStrategy(1));
-			powerManager.addSubsystem(loadingPlatform, new SimplePowerManagementStrategy(1));
-			powerManager.addSubsystem(liftingUnit, new SimplePowerManagementStrategy(1));
-			
-			
-			
+
+			powerManager.addSubsystem(gripper, 
+					createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
+			powerManager.addSubsystem(drive, 
+					createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
+			powerManager.addSubsystem(loadingPlatform,
+					createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
+			powerManager.addSubsystem(liftingUnit,
+					createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
+
 			autonomousBehavior = new AutonomousBehavior();
 
 			oi = OI.getInstance();
 		} catch (Throwable e) {
-			DriverStation.reportError(e.getMessage(),e.getStackTrace());			
+			DriverStation.reportError(e.getMessage(), e.getStackTrace());
 		}
 	}
 
 	/**
+	 * Please make shure to use PD value as fist parameter and PL value as second.
+	 * @param pd
+	 * @param pl
+	 * @return Configured {@link PowerManagementStrategy} instance
+	 */
+	private PowerManagementStrategy createPMS(final double pd, final double pl) {
+		return new AdaptivePowerManagementStrategy(new PowerExtremals(pd, pl));
+	}
+
+	/**
 	 * 
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -74,22 +86,21 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}
-	
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString code to get the
+	 * auto name from the text box below the Gyro
 	 *
 	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
+	 * chooser code above (like the commented example) or additional comparisons to
+	 * the switch structure below with additional strings & commands.
 	 */
 	@Override
 	public void autonomousInit() {
-    	autonomousBehavior.start();
+		autonomousBehavior.start();
 	}
 
 	/**
@@ -114,7 +125,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotPeriodic() {
-		
+
 	}
 
 	/**

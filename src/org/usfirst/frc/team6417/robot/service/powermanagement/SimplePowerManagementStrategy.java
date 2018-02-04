@@ -12,5 +12,4 @@ public final class SimplePowerManagementStrategy extends PowerManagementStrategy
 	public double calculatePower() {
 		return x;
 	}
-
 }

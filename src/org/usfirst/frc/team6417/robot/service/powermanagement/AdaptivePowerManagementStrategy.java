@@ -1,37 +1,22 @@
 package org.usfirst.frc.team6417.robot.service.powermanagement;
 
-public final class AdaptivePowerManagementStrategy extends PowerManagementStrategy {
+import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
 
-	private double x;
+public final class AdaptivePowerManagementStrategy extends PowerManagementStrategy {
+	private double m;
+	private double q;
 	
-	public AdaptivePowerManagementStrategy(double x) {
-		this.x = x;
+	public AdaptivePowerManagementStrategy(PowerExtremals pe) {
+		this.m = pe.a - pe.b;
+		this.q = pe.b;
 	}
 	
 	@Override
 	public double calculatePower() {
-		return x;
+//		TODO Uncomment the calculation. Make performance tests regarding the getThrottle method. nils
+//		double t = OI.getInstance().joystickOne.getThrottle();
+//		return m * t + q;
+		return 1.0;
 	}
-
-
-    public static double powerLift(double t) {
-        double powerLift = 1 + (t * (0.6 - 1));// x unklar,min PowerLift wenn max PowerDrive; in
-           // Beispiel 0.6 bzw 60%
-        System.out.println("power of Lift is: " + powerLift+" or "+ (powerLift*100)+"%");
-        return powerLift;
-    }
-
-    public static double powerGripper(double t) {
-        double powerGripper = 1 + (t * (0.5- 1));// x unklar, min PowerGripper wenn max PowerDrive in
-           // Beispiel 0.5 bzw 50%
-        System.out.println("power of Gripper is: " + powerGripper+" or "+ (powerGripper*100)+"%");
-        return powerGripper;
-    }
-
-    public static double powerDrive(double t) {
-        double powerDrive = t;
-        System.out.println("power of drive is: " + powerDrive + " or " + (powerDrive * 100) + "%");
-        return powerDrive;
-    }
 
 }
