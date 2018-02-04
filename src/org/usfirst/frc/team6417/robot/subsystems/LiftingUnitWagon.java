@@ -6,21 +6,31 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
 
+import edu.wpi.first.wpilibj.AnalogTrigger;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public final class LiftingUnitWagon extends Subsystem {
 	public static final Event FRONT = new Event("FRONT");
 	public static final Event BACK = new Event("BACK");
 
-	private final double FRONT_VELOCITY = 0.25;
-	private final double BACK_VELOCITY = -0.5;
-	private final double STOP_VELOCITY = 0;
-
 	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
+	
+	private final Counter frontEndPositionDetector;
+	private final Counter backEndPositionDetector;
 
 	private State currentState;
 
 	public LiftingUnitWagon() {
+		AnalogTrigger analogTrigger = new AnalogTrigger(RobotMap.AIO.LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_PORT);
+		analogTrigger.setLimitsRaw(RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD, 
+								   RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD);
+		frontEndPositionDetector = new Counter(analogTrigger);
+		analogTrigger = new AnalogTrigger(RobotMap.AIO.LIFTING_UNIT_WAGON_ENDPOSITION_BACK_PORT);
+		analogTrigger.setLimitsRaw(RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD, 
+								   RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD);
+		backEndPositionDetector = new Counter(analogTrigger);
+		
 		State front = currentState = new Front();
 		State back = new Back();
 		
@@ -38,8 +48,10 @@ public final class LiftingUnitWagon extends Subsystem {
 	}
 	
 	@Override
-	protected void initDefaultCommand() {
-		
+	protected void initDefaultCommand() {;}
+	
+	public boolean isFinished() {
+		return currentState.isFinished();
 	}
 	
 	private double p() {
@@ -47,55 +59,60 @@ public final class LiftingUnitWagon extends Subsystem {
 	}
 	
 	class Front extends State {
-		private long startTime;
 		
 		@Override
 		public void init() {
-			motor.set(p() * FRONT_VELOCITY);
-			startTime = System.currentTimeMillis();
+			motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY);
 		}
 		@Override
 		public void tick() {
-			if(isTimeUp()) {
-				motor.set(STOP_VELOCITY);
+			if(isInEndPosition()) {
+				motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			}else {
+				motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY);
 			}
 		}
 		@Override
 		public boolean isFinished() {
-			return isTimeUp();
+			boolean isFinished = isInEndPosition();
+			if(isFinished) {
+				frontEndPositionDetector.reset();
+			}
+			return isFinished;
 		}
-		private boolean isTimeUp() {
-			return System.currentTimeMillis() - startTime > 1000;
+		
+		private boolean isInEndPosition() {
+			return frontEndPositionDetector.get() > 0;
 		}
+		
 	}
 	
 	class Back extends State {
-		private long startTime;
-
 		@Override
 		public void init() {
-			motor.set(p() * BACK_VELOCITY);
-			startTime = System.currentTimeMillis();
+			motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
 		}
-		
 		@Override
 		public void tick() {
-			if(System.currentTimeMillis() - startTime > 1000) {
-				motor.set(STOP_VELOCITY);
+			if(isInEndPosition()) {
+				motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			}else {
+				motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
 			}
 		}
 		@Override
 		public boolean isFinished() {
-			return isTimeUp();
+			boolean isFinished = isInEndPosition();
+			if(isFinished) {
+				backEndPositionDetector.reset();
+			}
+			return isFinished;
 		}
 		
-		private boolean isTimeUp() {
-			return System.currentTimeMillis() - startTime > 1000;
+		private boolean isInEndPosition() {
+			return backEndPositionDetector.get() > 0;
 		}
-	}
-
-	public boolean isFinished() {
-		return currentState.isFinished();
+		
 	}
 
 

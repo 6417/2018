@@ -34,15 +34,25 @@ public class RobotMap {
 		public static final double PI = 3.14159265359;
 	}
 	
-	public static class SPEED {
+	public static class VELOCITY {
+		public static final double STOP_VELOCITY = 0.0;
+		public static final double LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY = 0.25;
+		public static final double LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY = -0.3;
 	}
 
+	public static class SENSOR {
+		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD = 530;
+		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD = 467;
+	}
 	
 	public static class DIO {
 		public static final int LIFTING_UNIT_PORT_A = 0;
 		public static final int LIFTING_UNIT_PORT_B = 1;
-		public static final int LOADING_PLATFORM_DOWN_PORT = 2;
-		public static final int LOADING_PLATFORM_UP_PORT = 3;
+	}
+	
+	public static class AIO {
+		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_PORT = 5;
+		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_BACK_PORT = 6;
 	}
 	
 	/**
