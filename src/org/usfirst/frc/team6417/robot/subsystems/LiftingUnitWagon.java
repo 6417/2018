@@ -16,7 +16,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	private final double BACK_VELOCITY = -0.5;
 	private final double STOP_VELOCITY = 0;
 
-	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LOADING_PLATFORM_PORT);
+	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
 
 	private State currentState;
 

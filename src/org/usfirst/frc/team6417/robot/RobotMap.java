@@ -27,16 +27,31 @@ public class RobotMap {
 	}
 	
 	/**
-	 * In the RobotMap.MOTOR class the motor ports are
+	 * In the RobotMap.MOTOR a CAN-bus port is mapped to a logical-port for our robot.
+	 * @see The hardware-documentation for further details:
+	 * https://docs.google.com/document/d/1LdHSLqYUQ-YM8OZ3idN6Gu3Klc91NrVBLmQmynH0i6Y/edit?usp=sharing
 	 */
 	public static class MOTOR {
-		public static final int GRIPPER_LEFT_PORT = 0;
-		public static final int GRIPPER_RIGHT_PORT = 1;
-		public static final int LOADING_PLATFORM_PORT = 3;
-		public static final int DRIVE_LEFT_PORT = 4;
-		public static final int DRIVE_RIGHT_PORT = 5;
-		public static final int LIFTING_UNIT_PORT_A = 6;
-		public static final int LIFTING_UNIT_PORT_B = 7;
+		public static final int DRIVE_FRONT_LEFT_ANGLE_PORT = 0;
+		public static final int DRIVE_FRONT_LEFT_VELOCITY_PORT = 4;
+		public static final int DRIVE_FRONT_RIGHT_ANGLE_PORT = 1;
+		public static final int DRIVE_FRONT_RIGHT_VELOCITY_PORT = 5;
+		public static final int DRIVE_BACK_LEFT_ANGLE_PORT = 2;
+		public static final int DRIVE_BACK_LEFT_VELOCITY_PORT = 6;
+		public static final int DRIVE_BACK_RIGHT_ANGLE_PORT = 3;
+		public static final int DRIVE_BACK_RIGHT_VELOCITY_PORT = 7;
+		
+		public static final int LIFTING_UNIT_WAGON_PORT = 8;
+
+		public static final int LIFTING_UNIT_PORT_A = 9;
+		public static final int LIFTING_UNIT_PORT_B = 10;
+
+		public static final int GRIPPER_LEFT_PORT = 11;
+		public static final int GRIPPER_RIGHT_PORT = 12;
+		
+		public static final int DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT = 13;
+		public static final int DIFFERENTIAL_DRIVE_FRONT_RIGHT_PORT = 14;
+
 	}
 
 	/**
@@ -45,6 +60,16 @@ public class RobotMap {
 	 */
 	public static class ENCODER {
 		public static final int PULSE_PER_ROTATION = 512;
+
+		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
+		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
+		public static final int DRIVE_FRONT_RIGHT_PORT_A = 2;
+		public static final int DRIVE_FRONT_RIGHT_PORT_B = 3;
+		public static final int DRIVE_BACK_LEFT_PORT_A = 4;
+		public static final int DRIVE_BACK_LEFT_PORT_B = 5;
+		public static final int DRIVE_BACK_RIGHT_PORT_A = 6;
+		public static final int DRIVE_BACK_RIGHT_PORT_B = 7;
+		
 	}
 
 	public static class CONTROLLER {
@@ -110,5 +135,7 @@ public class RobotMap {
 		public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * MATH.PI; /*cm*/
 		public static final double DIAGONAL_DISTANCE_BETWEEN_WHEELS = 0.0; /*cm*/
 		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
+		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 45; /*cm*/
+		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 45; /*cm*/
 	}
 }

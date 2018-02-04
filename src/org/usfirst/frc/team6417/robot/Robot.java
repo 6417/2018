@@ -11,6 +11,7 @@ import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
+import org.usfirst.frc.team6417.robot.subsystems.SwerveDrive;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -22,7 +23,9 @@ public class Robot extends TimedRobot {
 	public static NavX navX;
 	public static Gripper gripper;
 	public static Drive drive;
-	public static LiftingUnitWagon liftingUnitWagon;
+	public static LiftingUnitWagon liftingUnitWagon;	
+	public static SwerveDrive swerveDrive;
+	
 	// Controllers
 	public static OI oi;
 	public static LiftingUnit liftingUnit;
@@ -42,8 +45,11 @@ public class Robot extends TimedRobot {
 			navX = new NavX();
 			gripper = new Gripper();
 			drive = new Drive();
+			swerveDrive = new SwerveDrive();
 			liftingUnitWagon = new LiftingUnitWagon();
 			liftingUnit = new LiftingUnit();
+			
+			
 
 			powerManager.addSubsystem(gripper, 
 					createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));

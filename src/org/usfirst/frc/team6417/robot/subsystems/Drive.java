@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
- * This class represents the drive (Fahrwerk) of the robot
+ * This class represents the Plan-B drive (Fahrwerk) of the robot. It represents a differential-drive.
  */
 public final class Drive extends Subsystem {
 	private final DifferentialDrive drive;
 	
 	public Drive() {
 		drive = new DifferentialDrive(
-					new Fridolin(RobotMap.MOTOR.DRIVE_LEFT_PORT), 
-					new Fridolin(RobotMap.MOTOR.DRIVE_RIGHT_PORT));
+					new Fridolin(RobotMap.MOTOR.DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT), 
+					new Fridolin(RobotMap.MOTOR.DIFFERENTIAL_DRIVE_FRONT_RIGHT_PORT));
 	}	
 	
 	public void setVelocity(double leftVel, double rightVel) {
