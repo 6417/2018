@@ -7,7 +7,26 @@ package org.usfirst.frc.team6417.robot;
  * floating around.
  */
 public class RobotMap {
+	/**
+	 * In the RobotMap.ROBOT class you'll find different values concerning your
+	 * robot
+	 */
+	public static class ROBOT {
+		public static final double WHEEL_DIAMETER = 15.24; /*cm*/
+		public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * MATH.PI; /*cm*/
+		public static final double DIAGONAL_DISTANCE_BETWEEN_WHEELS = 0.0; /*cm*/
+		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
 
+		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 45; /*cm*/
+		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 45; /*cm*/
+		
+		public static final long LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = 200; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 500; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 600; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 700; /*encoder ticks*/
+	}
+	
 	/**
 	 * The RobotMap.MATH class provides you with different mathematical values
 	 */
@@ -126,16 +145,5 @@ public class RobotMap {
 		}
 	}
 
-	/**
-	 * In the RobotMap.ROBOT class you'll find different values concerning your
-	 * robot
-	 */
-	public static class ROBOT {
-		public static final double WHEEL_DIAMETER = 15.24; /*cm*/
-		public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * MATH.PI; /*cm*/
-		public static final double DIAGONAL_DISTANCE_BETWEEN_WHEELS = 0.0; /*cm*/
-		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
-		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 45; /*cm*/
-		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 45; /*cm*/
-	}
+
 }

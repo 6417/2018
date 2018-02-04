@@ -24,6 +24,7 @@ public class OI {
 	private JoystickButton liftingUnitToGroundAltitudeButton;
 	private JoystickButton liftingUnitToSwitchAltitudeButton;
 	private JoystickButton liftingUnitToScaleLowAltitudeButton;
+	private JoystickButton liftingUnitToScaleMiddleAltitudeButton;
 	private JoystickButton liftingUnitToScaleHighAltitudeButton;
 
 	private static OI INSTANCE;
@@ -45,6 +46,7 @@ public class OI {
 		liftingUnitToGroundAltitudeButton = new JoystickButton(joystickOne, 4);
 		liftingUnitToSwitchAltitudeButton = new JoystickButton(joystickOne, 6);
 		liftingUnitToScaleLowAltitudeButton = new JoystickButton(joystickOne, 3);
+		liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(joystickOne, 9);
 		liftingUnitToScaleHighAltitudeButton = new JoystickButton(joystickOne, 5);
 		
 		gripperPullButton.whenPressed(new GripperPush());
@@ -58,6 +60,7 @@ public class OI {
 		liftingUnitToGroundAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_GROUND));
 		liftingUnitToSwitchAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SWITCH));
 		liftingUnitToScaleLowAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_LOW));
+		liftingUnitToScaleMiddleAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_MIDDLE));
 		liftingUnitToScaleHighAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_HIGH));
 		
 	}
