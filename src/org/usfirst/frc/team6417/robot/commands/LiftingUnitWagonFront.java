@@ -1,24 +1,24 @@
 package org.usfirst.frc.team6417.robot.commands;
 
 import org.usfirst.frc.team6417.robot.Robot;
-import org.usfirst.frc.team6417.robot.subsystems.LoadingPlatform;
+import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public final class LoadingPlatformDown extends Command {
+public final class LiftingUnitWagonFront extends Command {
 	
-	public LoadingPlatformDown() {
-		requires(Robot.loadingPlatform);
+	public LiftingUnitWagonFront() {
+		requires(Robot.liftingUnitWagon);
 	}
 
 	@Override
 	protected void initialize() {
-		Robot.loadingPlatform.onEvent(LoadingPlatform.DOWN);
+		Robot.liftingUnitWagon.onEvent(LiftingUnitWagon.FRONT);
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.loadingPlatform.tick();
+		Robot.liftingUnitWagon.tick();
 	}
 	
 	@Override

@@ -4,8 +4,8 @@ import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMove;
-import org.usfirst.frc.team6417.robot.commands.LoadingPlatformDown;
-import org.usfirst.frc.team6417.robot.commands.LoadingPlatformUp;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonBack;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFront;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -52,9 +52,8 @@ public class OI {
 		gripperPushButton.whenPressed(new GripperPull());
 		gripperPushButton.whenReleased(new GripperStop());
 		
-		loadingPlatformDownButton.whenPressed(new LoadingPlatformDown());
-		loadingPlatformUpButton.whenPressed(new LoadingPlatformUp());
-		loadingPlatformDownButton.whenPressed(new LoadingPlatformDown());
+		loadingPlatformDownButton.whenPressed(new LiftingUnitWagonFront());
+		loadingPlatformUpButton.whenPressed(new LiftingUnitWagonBack());
 		
 		liftingUnitToGroundAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_GROUND));
 		liftingUnitToSwitchAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SWITCH));

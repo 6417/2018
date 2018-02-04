@@ -9,7 +9,7 @@ import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManager;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
-import org.usfirst.frc.team6417.robot.subsystems.LoadingPlatform;
+import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
 	public static NavX navX;
 	public static Gripper gripper;
 	public static Drive drive;
-	public static LoadingPlatform loadingPlatform;
+	public static LiftingUnitWagon liftingUnitWagon;
 	// Controllers
 	public static OI oi;
 	public static LiftingUnit liftingUnit;
@@ -42,14 +42,14 @@ public class Robot extends TimedRobot {
 			navX = new NavX();
 			gripper = new Gripper();
 			drive = new Drive();
-			loadingPlatform = new LoadingPlatform();
+			liftingUnitWagon = new LiftingUnitWagon();
 			liftingUnit = new LiftingUnit();
 
 			powerManager.addSubsystem(gripper, 
 					createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
 			powerManager.addSubsystem(drive, 
 					createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
-			powerManager.addSubsystem(loadingPlatform,
+			powerManager.addSubsystem(liftingUnitWagon,
 					createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
 			powerManager.addSubsystem(liftingUnit,
 					createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));

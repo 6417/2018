@@ -8,24 +8,24 @@ import org.usfirst.frc.team6417.robot.model.State;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public final class LoadingPlatform extends Subsystem {
-	public static final Event UP = new Event("UP");
-	public static final Event DOWN = new Event("DOWN");
+public final class LiftingUnitWagon extends Subsystem {
+	public static final Event FRONT = new Event("FRONT");
+	public static final Event BACK = new Event("BACK");
 
-	private final double UP_VELOCITY = 0.25;
-	private final double DOWN_VELOCITY = -0.5;
+	private final double FRONT_VELOCITY = 0.25;
+	private final double BACK_VELOCITY = -0.5;
 	private final double STOP_VELOCITY = 0;
 
 	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LOADING_PLATFORM_PORT);
 
 	private State currentState;
 
-	public LoadingPlatform() {
-		State up = currentState = new Up();
-		State down = new Down();
+	public LiftingUnitWagon() {
+		State front = currentState = new Front();
+		State back = new Back();
 		
-		up.addTransition(LoadingPlatform.DOWN, down);
-		down.addTransition(LoadingPlatform.UP, up);
+		front.addTransition(LiftingUnitWagon.FRONT, back);
+		back.addTransition(LiftingUnitWagon.BACK, front);
 	}
 	
 	public void onEvent(Event event) {
@@ -46,12 +46,12 @@ public final class LoadingPlatform extends Subsystem {
 		return Robot.powerManager.calculatePowerFor(this);
 	}
 	
-	class Up extends State {
+	class Front extends State {
 		private long startTime;
 		
 		@Override
 		public void init() {
-			motor.set(p() * UP_VELOCITY);
+			motor.set(p() * FRONT_VELOCITY);
 			startTime = System.currentTimeMillis();
 		}
 		@Override
@@ -69,12 +69,12 @@ public final class LoadingPlatform extends Subsystem {
 		}
 	}
 	
-	class Down extends State {
+	class Back extends State {
 		private long startTime;
 
 		@Override
 		public void init() {
-			motor.set(p() * DOWN_VELOCITY);
+			motor.set(p() * BACK_VELOCITY);
 			startTime = System.currentTimeMillis();
 		}
 		
