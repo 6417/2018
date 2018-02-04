@@ -1,19 +1,22 @@
 package org.usfirst.frc.team6417.robot.commands;
 
 import org.usfirst.frc.team6417.robot.Robot;
-import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
+import org.usfirst.frc.team6417.robot.model.Event;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public final class LiftingUnitWagonBack extends Command {
+public final class LiftingUnitWagonMove extends Command {
 	
-	public LiftingUnitWagonBack() {
+	private final Event event;
+	
+	public LiftingUnitWagonMove(final Event event) {
+		this.event = event;
 		requires(Robot.liftingUnitWagon);
 	}
 
 	@Override
 	protected void initialize() {
-		Robot.liftingUnitWagon.onEvent(LiftingUnitWagon.BACK);
+		Robot.liftingUnitWagon.onEvent(event);
 	}
 	
 	@Override
