@@ -11,6 +11,7 @@ public final class SwerveDrive extends Subsystem {
 	private final SwerveWheelDrive frontLeft, frontRight, backLeft, backRight;
 	
 	public SwerveDrive() {
+		super("SwerveDrive");
 		frontLeft = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT, 
 										 RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_A);

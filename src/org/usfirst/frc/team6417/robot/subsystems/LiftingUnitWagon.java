@@ -14,7 +14,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	public static final Event FRONT = new Event("FRONT");
 	public static final Event BACK = new Event("BACK");
 
-	private final Fridolin motor = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
+	private final Fridolin motor = new Fridolin("Motor", RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
 	
 	private final Counter frontEndPositionDetector;
 	private final Counter backEndPositionDetector;
@@ -22,6 +22,8 @@ public final class LiftingUnitWagon extends Subsystem {
 	private State currentState;
 
 	public LiftingUnitWagon() {
+		super("LiftingUnitWagon");
+		
 		AnalogTrigger analogTrigger = new AnalogTrigger(RobotMap.AIO.LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_PORT);
 		analogTrigger.setLimitsRaw(RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD, 
 								   RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD);

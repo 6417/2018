@@ -32,9 +32,10 @@ public final class Gripper extends Subsystem {
 	private State currentState;
 	
 	public Gripper() {
+		super("Gripper");
 				
-		leftMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_LEFT_PORT);
-		rightMotor = new Fridolin(RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
+		leftMotor = new Fridolin("Left-Motor", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
+		rightMotor = new Fridolin("Right-Motor", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
 		
 		State stopped = currentState = new Stopped();
 		State pushing = new Pushing();

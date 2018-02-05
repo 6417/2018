@@ -15,9 +15,10 @@ public final class Drive extends Subsystem {
 	private final DifferentialDrive drive;
 	
 	public Drive() {
+		super("Drive");
 		drive = new DifferentialDrive(
-					new Fridolin(RobotMap.MOTOR.DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT), 
-					new Fridolin(RobotMap.MOTOR.DIFFERENTIAL_DRIVE_FRONT_RIGHT_PORT));
+					new Fridolin("Left-Motor", RobotMap.MOTOR.DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT), 
+					new Fridolin("Right-Motor", RobotMap.MOTOR.DIFFERENTIAL_DRIVE_FRONT_RIGHT_PORT));
 	}	
 	
 	public void setVelocity(double leftVel, double rightVel) {

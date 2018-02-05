@@ -35,8 +35,8 @@ public final class LiftingUnit extends PIDSubsystem {
 		setOutputRange(-1.0, 1.0);
 		getPIDController().setContinuous(false);		
 		
-		motorA = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
-		motorB = new Fridolin(RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorA = new Fridolin("Motor-A", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
+		motorB = new Fridolin("Motor-B", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
 
 		altimeter = new Encoder(RobotMap.DIO.LIFTING_UNIT_PORT_A, RobotMap.DIO.LIFTING_UNIT_PORT_B);
 		altimeter.setDistancePerPulse(RobotMap.ROBOT.DIST_PER_PULSE);

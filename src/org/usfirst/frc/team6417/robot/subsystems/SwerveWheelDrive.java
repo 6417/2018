@@ -18,10 +18,13 @@ public final class SwerveWheelDrive extends Subsystem {
 	private final double MAX_VOLTS = 4.95;
 	
 	public SwerveWheelDrive (int angleMotor, int speedMotor, int encoder) {
-	    this.angleMotor = new Fridolin (angleMotor);
-	    this.speedMotor = new Fridolin (speedMotor);
+		super("SwerveWheelDrive");
+		
+	    this.angleMotor = new Fridolin ("Angle-Motor", angleMotor);
+	    this.speedMotor = new Fridolin ("Speed-Motor", speedMotor);
 	    pidController = new PIDController (1, 0, 0, new AnalogInput (encoder), this.angleMotor);
-
+	    pidController.setName("Angle-Motor-Controller");
+	    
 	    pidController.setOutputRange (-1, 1);
 	    pidController.setContinuous ();
 	    pidController.enable ();
