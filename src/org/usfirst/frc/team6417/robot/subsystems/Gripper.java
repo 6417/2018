@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The Gripper can be in one of three states: Stopped, Pushing or Pulling.
- * Given an event a state change happens. 
- * Push, pull and stop movements are smoothened between the start- and end-velocity.
+ * The Gripper can be in one of three states: Stopped, Pushing or Pulling. Given
+ * an event a state change happens. Push, pull and stop movements are smoothened
+ * between the start- and end-velocity.
  */
 public final class Gripper extends Subsystem {
 	public static final Event STOP = new Event("STOP");
@@ -25,75 +25,75 @@ public final class Gripper extends Subsystem {
 	private final double PUSH_VELOCITY = 0.45;
 	private final double PULL_VELOCITY = -0.45;
 	private final double STOP_VELOCITY = 0;
-		
+
 	private final Fridolin leftMotor;
 	private final Fridolin rightMotor;
 
 	private State currentState;
-	
+
 	public Gripper() {
 		super("Gripper");
-				
+
 		leftMotor = new Fridolin("Left-Motor", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
 		rightMotor = new Fridolin("Right-Motor", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
-		
+
 		State stopped = currentState = new Stopped();
 		State pushing = new Pushing();
 		State pulling = new Pulling();
-		
+
 		stopped.addTransition(Gripper.PUSH, pushing);
 		stopped.addTransition(Gripper.PULL, pulling);
-		stopped.addTransition(Gripper.STOP, stopped);		
+		stopped.addTransition(Gripper.STOP, stopped);
 		pushing.addTransition(Gripper.STOP, stopped);
-		pulling.addTransition(Gripper.STOP, stopped);	
-		
+		pulling.addTransition(Gripper.STOP, stopped);
+
 		SmartDashboard.putString("Gripper initial state", currentState.getClass().getSimpleName());
 	}
-	
+
 	@Override
 	protected void initDefaultCommand() {
 		setDefaultCommand(new GripperStop());
 	}
-	
+
 	public void onEvent(Event event) {
-		SmartDashboard.putString("Gripper event", event.getClass().getSimpleName());		
-		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());		
+		SmartDashboard.putString("Gripper event", event.getClass().getSimpleName());
+		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());
 		currentState = currentState.transition(event);
 		currentState.init();
-		SmartDashboard.putString("Gripper state (current)", currentState.getClass().getSimpleName());		
+		SmartDashboard.putString("Gripper state (current)", currentState.getClass().getSimpleName());
 	}
-	
+
 	public void tick() {
 		currentState.tick();
 	}
-	
+
 	public boolean isFinished() {
 		return currentState.isFinished();
 	}
-	
+
 	private void setVelocity(double vel) {
-		leftMotor.set(Robot.powerManager.calculatePowerFor(this) * vel);
+		vel = Robot.powerManager.calculatePowerFor(this) * vel;
+		leftMotor.set(vel);
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
 	}
-	
-	
+
 	class Stopped extends State {
 
 		@Override
 		public void init() {
 			setVelocity(0.0);
 		}
-		
+
 		@Override
 		public boolean isFinished() {
 			return true;
 		}
 	}
-	
+
 	class Pushing extends State {
 		private InterpolationStrategy regulator;
-		
+
 		@Override
 		public void init() {
 			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, PUSH_VELOCITY, 10);
@@ -102,25 +102,27 @@ public final class Gripper extends Subsystem {
 		@Override
 		public void tick() {
 			setVelocity(regulator.nextX());
-		}		
+		}
 
 		@Override
 		public boolean isFinished() {
 			return false;
 		}
-}
+	}
+
 	class Pulling extends State {
 		private InterpolationStrategy regulator;
-		
+
 		@Override
 		public void init() {
 			regulator = new SmoothStepInterpolationStrategy(STOP_VELOCITY, PULL_VELOCITY, 20);
 		}
-		
+
 		@Override
 		public void tick() {
 			setVelocity(regulator.nextX());
 		}
+
 		@Override
 		public boolean isFinished() {
 			return false;
