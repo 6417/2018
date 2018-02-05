@@ -46,8 +46,7 @@ public class RobotMap {
 	}
 	
 	public static class DIO {
-		public static final int LIFTING_UNIT_PORT_A = 0;
-		public static final int LIFTING_UNIT_PORT_B = 1;
+
 	}
 	
 	public static class AIO {
