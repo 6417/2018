@@ -7,8 +7,6 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,8 +21,7 @@ public final class LiftingUnit extends PIDSubsystem {
 	private static final double kI = 0.0;
 	private static final double kD = 0.0;
 	
-	private final SpeedController motorA, motorB;
-	private final Encoder altimeter;
+	private final Fridolin motorA, motorB;
 	
 	private State currentState;
 	
@@ -38,10 +35,6 @@ public final class LiftingUnit extends PIDSubsystem {
 		motorA = new Fridolin("Motor-A", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
 		motorB = new Fridolin("Motor-B", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
 
-		altimeter = new Encoder(RobotMap.DIO.LIFTING_UNIT_PORT_A, RobotMap.DIO.LIFTING_UNIT_PORT_B);
-		altimeter.setDistancePerPulse(RobotMap.ROBOT.DIST_PER_PULSE);
-		altimeter.setReverseDirection(true);
-		
 		State ground = currentState = new Ground();
 		State theSwitch = new Switch();
 		State scaleLow = new Switch();
@@ -72,8 +65,9 @@ public final class LiftingUnit extends PIDSubsystem {
 
 	@Override
 	protected double returnPIDInput() {
-		SmartDashboard.putNumber("LiftingUnit altimeter", altimeter.get());		
-		return altimeter.get();
+		int position = motorA.getSensorCollection().getPulseWidthPosition();
+		SmartDashboard.putNumber("LiftingUnit position", position);		
+		return position;
 	}
 
 	@Override
