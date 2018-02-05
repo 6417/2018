@@ -30,10 +30,12 @@ public final class LiftingUnit extends PIDSubsystem {
 		
 		setAbsoluteTolerance(5);
 		setOutputRange(-1.0, 1.0);
-		getPIDController().setContinuous(false);		
+		getPIDController().setContinuous(false);
+		getPIDController().setName("LiftingUnit-Controller");
 		
-		motorA = new Fridolin("Motor-A", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
-		motorB = new Fridolin("Motor-B", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorA = new Fridolin("Motor-A-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
+		motorB = new Fridolin("Motor-B-Follower", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorB.follow(motorA);
 
 		State ground = currentState = new Ground();
 		State theSwitch = new Switch();
@@ -72,9 +74,10 @@ public final class LiftingUnit extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		SmartDashboard.putNumber("LiftingUnit PID output", output);		
+		SmartDashboard.putNumber("LiftingUnit PID output", output);
+		// Motor A is master. Motor B is follower and will reflect the Motor A behavior.
+		// Only Motor A must be changed. B will be changed automatically from A.
 		motorA.pidWrite(output);
-		motorB.pidWrite(output);
 	}
 	
 	abstract class SetpointState extends State {
