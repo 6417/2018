@@ -49,9 +49,9 @@ public class OI {
 		liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(joystickOne, 9);
 		liftingUnitToScaleHighAltitudeButton = new JoystickButton(joystickOne, 5);
 		
-		gripperPullButton.whenPressed(new GripperPush());
+		gripperPullButton.whenPressed(new GripperPull());
 		gripperPullButton.whenReleased(new GripperStop());
-		gripperPushButton.whenPressed(new GripperPull());
+		gripperPushButton.whenPressed(new GripperPush());
 		gripperPushButton.whenReleased(new GripperStop());
 		
 		loadingPlatformDownButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));

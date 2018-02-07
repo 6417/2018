@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 /**
  * Class that represents a physical state of a device
  */
-public class State {
+public abstract class State {
 	private final Map<Event, State> eventToStateMap = new HashMap<>();
 
 	public void init() {;}

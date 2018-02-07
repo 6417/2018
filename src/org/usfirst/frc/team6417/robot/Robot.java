@@ -123,6 +123,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		// nothing to do since all pilot's commands are handled via event-listeners in the OI class.
 	}
 
 	/**

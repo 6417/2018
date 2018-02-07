@@ -48,7 +48,6 @@ public final class SmoothStepInterpolationStrategy implements InterpolationStrat
 
 	@Override
 	public boolean onTarget() {
-		SmartDashboard.putNumber("Current step", currentStep);
 		return currentStep >= maxSteps;
 	}
 }
