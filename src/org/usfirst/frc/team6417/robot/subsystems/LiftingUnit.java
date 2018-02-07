@@ -62,6 +62,12 @@ public final class LiftingUnit extends PIDSubsystem {
 		SmartDashboard.putString("LiftingUnit state (current)", currentState.getClass().getSimpleName());		
 	}
 	
+	public void reset() {
+		// Reset the encoder to 0. 
+		// Only motorA has an encoder so only motorA gets the reset:
+		motorA.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
+	}
+	
 	@Override
 	protected void initDefaultCommand() {;}
 
