@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6417.robot;
 
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.commands.TestBehavior;
 import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
 import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
 import org.usfirst.frc.team6417.robot.service.powermanagement.AdaptivePowerManagementStrategy;
@@ -31,7 +32,9 @@ public class Robot extends TimedRobot {
 	public static LiftingUnit liftingUnit;
 	// Services
 	public static PowerManager powerManager;
+	
 	private Command autonomousBehavior;
+	private Command testBehavior;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -61,6 +64,7 @@ public class Robot extends TimedRobot {
 					createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
 
 			autonomousBehavior = new AutonomousBehavior();
+			testBehavior = new TestBehavior();
 
 			oi = OI.getInstance();
 		} catch (Throwable e) {
@@ -133,11 +137,17 @@ public class Robot extends TimedRobot {
 	public void robotPeriodic() {
 
 	}
+	
+	@Override
+	public void testInit() {
+		testBehavior.start();
+	}
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
 	public void testPeriodic() {
+		Scheduler.getInstance().run();
 	}
 }
