@@ -1,13 +1,12 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
 import org.usfirst.frc.team6417.robot.Fridolin;
-import org.usfirst.frc.team6417.robot.Robot;
 import org.usfirst.frc.team6417.robot.RobotMap;
-import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
 import org.usfirst.frc.team6417.robot.model.interpolation.InterpolationStrategy;
 import org.usfirst.frc.team6417.robot.model.interpolation.SmoothStepInterpolationStrategy;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,16 +25,22 @@ public final class Gripper extends Subsystem {
 	private final double PULL_VELOCITY = -0.45;
 	private final double STOP_VELOCITY = 0;
 
+	private final PowerManagementStrategy powerManagementStrategy;
+
 	private final Fridolin leftMotor;
 	private final Fridolin rightMotor;
 
 	private State currentState;
 
-	public Gripper() {
+	public Gripper(PowerManagementStrategy powerManagementStrategy) {
 		super("Gripper");
-
+		
+		this.powerManagementStrategy = powerManagementStrategy;
+		
 		leftMotor = new Fridolin("Left-Motor", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
 		rightMotor = new Fridolin("Right-Motor", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
+		configure(leftMotor);
+		configure(rightMotor);
 
 		State stopped = currentState = new Stopped();
 		State pushing = new Pushing();
@@ -50,13 +55,23 @@ public final class Gripper extends Subsystem {
 		SmartDashboard.putString("Gripper initial state", currentState.getClass().getSimpleName());
 	}
 
+	private static void configure(Fridolin motor) {
+//		/* Limits the current to 10 amps whenever the current has exceeded 15 amps for 100 Ms */
+//		motor.configContinuousCurrentLimit(10, 0);
+//		motor.configPeakCurrentLimit(15, 0);
+//		motor.configPeakCurrentDuration(100, 0);
+//		motor.enableCurrentLimit(true);
+//		/* Motor is configured to ramp from neutral to full within 2 seconds */
+//		motor.configOpenloopRamp(0.7, 0);
+	}
+
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new GripperStop());
+		//setDefaultCommand(new GripperStop());
 	}
 
 	public void onEvent(Event event) {
-		SmartDashboard.putString("Gripper event", event.getClass().getSimpleName());
+		SmartDashboard.putString("Gripper event", event.toString());
 		SmartDashboard.putString("Gripper state (prev)", currentState.getClass().getSimpleName());
 		currentState = currentState.transition(event);
 		currentState.init();
@@ -72,7 +87,7 @@ public final class Gripper extends Subsystem {
 	}
 
 	private void setVelocity(double vel) {
-		vel = Robot.powerManager.calculatePowerFor(this) * vel;
+		vel = powerManagementStrategy.calculatePower() * vel;
 		leftMotor.set(vel);
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
@@ -106,7 +121,7 @@ public final class Gripper extends Subsystem {
 
 		@Override
 		public boolean isFinished() {
-			return false;
+			return regulator.onTarget();
 		}
 	}
 
@@ -125,7 +140,7 @@ public final class Gripper extends Subsystem {
 
 		@Override
 		public boolean isFinished() {
-			return false;
+			return regulator.onTarget();
 		}
 	}
 }

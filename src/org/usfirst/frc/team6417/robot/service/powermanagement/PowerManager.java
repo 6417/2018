@@ -7,24 +7,24 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class PowerManager {
-	private Map<Subsystem, PowerManagementStrategy> subsystems = new HashMap<Subsystem, PowerManagementStrategy>();
+	private Map<String, PowerManagementStrategy> subsystems = new HashMap<String, PowerManagementStrategy>();
 
 	public PowerManager addSubsystem(Subsystem subsystem, PowerManagementStrategy strategy) {
-		subsystems.put(subsystem, strategy);
+		subsystems.put(subsystem.getName(), strategy);
 		return this;
 	}
 	
 	public PowerManager removeSubsystem(Subsystem subsystem) {
-		subsystems.remove(subsystem);
+		subsystems.remove(subsystem.getName());
 		return this;
 	}
 	
-	public double calculatePowerFor(Subsystem subsystem) {
-		if (!subsystems.containsKey(subsystem)) {
-			return subsystems.get(subsystem).calculatePower();
+	public double calculatePowerFor(String subsystemName) {
+		if (!subsystems.containsKey(subsystemName)) {
+			return subsystems.get(subsystemName).calculatePower();
 		}
 		DriverStation.reportError("Missing Subsystem in " + this.getClass().getSimpleName() + " Subsystem "
-				+ this.getClass().getSimpleName() + "!", true);
+				+ subsystemName + "!", true);
 		
 		// 0 should set motors to stop
 		return 0;

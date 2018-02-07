@@ -4,9 +4,7 @@ import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMove;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
-import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -16,12 +14,15 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {	
-	public final Joystick joystickOne = new Joystick(RobotMap.CONTROLLER.RIGHT);
+	public final Joystick joystickOne = new Joystick(RobotMap.CONTROLLER.DIRECTION_CONTROLLER);
+	public final Joystick liftingUnitController = new Joystick(RobotMap.CONTROLLER.LIFTING_UNIT_CONTROLLER);
+	
 	private final JoystickButton gripperPullButton;
 	private final JoystickButton gripperPushButton;
 	
 	private JoystickButton loadingPlatformDownButton, loadingPlatformUpButton;
 	private JoystickButton liftingUnitToGroundAltitudeButton;
+	private JoystickButton liftingUnitToExchangeAltitudeButton;
 	private JoystickButton liftingUnitToSwitchAltitudeButton;
 	private JoystickButton liftingUnitToScaleLowAltitudeButton;
 	private JoystickButton liftingUnitToScaleMiddleAltitudeButton;
@@ -39,26 +40,28 @@ public class OI {
 	private OI() {
 		gripperPushButton = new JoystickButton(joystickOne, 1);
 		gripperPullButton = new JoystickButton(joystickOne, 2);
-		
-		loadingPlatformUpButton = new JoystickButton(joystickOne, 8);
-		loadingPlatformDownButton = new JoystickButton(joystickOne, 7);
-		
-		liftingUnitToGroundAltitudeButton = new JoystickButton(joystickOne, 4);
-		liftingUnitToSwitchAltitudeButton = new JoystickButton(joystickOne, 6);
-		liftingUnitToScaleLowAltitudeButton = new JoystickButton(joystickOne, 3);
-		liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(joystickOne, 9);
-		liftingUnitToScaleHighAltitudeButton = new JoystickButton(joystickOne, 5);
-		
+//		
+//		loadingPlatformUpButton = new JoystickButton(joystickOne, 8);
+//		loadingPlatformDownButton = new JoystickButton(joystickOne, 7);
+//		
+		liftingUnitToGroundAltitudeButton = new JoystickButton(liftingUnitController, 0);
+		liftingUnitToExchangeAltitudeButton = new JoystickButton(liftingUnitController, 1);
+		liftingUnitToSwitchAltitudeButton = new JoystickButton(liftingUnitController, 2);
+		liftingUnitToScaleLowAltitudeButton = new JoystickButton(liftingUnitController, 3);
+		liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(liftingUnitController, 4);
+		liftingUnitToScaleHighAltitudeButton = new JoystickButton(liftingUnitController, 5);
+//		
 		gripperPullButton.whenPressed(new GripperPull());
 		gripperPullButton.whenReleased(new GripperStop());
 		gripperPushButton.whenPressed(new GripperPush());
 		gripperPushButton.whenReleased(new GripperStop());
-		
-		loadingPlatformDownButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
-		loadingPlatformUpButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
-		
+//		
+//		loadingPlatformDownButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
+//		loadingPlatformUpButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
+//		
 		liftingUnitToGroundAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_GROUND));
 		liftingUnitToSwitchAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SWITCH));
+		liftingUnitToExchangeAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_EXCHANGE));
 		liftingUnitToScaleLowAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_LOW));
 		liftingUnitToScaleMiddleAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_MIDDLE));
 		liftingUnitToScaleHighAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_HIGH));

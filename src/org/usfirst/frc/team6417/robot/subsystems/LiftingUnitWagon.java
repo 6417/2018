@@ -1,10 +1,10 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
 import org.usfirst.frc.team6417.robot.Fridolin;
-import org.usfirst.frc.team6417.robot.Robot;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
+import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 
 import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.Counter;
@@ -20,9 +20,11 @@ public final class LiftingUnitWagon extends Subsystem {
 	private final Counter backEndPositionDetector;
 
 	private State currentState;
+	private PowerManagementStrategy powerManagementStrategy;
 
-	public LiftingUnitWagon() {
+	public LiftingUnitWagon(PowerManagementStrategy powerManagementStrategy) {
 		super("LiftingUnitWagon");
+		this.powerManagementStrategy = powerManagementStrategy;
 		
 		AnalogTrigger analogTrigger = new AnalogTrigger(RobotMap.AIO.LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_PORT);
 		analogTrigger.setLimitsRaw(RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD, 
@@ -57,7 +59,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	}
 	
 	private double p() {
-		return Robot.powerManager.calculatePowerFor(this);
+		return powerManagementStrategy.calculatePower();
 	}
 	
 	class Front extends State {

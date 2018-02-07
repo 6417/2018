@@ -88,6 +88,9 @@ public class RobotMap {
 	 */
 	public static class ENCODER {
 		public static final int PULSE_PER_ROTATION = 512;
+		
+		// https://www.vexrobotics.com/vexpro/motors-electronics/encoders/217-5046.html :
+		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
 
 		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
 		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
@@ -101,8 +104,8 @@ public class RobotMap {
 	}
 
 	public static class CONTROLLER {
-		public static final int RIGHT = 0;
-		public static final int LEFT = 1;
+		public static final int DIRECTION_CONTROLLER = 0;
+		public static final int LIFTING_UNIT_CONTROLLER = 1;
 	}
 
 	/**

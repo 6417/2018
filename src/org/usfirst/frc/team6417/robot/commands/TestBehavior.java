@@ -20,33 +20,33 @@ public final class TestBehavior extends CommandGroup {
 				return true;
 			}
 		});
-		addSequential(new Command() {
-
-			@Override
-			protected void initialize() {
-				Robot.liftingUnit.setSetpoint(1000);
-			}
-
-			@Override
-			protected boolean isFinished() {
-				return Robot.liftingUnit.onTarget();
-			}
-		});
-		addSequential(new Command() {
-
-			@Override
-			protected void initialize() {
-				Robot.liftingUnit.setSetpoint(0);
-			}
-
-			@Override
-			protected boolean isFinished() {
-				return Robot.liftingUnit.onTarget();
-			}
-		});
-		addSequential(new GripperPull());
-		addSequential(new GripperStop());
-		addSequential(new GripperPush());
-		addSequential(new GripperStop());
+//		addSequential(new Command() {
+//
+//			@Override
+//			protected void initialize() {
+//				Robot.liftingUnit.setSetpoint(1000);
+//			}
+//
+//			@Override
+//			protected boolean isFinished() {
+//				return Robot.liftingUnit.onTarget();
+//			}
+//		});
+//		addSequential(new Command() {
+//
+//			@Override
+//			protected void initialize() {
+//				Robot.liftingUnit.setSetpoint(0);
+//			}
+//
+//			@Override
+//			protected boolean isFinished() {
+//				return Robot.liftingUnit.onTarget();
+//			}
+//		});
+//		addSequential(new GripperPull());
+//		addSequential(new GripperStop());
+//		addSequential(new GripperPush());
+//		addSequential(new GripperStop());
 	}
 }

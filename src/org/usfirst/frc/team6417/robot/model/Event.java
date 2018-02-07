@@ -9,7 +9,7 @@ public final class Event {
 	
 	@Override
 	public String toString() {
-		return "Event [name=" + name + "]";
+		return name;
 	}
 
 	@Override

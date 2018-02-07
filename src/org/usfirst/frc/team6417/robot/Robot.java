@@ -1,12 +1,9 @@
 package org.usfirst.frc.team6417.robot;
 
-import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
-import org.usfirst.frc.team6417.robot.commands.TestBehavior;
 import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
 import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
 import org.usfirst.frc.team6417.robot.service.powermanagement.AdaptivePowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
-import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManager;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
 import org.usfirst.frc.team6417.robot.subsystems.Gripper;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
@@ -31,7 +28,6 @@ public class Robot extends TimedRobot {
 	public static OI oi;
 	public static LiftingUnit liftingUnit;
 	// Services
-	public static PowerManager powerManager;
 	
 	private Command autonomousBehavior;
 	private Command testBehavior;
@@ -43,28 +39,27 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		try {
-			powerManager = new PowerManager();
 
 			navX = new NavX();
-			gripper = new Gripper();
-			drive = new Drive();
-			swerveDrive = new SwerveDrive();
-			liftingUnitWagon = new LiftingUnitWagon();
-			liftingUnit = new LiftingUnit();
-			
-			
+			gripper = new Gripper(createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
+			drive = new Drive(createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
+//			swerveDrive = new SwerveDrive();
+//			liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
+			liftingUnit = new LiftingUnit(createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
+//			
+//			
+//
+//			powerManager.addSubsystem(gripper, 
+//					createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
+//			powerManager.addSubsystem(drive, 
+//					createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
+//			powerManager.addSubsystem(liftingUnitWagon,
+//					);
+//			powerManager.addSubsystem(liftingUnit,
+//					createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
 
-			powerManager.addSubsystem(gripper, 
-					createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
-			powerManager.addSubsystem(drive, 
-					createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
-			powerManager.addSubsystem(liftingUnitWagon,
-					createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
-			powerManager.addSubsystem(liftingUnit,
-					createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
-
-			autonomousBehavior = new AutonomousBehavior();
-			testBehavior = new TestBehavior();
+//			autonomousBehavior = new AutonomousBehavior();
+//			testBehavior = new TestBehavior();
 
 			oi = OI.getInstance();
 		} catch (Throwable e) {
