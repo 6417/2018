@@ -2,7 +2,7 @@ package org.usfirst.frc.team6417.robot.subsystems;
 
 import java.util.Arrays;
 
-import org.usfirst.frc.team6417.robot.Fridolin;
+import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
@@ -26,7 +26,7 @@ public final class LiftingUnit extends Subsystem {
 //	private static final double kI = 0.1;
 //	private static final double kD = 0.1;
 	
-	private final Fridolin motorA, motorB;
+	private final MotorController motorA, motorB;
 	
 	private State currentState;
 	private final PowerManagementStrategy powerManagementStrategy;
@@ -43,8 +43,8 @@ public final class LiftingUnit extends Subsystem {
 //		getPIDController().setContinuous(false);
 //		getPIDController().setName("LiftingUnit-Controller");
 		
-		motorA = new Fridolin("Motor-A", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
-		motorB = new Fridolin("Motor-B", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorA = new MotorController("Motor-A", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
+		motorB = new MotorController("Motor-B", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
 		
 		configure(motorA);
 		configure(motorB);
@@ -69,54 +69,54 @@ public final class LiftingUnit extends Subsystem {
 		
 	}
 	
-	private void configureForClosedLoop(Fridolin motor) {
+	private void configureForClosedLoop(MotorController motor) {
 		/* choose the sensor and sensor direction */
 		motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 
-				Fridolin.kPIDLoopIdx,
-				Fridolin.kTimeoutMs);
+				MotorController.kPIDLoopIdx,
+				MotorController.kTimeoutMs);
 
 		/*
 		 * set the allowable closed-loop error, Closed-Loop output will be
 		 * neutral within this range. See Table in Section 17.2.1 for native
 		 * units per rotation.
 		 */
-		motor.configAllowableClosedloopError(0, Fridolin.kPIDLoopIdx, Fridolin.kTimeoutMs);
+		motor.configAllowableClosedloopError(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
 
 		/* set closed loop gains in slot0, typically kF stays zero. */
-		motor.config_kF(Fridolin.kPIDLoopIdx, 0.0, Fridolin.kTimeoutMs);
-		motor.config_kP(Fridolin.kPIDLoopIdx, 0.1, Fridolin.kTimeoutMs);
-		motor.config_kI(Fridolin.kPIDLoopIdx, 0.0, Fridolin.kTimeoutMs);
-		motor.config_kD(Fridolin.kPIDLoopIdx, 0.0, Fridolin.kTimeoutMs);
+		motor.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+		motor.config_kP(MotorController.kPIDLoopIdx, 0.1, MotorController.kTimeoutMs);
+		motor.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+		motor.config_kD(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
 		
 		/*
 		 * lets grab the 360 degree position of the MagEncoder's absolute
 		 * position, and intitally set the relative sensor to match.
 		 */
-		int absolutePosition = motor.getSelectedSensorPosition(Fridolin.kPIDLoopIdx);
+		int absolutePosition = motor.getSelectedSensorPosition(MotorController.kPIDLoopIdx);
 		/* mask out overflows, keep bottom 12 bits */
 		absolutePosition &= 0xFFF;
-		if (Fridolin.kSensorPhase)
+		if (MotorController.kSensorPhase)
 			absolutePosition *= -1;
-		if (Fridolin.kMotorInvert)
+		if (MotorController.kMotorInvert)
 			absolutePosition *= -1;
 		/* set the quadrature (relative) sensor to match absolute */
-		motor.setSelectedSensorPosition(absolutePosition, Fridolin.kPIDLoopIdx, Fridolin.kTimeoutMs);
+		motor.setSelectedSensorPosition(absolutePosition, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
 
 	}
 
-	private void configure(Fridolin motor) {
+	private void configure(MotorController motor) {
 		/* choose to ensure sensor is positive when output is positive */
-		motor.setSensorPhase(Fridolin.kSensorPhase);
+		motor.setSensorPhase(MotorController.kSensorPhase);
 
 		/* choose based on what direction you want forward/positive to be.
 		 * This does not affect sensor phase. */ 
-		motor.setInverted(Fridolin.kMotorInvert);
+		motor.setInverted(MotorController.kMotorInvert);
 
 		/* set the peak and nominal outputs, 12V means full */
-		motor.configNominalOutputForward(0, Fridolin.kTimeoutMs);
-		motor.configNominalOutputReverse(0, Fridolin.kTimeoutMs);
-		motor.configPeakOutputForward(1, Fridolin.kTimeoutMs);
-		motor.configPeakOutputReverse(-1, Fridolin.kTimeoutMs);
+		motor.configNominalOutputForward(0, MotorController.kTimeoutMs);
+		motor.configNominalOutputReverse(0, MotorController.kTimeoutMs);
+		motor.configPeakOutputForward(1, MotorController.kTimeoutMs);
+		motor.configPeakOutputReverse(-1, MotorController.kTimeoutMs);
 
 	}
 

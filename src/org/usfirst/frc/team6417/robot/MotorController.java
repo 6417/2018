@@ -2,7 +2,7 @@ package org.usfirst.frc.team6417.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-public class Fridolin extends WPI_TalonSRX {
+public class MotorController extends WPI_TalonSRX {
 	/**
 	 * Which PID slot to pull gains from. Starting 2018, you can choose from
 	 * 0,1,2 or 3. Only the first two (0,1) are visible in web-based
@@ -32,11 +32,11 @@ public class Fridolin extends WPI_TalonSRX {
 	
 	private double maxSpeed = 1;
 
-	public Fridolin(final int channel) {
+	public MotorController(final int channel) {
 		super(channel);
 	}
 
-	public Fridolin(final String name, final int channel) {
+	public MotorController(final String name, final int channel) {
 		this(channel);
 		setName(name);
 	}

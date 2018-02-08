@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
-import org.usfirst.frc.team6417.robot.Fridolin;
+import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.commands.DriveTeleoperated;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
@@ -23,14 +23,14 @@ public final class Drive extends Subsystem {
 		super("Drive");
 		this.powerManagementStrategy = powerManagementStrategy;
 		
-		Fridolin leftFrontMotor = new Fridolin("Left-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT); 
-		Fridolin rightFrontMotor = new Fridolin("Right-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT);
+		MotorController leftFrontMotor = new MotorController("Left-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT); 
+		MotorController rightFrontMotor = new MotorController("Right-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT);
 		
 		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 		
 		if(isAll4MotorsConnected) {
-			Fridolin leftRearMotor = new Fridolin("Left-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
-			Fridolin rightRearMotor = new Fridolin("Right-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
+			MotorController leftRearMotor = new MotorController("Left-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
+			MotorController rightRearMotor = new MotorController("Right-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
 			leftRearMotor.follow(leftFrontMotor);
 			rightRearMotor.follow(rightFrontMotor);
 		}

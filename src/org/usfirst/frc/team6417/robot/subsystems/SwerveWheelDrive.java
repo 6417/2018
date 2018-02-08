@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
-import org.usfirst.frc.team6417.robot.Fridolin;
+import org.usfirst.frc.team6417.robot.MotorController;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PIDController;
@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * @author https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/part-2-driving.html
  */
 public final class SwerveWheelDrive extends Subsystem {
-	private Fridolin angleMotor;
-	private Fridolin speedMotor;
+	private MotorController angleMotor;
+	private MotorController speedMotor;
 	private PIDController pidController;
 	
 	private final double MAX_VOLTS = 4.95;
@@ -20,8 +20,8 @@ public final class SwerveWheelDrive extends Subsystem {
 	public SwerveWheelDrive (int angleMotor, int speedMotor, int encoder) {
 		super("SwerveWheelDrive");
 		
-	    this.angleMotor = new Fridolin ("Angle-Motor", angleMotor);
-	    this.speedMotor = new Fridolin ("Speed-Motor", speedMotor);
+	    this.angleMotor = new MotorController ("Angle-Motor", angleMotor);
+	    this.speedMotor = new MotorController ("Speed-Motor", speedMotor);
 	    pidController = new PIDController (1, 0, 0, new AnalogInput (encoder), this.angleMotor);
 	    pidController.setName("Angle-Motor-Controller");
 	    

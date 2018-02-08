@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
-import org.usfirst.frc.team6417.robot.Fridolin;
+import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
@@ -14,7 +14,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	public static final Event FRONT = new Event("FRONT");
 	public static final Event BACK = new Event("BACK");
 
-	private final Fridolin motor = new Fridolin("Motor", RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
+	private final MotorController motor = new MotorController("Motor", RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
 	
 	private final Counter frontEndPositionDetector;
 	private final Counter backEndPositionDetector;

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
-import org.usfirst.frc.team6417.robot.Fridolin;
+import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
@@ -27,8 +27,8 @@ public final class Gripper extends Subsystem {
 
 	private final PowerManagementStrategy powerManagementStrategy;
 
-	private final Fridolin leftMotor;
-	private final Fridolin rightMotor;
+	private final MotorController leftMotor;
+	private final MotorController rightMotor;
 
 	private State currentState;
 
@@ -37,8 +37,8 @@ public final class Gripper extends Subsystem {
 		
 		this.powerManagementStrategy = powerManagementStrategy;
 		
-		leftMotor = new Fridolin("Left-Motor", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
-		rightMotor = new Fridolin("Right-Motor", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
+		leftMotor = new MotorController("Left-Motor", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
+		rightMotor = new MotorController("Right-Motor", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
 		configure(leftMotor);
 		configure(rightMotor);
 
@@ -55,7 +55,7 @@ public final class Gripper extends Subsystem {
 		SmartDashboard.putString("Gripper initial state", currentState.getClass().getSimpleName());
 	}
 
-	private static void configure(Fridolin motor) {
+	private static void configure(MotorController motor) {
 //		/* Limits the current to 10 amps whenever the current has exceeded 15 amps for 100 Ms */
 //		motor.configContinuousCurrentLimit(10, 0);
 //		motor.configPeakCurrentLimit(15, 0);
