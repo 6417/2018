@@ -16,21 +16,30 @@ public final class Drive extends Subsystem {
 	private final DifferentialDrive drive;
 	private final PowerManagementStrategy powerManagementStrategy;
 	
+	// TODO nils Remove if all 4 motors are connected to the robot
+	private boolean isAll4MotorsConnected = false;
+	
 	public Drive(PowerManagementStrategy powerManagementStrategy) {
 		super("Drive");
 		this.powerManagementStrategy = powerManagementStrategy;
-		drive = new DifferentialDrive(
-					new Fridolin("Left-Motor", RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT), 
-					new Fridolin("Right-Motor", RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT));
+		
+		Fridolin leftFrontMotor = new Fridolin("Left-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT); 
+		Fridolin rightFrontMotor = new Fridolin("Right-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT);
+		
+		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
+		
+		if(isAll4MotorsConnected) {
+			Fridolin leftRearMotor = new Fridolin("Left-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
+			Fridolin rightRearMotor = new Fridolin("Right-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
+			leftRearMotor.follow(leftFrontMotor);
+			rightRearMotor.follow(rightFrontMotor);
+		}
 	}	
 	
-	public void setVelocity(double angle, double throttle) {
-		double p = powerManagementStrategy.calculatePower();
-		throttle = p * throttle;
-		drive.arcadeDrive(throttle, -angle);
-		
-		SmartDashboard.putNumber("Drive velocity", throttle);
-		SmartDashboard.putNumber("Drive angle", angle);
+	public void arcadeDrive(double speed, double turn) {
+		drive.arcadeDrive(powerManagementStrategy.calculatePower() * speed, turn);
+		SmartDashboard.putNumber("Drive velocity", speed);
+		SmartDashboard.putNumber("Drive angle", turn);
 	}
 	
 	public void stop() {

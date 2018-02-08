@@ -13,8 +13,26 @@ public final class DriveTeleoperated extends Command {
 	
 	@Override
 	protected void execute() {
-		Robot.drive.setVelocity(OI.getInstance().joystickOne.getX(), 
-								OI.getInstance().joystickOne.getY());
+		/* sign this so forward is positive */
+		double forward = -1.0 * OI.getInstance().joystickOne.getY();
+		/* sign this so right is positive. */
+		double turn = +1.0 * OI.getInstance().joystickOne.getZ();
+		/* deadband */
+		if (Math.abs(forward) < 0.10) {
+			/* within 10% joystick, make it zero */
+			forward = 0;
+		}
+		if (Math.abs(turn) < 0.10) {
+			/* within 10% joystick, make it zero */
+			turn = 0;
+		}
+		/* print the joystick values to sign them, comment
+		 * out this line after checking the joystick directions. */
+		System.out.println("JoyY:" + forward + "  turn:" + turn );
+		/* drive the robot, when driving forward one side will be red.  
+		 * This is because DifferentialDrive assumes 
+		 * one side must be negative */	
+		Robot.drive.arcadeDrive(forward, turn);
 	}
 	
 	@Override
