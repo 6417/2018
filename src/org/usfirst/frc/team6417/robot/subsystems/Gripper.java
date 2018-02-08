@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
 import org.usfirst.frc.team6417.robot.MotorController;
+import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
@@ -37,11 +38,11 @@ public final class Gripper extends Subsystem {
 		
 		this.powerManagementStrategy = powerManagementStrategy;
 		
-		leftMotor = new MotorController("Left-Motor", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
-		rightMotor = new MotorController("Right-Motor", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
-		configure(leftMotor);
-		configure(rightMotor);
-
+		final MotorControllerFactory factory = new MotorControllerFactory();
+		leftMotor = factory.create775Pro("Left-Motor-Slave", RobotMap.MOTOR.GRIPPER_LEFT_PORT);
+		rightMotor = factory.create775Pro("Right-Motor-Master", RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
+		leftMotor.follow(rightMotor);
+		
 		State stopped = currentState = new Stopped();
 		State pushing = new Pushing();
 		State pulling = new Pulling();
@@ -55,20 +56,9 @@ public final class Gripper extends Subsystem {
 		SmartDashboard.putString("Gripper initial state", currentState.getClass().getSimpleName());
 	}
 
-	private static void configure(MotorController motor) {
-//		/* Limits the current to 10 amps whenever the current has exceeded 15 amps for 100 Ms */
-//		motor.configContinuousCurrentLimit(10, 0);
-//		motor.configPeakCurrentLimit(15, 0);
-//		motor.configPeakCurrentDuration(100, 0);
-//		motor.enableCurrentLimit(true);
-//		/* Motor is configured to ramp from neutral to full within 2 seconds */
-//		motor.configOpenloopRamp(0.7, 0);
-	}
 
 	@Override
-	protected void initDefaultCommand() {
-		//setDefaultCommand(new GripperStop());
-	}
+	protected void initDefaultCommand() {;}
 
 	public void onEvent(Event event) {
 		SmartDashboard.putString("Gripper event", event.toString());
@@ -88,7 +78,7 @@ public final class Gripper extends Subsystem {
 
 	private void setVelocity(double vel) {
 		vel = powerManagementStrategy.calculatePower() * vel;
-		leftMotor.set(vel);
+		//Only master-motor must be set
 		rightMotor.set(vel);
 		SmartDashboard.putNumber("Gripper velocity", vel);
 	}

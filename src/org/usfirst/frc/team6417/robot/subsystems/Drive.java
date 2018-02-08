@@ -29,8 +29,8 @@ public final class Drive extends Subsystem {
 		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 		
 		if(isAll4MotorsConnected) {
-			MotorController leftRearMotor = new MotorController("Left-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
-			MotorController rightRearMotor = new MotorController("Right-Rear-Motor", RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
+			MotorController leftRearMotor = new MotorController("Left-Rear-Motor-Slave", RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
+			MotorController rightRearMotor = new MotorController("Right-Rear-Motor-Slave", RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
 			leftRearMotor.follow(leftFrontMotor);
 			rightRearMotor.follow(rightFrontMotor);
 		}
