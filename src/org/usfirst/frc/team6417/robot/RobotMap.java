@@ -21,11 +21,11 @@ public class RobotMap {
 		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 45; /*cm*/
 		
 		public static final long LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
-		public static final long LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = 100; /*encoder ticks*/
-		public static final long LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = 200; /*encoder ticks*/
-		public static final long LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 500; /*encoder ticks*/
-		public static final long LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 600; /*encoder ticks*/
-		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 700; /*encoder ticks*/
+		public static final long LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = 1000; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = 2000; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 5000; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 6000; /*encoder ticks*/
+		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 7000; /*encoder ticks*/
 	}
 	
 	/**
@@ -92,7 +92,8 @@ public class RobotMap {
 		
 		// https://www.vexrobotics.com/vexpro/motors-electronics/encoders/217-5046.html :
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
-
+		public static final int QUADRATURE_UNITS_PER_ROTATION = 4096;
+		
 		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
 		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
 		public static final int DRIVE_FRONT_RIGHT_PORT_A = 2;
