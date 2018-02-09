@@ -4,6 +4,7 @@ import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMove;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,13 +21,13 @@ public class OI {
 	private final JoystickButton gripperPullButton;
 	private final JoystickButton gripperPushButton;
 	
-	private JoystickButton loadingPlatformDownButton, loadingPlatformUpButton;
 	private JoystickButton liftingUnitToGroundAltitudeButton;
 	private JoystickButton liftingUnitToExchangeAltitudeButton;
 	private JoystickButton liftingUnitToSwitchAltitudeButton;
 	private JoystickButton liftingUnitToScaleLowAltitudeButton;
 	private JoystickButton liftingUnitToScaleMiddleAltitudeButton;
 	private JoystickButton liftingUnitToScaleHighAltitudeButton;
+	private JoystickButton liftingUnitResetButton;
 
 	private static OI INSTANCE;
 	
@@ -50,6 +51,7 @@ public class OI {
 		liftingUnitToScaleLowAltitudeButton = new JoystickButton(liftingUnitController, 4);
 		liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(liftingUnitController, 5);
 		liftingUnitToScaleHighAltitudeButton = new JoystickButton(liftingUnitController, 6);
+		liftingUnitResetButton = new JoystickButton(joystickOne, 10);
 //		
 		gripperPullButton.whenPressed(new GripperPull());
 		gripperPullButton.whenReleased(new GripperStop());
@@ -65,7 +67,7 @@ public class OI {
 		liftingUnitToScaleLowAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_LOW));
 		liftingUnitToScaleMiddleAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_MIDDLE));
 		liftingUnitToScaleHighAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_HIGH));
-		
+		liftingUnitResetButton.whenPressed(new LiftingUnitReset());
 	}
 	
 }

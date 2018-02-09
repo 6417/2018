@@ -22,15 +22,11 @@ public final class LiftingUnit extends Subsystem {
 	public static final Event TO_SCALE_MIDDLE = new Event("TO_SCALE_MIDDLE");
 	public static final Event TO_SCALE_HIGH = new Event("TO_SCALE_HIGH");
 
-	private static final double kP = 0.2;
-	private static final double kI = 0.0;
-	private static final double kD = 0.0;
-	private static final double kF = 0.0;
-	
 	private final MotorController motorA, motorB;
 	
 	private State currentState;
 	private final PowerManagementStrategy powerManagementStrategy;
+	private int allowedErrorRelative;
 	
 	public LiftingUnit(PowerManagementStrategy powerManagementStrategy) {
 		super("LiftingUnit");
@@ -39,9 +35,13 @@ public final class LiftingUnit extends Subsystem {
 		
 		final MotorControllerFactory factory = new MotorControllerFactory();
 		motorA = factory.create775Pro("Motor-A-Slave", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
-		motorB = factory.create775ProWithEncoder("Motor-B-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
-		
-		configure(motorB);
+		motorB = factory.create777ProWithPositionControl("Motor-B-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+
+		// TODO nils: Move these 3 lines to the factory after testing
+		int allowedErrorPercentage = 10;
+		allowedErrorRelative = RobotMap.ENCODER.QUADRATURE_UNITS_PER_ROTATION / allowedErrorPercentage;
+		motorB.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
+
 		motorA.follow(motorB);
 
 		State ground = currentState = new Ground();
@@ -61,25 +61,6 @@ public final class LiftingUnit extends Subsystem {
 		} );
 		
 	}
-	
-	
-
-	private void configure(MotorController motor) {
-		/*
-		 * set the allowable closed-loop error, Closed-Loop output will be
-		 * neutral within this range. See Table in Section 17.2.1 for native
-		 * units per rotation.
-		 */
-		motor.configAllowableClosedloopError(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
-
-		/* set closed loop gains in slot0, typically kF stays zero. */
-		motor.config_kF(MotorController.kPIDLoopIdx, kF, MotorController.kTimeoutMs);
-		motor.config_kP(MotorController.kPIDLoopIdx, kP, MotorController.kTimeoutMs);
-		motor.config_kI(MotorController.kPIDLoopIdx, kI, MotorController.kTimeoutMs);
-		motor.config_kD(MotorController.kPIDLoopIdx, kD, MotorController.kTimeoutMs);
-		
-	}
-
 
 
 	public void onEvent(Event event) {
@@ -93,16 +74,20 @@ public final class LiftingUnit extends Subsystem {
 	public void reset() {
 		// Reset the encoder to 0. 
 		// Only motorB has an encoder so only motorB gets the reset:
-		motorB.set(ControlMode.Position, 0);
+		motorB.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
+	}
+	
+	public boolean onTarget() {
+		return allowedErrorRelative <= motorB.getClosedLoopError(MotorController.kPIDLoopIdx);
 	}
 	
 	@Override
 	protected void initDefaultCommand() {;}
 	
 	abstract class SetpointState extends State {
-		protected void init(long ticks) {
-			SmartDashboard.putNumber("LiftingUnit Setpoint", ticks);
-			motorB.set(ControlMode.Position, ticks);
+		protected void init(long setpoint) {
+			SmartDashboard.putNumber("LiftingUnit Setpoint", setpoint);
+			motorB.set(ControlMode.MotionMagic, setpoint);
 		}
 		
 	}
