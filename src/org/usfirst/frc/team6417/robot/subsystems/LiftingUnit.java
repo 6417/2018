@@ -51,7 +51,7 @@ public final class LiftingUnit extends Subsystem {
 		State scaleMiddle = new Switch();
 		State scaleHigh = new Switch();
 
-		Arrays.asList(ground,theSwitch,scaleLow,scaleHigh).stream().forEach( state -> {
+		Arrays.asList(ground,theSwitch,exchange,scaleLow,scaleMiddle,scaleHigh).stream().forEach( state -> {
 			state.addTransition(TO_GROUND, ground)
 			     .addTransition(TO_SWITCH, theSwitch)
 			     .addTransition(TO_EXCHANGE, exchange)
