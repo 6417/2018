@@ -36,20 +36,19 @@ public final class LiftingUnit extends Subsystem {
 		final MotorControllerFactory factory = new MotorControllerFactory();
 		motorA = factory.create775Pro("Motor-A-Slave", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
 		motorB = factory.create777ProWithPositionControl("Motor-B-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorA.follow(motorB);
 
 		// TODO nils: Move these 3 lines to the factory after testing
 		int allowedErrorPercentage = 10;
 		allowedErrorRelative = RobotMap.ENCODER.QUADRATURE_UNITS_PER_ROTATION / allowedErrorPercentage;
 		motorB.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
 
-		motorA.follow(motorB);
-
-		State ground = currentState = new Ground();
-		State theSwitch = new Switch();
-		State exchange = new Exchange();
-		State scaleLow = new Switch();
-		State scaleMiddle = new Switch();
-		State scaleHigh = new Switch();
+		State ground = currentState = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
+		State theSwitch = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS);
+		State exchange = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS);
+		State scaleLow = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS);
+		State scaleMiddle = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS);
+		State scaleHigh = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
 
 		Arrays.asList(ground,theSwitch,exchange,scaleLow,scaleMiddle,scaleHigh).stream().forEach( state -> {
 			state.addTransition(TO_GROUND, ground)
@@ -84,48 +83,24 @@ public final class LiftingUnit extends Subsystem {
 	@Override
 	protected void initDefaultCommand() {;}
 	
-	abstract class SetpointState extends State {
-		protected void init(long setpoint) {
-			SmartDashboard.putNumber("LiftingUnit Setpoint", setpoint);
-			motorB.set(ControlMode.MotionMagic, setpoint);
+	private final class PositionState extends State {
+		private final long position;
+		
+		PositionState(long position){
+			this.position = position;
 		}
 		
-	}
-	class Ground extends SetpointState {
 		@Override
 		public void init() {
-			init(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
+			SmartDashboard.putNumber("LiftingUnit nominal position", position);
+			motorB.set(ControlMode.Position, position);
 		}
-	}
-	class Switch extends SetpointState {
+		
 		@Override
-		public void init() {
-			init(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS);
+		public void tick() {
+			SmartDashboard.putNumber("LiftingUnit actual position", motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
+			motorB.set(ControlMode.Position, position);
 		}
 	}
-	class Exchange extends SetpointState {
-		@Override
-		public void init() {
-			init(RobotMap.ROBOT.LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS);
-		}
-	}
-	class ScaleLow extends SetpointState {
-		@Override
-		public void init() {
-			init(RobotMap.ROBOT.LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS);
-		}
-	}
-	class ScaleMiddle extends SetpointState {
-		@Override
-		public void init() {
-			init(RobotMap.ROBOT.LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS);
-		}
-	}
-	class ScaleHigh extends SetpointState {
-		@Override
-		public void init() {
-			init(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
-		}
-	}
-
+	
 }
