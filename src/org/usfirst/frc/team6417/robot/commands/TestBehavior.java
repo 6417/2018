@@ -1,25 +1,22 @@
 package org.usfirst.frc.team6417.robot.commands;
 
-import org.usfirst.frc.team6417.robot.Robot;
-
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public final class TestBehavior extends CommandGroup {
 	public TestBehavior() {
 		addSequential(new GetFieldInformation());
-		addSequential(new Command() {
-
-			@Override
-			protected void initialize() {
-				Robot.liftingUnit.reset();
-			}
-
-			@Override
-			protected boolean isFinished() {
-				return true;
-			}
-		});
+//		addSequential(new Command() {
+//
+//			@Override
+//			protected void initialize() {
+//				Robot.liftingUnit.reset();
+//			}
+//
+//			@Override
+//			protected boolean isFinished() {
+//				return true;
+//			}
+//		});
 //		addSequential(new Command() {
 //
 //			@Override

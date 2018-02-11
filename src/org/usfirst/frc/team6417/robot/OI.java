@@ -18,8 +18,8 @@ public class OI {
 	public final Joystick joystickOne = new Joystick(RobotMap.CONTROLLER.DIRECTION_CONTROLLER);
 	public final Joystick liftingUnitController = new Joystick(RobotMap.CONTROLLER.LIFTING_UNIT_CONTROLLER);
 	
-	private final JoystickButton gripperPullButton;
-	private final JoystickButton gripperPushButton;
+	private JoystickButton gripperPullButton;
+	private JoystickButton gripperPushButton;
 	
 	private JoystickButton liftingUnitToGroundAltitudeButton;
 	private JoystickButton liftingUnitToExchangeAltitudeButton;
@@ -39,35 +39,42 @@ public class OI {
 	}
 	
 	private OI() {
-		gripperPushButton = new JoystickButton(joystickOne, 1);
-		gripperPullButton = new JoystickButton(joystickOne, 2);
-//		
-//		loadingPlatformUpButton = new JoystickButton(joystickOne, 8);
-//		loadingPlatformDownButton = new JoystickButton(joystickOne, 7);
-//		
-		liftingUnitToGroundAltitudeButton = new JoystickButton(liftingUnitController, 1);
-		liftingUnitToExchangeAltitudeButton = new JoystickButton(liftingUnitController, 2);
-		liftingUnitToSwitchAltitudeButton = new JoystickButton(liftingUnitController, 3);
-		liftingUnitToScaleLowAltitudeButton = new JoystickButton(liftingUnitController, 4);
-		liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(liftingUnitController, 5);
-		liftingUnitToScaleHighAltitudeButton = new JoystickButton(liftingUnitController, 6);
-		liftingUnitResetButton = new JoystickButton(joystickOne, 10);
-//		
-		gripperPullButton.whenPressed(new GripperPull());
-		gripperPullButton.whenReleased(new GripperStop());
-		gripperPushButton.whenPressed(new GripperPush());
-		gripperPushButton.whenReleased(new GripperStop());
-//		
-//		loadingPlatformDownButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
-//		loadingPlatformUpButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
-//		
-		liftingUnitToGroundAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_GROUND));
-		liftingUnitToSwitchAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SWITCH));
-		liftingUnitToExchangeAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_EXCHANGE));
-		liftingUnitToScaleLowAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_LOW));
-		liftingUnitToScaleMiddleAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_MIDDLE));
-		liftingUnitToScaleHighAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_HIGH));
-		liftingUnitResetButton.whenPressed(new LiftingUnitReset());
+		if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
+			gripperPushButton = new JoystickButton(joystickOne, 1);
+			gripperPullButton = new JoystickButton(joystickOne, 2);
+
+			gripperPullButton.whenPressed(new GripperPull());
+			gripperPullButton.whenReleased(new GripperStop());
+			gripperPushButton.whenPressed(new GripperPush());
+			gripperPushButton.whenReleased(new GripperStop());
+		}
+		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
+//			liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
+		}
+		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
+			liftingUnitToGroundAltitudeButton = new JoystickButton(liftingUnitController, 1);
+			liftingUnitToExchangeAltitudeButton = new JoystickButton(liftingUnitController, 2);
+			liftingUnitToSwitchAltitudeButton = new JoystickButton(liftingUnitController, 3);
+			liftingUnitToScaleLowAltitudeButton = new JoystickButton(liftingUnitController, 4);
+			liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(liftingUnitController, 5);
+			liftingUnitToScaleHighAltitudeButton = new JoystickButton(liftingUnitController, 6);
+			liftingUnitResetButton = new JoystickButton(joystickOne, 10);
+
+			liftingUnitToGroundAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_GROUND));
+			liftingUnitToSwitchAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SWITCH));
+			liftingUnitToExchangeAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_EXCHANGE));
+			liftingUnitToScaleLowAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_LOW));
+			liftingUnitToScaleMiddleAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_MIDDLE));
+			liftingUnitToScaleHighAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_HIGH));
+			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
+		}
+		if(RobotMap.SUBSYSTEM.IS_DIFFERENTIAL_DRIVE_IN_USE) {
+		// nothing to do. the drive uses the internal default command.
+		}
+		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
+			// nothing to do. the drive uses the internal default command.
+		}		
+
 	}
 	
 }

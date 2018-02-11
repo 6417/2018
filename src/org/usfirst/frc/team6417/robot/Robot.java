@@ -1,5 +1,7 @@
 package org.usfirst.frc.team6417.robot;
 
+import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.commands.TestBehavior;
 import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
 import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
 import org.usfirst.frc.team6417.robot.service.powermanagement.AdaptivePowerManagementStrategy;
@@ -41,11 +43,22 @@ public class Robot extends TimedRobot {
 		try {
 
 			navX = new NavX();
-			gripper = new Gripper(createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
-			drive = new Drive(createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
-//			swerveDrive = new SwerveDrive();
-//			liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
-			liftingUnit = new LiftingUnit(createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
+			
+			if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
+				gripper = new Gripper(createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
+			}
+			if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
+//				liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
+			}
+			if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
+				liftingUnit = new LiftingUnit(createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
+			}
+			if(RobotMap.SUBSYSTEM.IS_DIFFERENTIAL_DRIVE_IN_USE) {
+				drive = new Drive(createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
+			}
+			if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
+//				swerveDrive = new SwerveDrive();
+			}
 //			
 //			
 //
@@ -58,8 +71,8 @@ public class Robot extends TimedRobot {
 //			powerManager.addSubsystem(liftingUnit,
 //					createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));
 
-//			autonomousBehavior = new AutonomousBehavior();
-//			testBehavior = new TestBehavior();
+			autonomousBehavior = new AutonomousBehavior();
+			testBehavior = new TestBehavior();
 
 			oi = OI.getInstance();
 		} catch (Throwable e) {

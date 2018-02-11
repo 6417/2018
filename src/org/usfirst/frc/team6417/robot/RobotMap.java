@@ -28,6 +28,13 @@ public class RobotMap {
 		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 7000; /*encoder ticks*/
 	}
 	
+	public static class SUBSYSTEM {
+		public static boolean IS_GRIPPER_IN_USE = true;
+		public static boolean IS_LIFTING_UNIT_IN_USE = true;
+		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
+		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = true;
+		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
+	}
 	/**
 	 * The RobotMap.MATH class provides you with different mathematical values
 	 */
