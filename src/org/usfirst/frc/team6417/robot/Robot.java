@@ -12,6 +12,7 @@ import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 import org.usfirst.frc.team6417.robot.subsystems.NavX;
 import org.usfirst.frc.team6417.robot.subsystems.SwerveDrive;
+import org.usfirst.frc.team6417.robot.subsystems.SwerveWheelDrive;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -33,6 +34,8 @@ public class Robot extends TimedRobot {
 	
 	private Command autonomousBehavior;
 	private Command testBehavior;
+	
+	public static SwerveWheelDrive swerveDriveWheel;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -59,6 +62,9 @@ public class Robot extends TimedRobot {
 			if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 //				swerveDrive = new SwerveDrive();
 			}
+			if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
+				swerveDriveWheel = new SwerveWheelDrive(1, 0, 0);
+			}
 //			
 //			
 //
@@ -75,6 +81,8 @@ public class Robot extends TimedRobot {
 			testBehavior = new TestBehavior();
 
 			oi = OI.getInstance();
+			
+			
 		} catch (Throwable e) {
 			DriverStation.reportError(e.getMessage(), e.getStackTrace());
 		}
@@ -132,6 +140,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		// nothing to do since all pilot's commands are handled via event-listeners in the OI class.
+		swerveDriveWheel.toAngle(720);
 	}
 
 	/**

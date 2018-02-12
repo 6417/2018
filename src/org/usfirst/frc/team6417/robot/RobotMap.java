@@ -8,6 +8,12 @@ package org.usfirst.frc.team6417.robot;
  */
 public class RobotMap {
 	/**
+	 * The RobotMap.MATH class provides you with different mathematical values
+	 */
+	public static class MATH {
+		public static final double PI = 3.14159265359;
+	}
+	/**
 	 * In the RobotMap.ROBOT class you'll find different values concerning your
 	 * robot
 	 */
@@ -26,26 +32,29 @@ public class RobotMap {
 		public static final long LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 5000; /*encoder ticks*/
 		public static final long LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 6000; /*encoder ticks*/
 		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 7000; /*encoder ticks*/
+		
+		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
+		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION = 2.0 * RobotMap.MATH.PI * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
+		
 	}
 	
 	public static class SUBSYSTEM {
-		public static boolean IS_GRIPPER_IN_USE = true;
+		public static boolean IS_GRIPPER_IN_USE = false;
 		public static boolean IS_LIFTING_UNIT_IN_USE = false;
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
-	}
-	/**
-	 * The RobotMap.MATH class provides you with different mathematical values
-	 */
-	public static class MATH {
-		public static final double PI = 3.14159265359;
+		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
 	}
 	
 	public static class VELOCITY {
 		public static final double STOP_VELOCITY = 0.0;
+		
 		public static final double LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY = 0.25;
 		public static final double LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY = -0.3;
+		
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY = 0.3;
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY = -0.3;
 	}
 
 	public static class SENSOR {
