@@ -23,7 +23,6 @@ public final class LiftingUnit extends Subsystem {
 	public static final Event TO_SCALE_HIGH = new Event("TO_SCALE_HIGH");
 
 	private final MotorController motorA, motorB;
-	
 	private State currentState;
 	private final PowerManagementStrategy powerManagementStrategy;
 	private int allowedErrorRelative;
@@ -40,7 +39,8 @@ public final class LiftingUnit extends Subsystem {
 
 		// TODO nils: Move these 3 lines to the factory after testing
 		int allowedErrorPercentage = 10;
-		allowedErrorRelative = RobotMap.ENCODER.QUADRATURE_UNITS_PER_ROTATION / allowedErrorPercentage;
+//		Use this: 
+		allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION / allowedErrorPercentage;
 		motorB.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
 
 		State ground = currentState = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);

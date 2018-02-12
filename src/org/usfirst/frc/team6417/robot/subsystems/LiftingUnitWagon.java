@@ -35,6 +35,8 @@ public final class LiftingUnitWagon extends Subsystem {
 								   RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD);
 		backEndPositionDetector = new Counter(analogTrigger);
 		
+//		Use the RobotMap.ENCODER.PULSE_PER_ROTATION for this encoder. nils
+		
 		State front = currentState = new Front();
 		State back = new Back();
 		
