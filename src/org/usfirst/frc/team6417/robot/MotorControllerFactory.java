@@ -3,7 +3,17 @@ package org.usfirst.frc.team6417.robot;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public final class MotorControllerFactory {
+
+	public MotorController createCIM(String name, int id) {
+		return create775Pro(name, id);
+	}
+
+	public MotorController createSmall(String name, int id) {
+		return create775Pro(name, id);
+	}
 
 	public MotorController create775Pro(String name, int id) {
 		MotorController motor = new MotorController(name, id);
@@ -81,7 +91,7 @@ public final class MotorControllerFactory {
 			absolutePosition *= -1;
 		/* set the quadrature (relative) sensor to match absolute */
 		motor.setSelectedSensorPosition(absolutePosition, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
-
+            SmartDashboard.putNumber("Position",motor.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
 	}
 
 	private static void configure(MotorController motor) {

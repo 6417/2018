@@ -34,7 +34,8 @@ public class RobotMap {
 		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 7000; /*encoder ticks*/
 		
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
-		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION = 2.0 * RobotMap.MATH.PI * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
+		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_GRAD = 360.0 * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
+		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_RADIANS = 2.0 * RobotMap.MATH.PI * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
 		
 	}
 	
@@ -53,8 +54,8 @@ public class RobotMap {
 		public static final double LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY = 0.25;
 		public static final double LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY = -0.3;
 		
-		public static final double SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY = 0.3;
-		public static final double SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY = -0.3;
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY = 0.4;
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY = -0.4;
 	}
 
 	public static class SENSOR {
@@ -105,6 +106,7 @@ public class RobotMap {
 	 */
 	public static class ENCODER {
 		public static final int PULSE_PER_ROTATION = 512;
+		public static final int EPSILON = 1;
 		
 		// https://www.vexrobotics.com/vexpro/motors-electronics/encoders/217-5046.html :
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;

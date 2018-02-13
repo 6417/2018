@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6417.robot.commands;
 
+import org.usfirst.frc.team6417.robot.OI;
 import org.usfirst.frc.team6417.robot.Robot;
 import org.usfirst.frc.team6417.robot.RobotMap;
 
@@ -17,7 +18,7 @@ public final class SwerveDriveWheelToAngle extends Command {
 
 	@Override
 	protected void initialize() {
-		Robot.swerveDriveWheel.gotoAngle(RobotMap.MATH.PI);
+		Robot.swerveDriveWheel.gotoAngle(-OI.getInstance().joystickOne.getY() * RobotMap.MATH.PI);
 	}
 	
 	@Override
