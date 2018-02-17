@@ -4,6 +4,9 @@ import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogTrigger;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,18 +21,31 @@ public final class SwerveWheelDrive extends Subsystem {
 	private final MotorController velocityMotor;
 	private final Encoder angleEncoder;
 	private int currentTarget;
+	private AnalogInput positionSensor;
+	private Counter zeroPointCounter;
 
-	public SwerveWheelDrive(int angleMotorPort, int velocityMotorPort, int encoderPort) {
+	public SwerveWheelDrive(int angleMotorPort, 
+							int velocityMotorPort, 
+							int encoderPortA,
+							int encoderPortB,
+							int positionSensorPort) {
 		super("SwerveWheelDrive");
 
 		MotorControllerFactory factory = new MotorControllerFactory();
 		angleMotor = factory.createSmall("Angle-Motor", angleMotorPort);
 		velocityMotor = factory.createCIM("Speed-Motor", velocityMotorPort);
-		angleEncoder = new Encoder(encoderPort, encoderPort+1);
+
+		angleEncoder = new Encoder(encoderPortA, encoderPortB);
+		positionSensor = new AnalogInput(positionSensorPort);
+		AnalogTrigger analogTrigger = new AnalogTrigger(positionSensor);
+		analogTrigger.setLimitsRaw(RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD, 
+				                   RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD);
+		zeroPointCounter = new Counter(analogTrigger);
 		
 		velocityMotor.setInverted(true);
 		angleEncoder.reset();
 		currentTarget = 0;
+		zeroPointCounter.reset();
 
 		SmartDashboard.putNumber("Swerve Velocity", 0);
 		SmartDashboard.putNumber("Swerve Angle Nominal", 0);
@@ -112,6 +128,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		SmartDashboard.putNumber("Swerve Velocity", speed);
 		SmartDashboard.putNumber("Swerve Angle Nominal", angle);
 		SmartDashboard.putNumber("Swerve Angle Actual", angleEncoder.get());
+		SmartDashboard.putNumber("Swerve Position Sensor", positionSensor.getValue());
 
 		velocityMotor.set(speed);
 		gotoAngle(angle * RobotMap.MATH.PI);
@@ -144,4 +161,18 @@ public final class SwerveWheelDrive extends Subsystem {
 		}
 		return isOnTarget;
 	}
+
+	public void startZeroPointCalibration() {
+		zeroPointCounter.reset();
+		angleMotor.set(0.5);
+	}
+	
+	public boolean isOnZeroPoint() {
+		final boolean isOnZeroPoint =  zeroPointCounter.get() > 0;
+		if(isOnZeroPoint) {
+			zeroPointCounter.reset();
+		}
+		return isOnZeroPoint;
+	}
+
 }

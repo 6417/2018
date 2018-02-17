@@ -1,5 +1,8 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.usfirst.frc.team6417.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -8,22 +11,32 @@ public final class SwerveDrive extends Subsystem {
 	public final double L = RobotMap.ROBOT.WHEEL_DISTANCE_FRONT_TO_BACK;
 	public final double W = RobotMap.ROBOT.WHEEL_DISTANCE_LEFT_TO_RIGHT;
 	
+	private final List<SwerveWheelDrive> wheelsToCalibrate = new ArrayList<>();
+	
 	private final SwerveWheelDrive frontLeft, frontRight, backLeft, backRight;
 	
 	public SwerveDrive() {
 		super("SwerveDrive");
 		frontLeft = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT, 
-										 RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_A);
+										 RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_A,
+										 RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_B,
+										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT);
 		frontRight = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
 										  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
-										  RobotMap.ENCODER.DRIVE_FRONT_RIGHT_PORT_A);
+											 RobotMap.ENCODER.DRIVE_FRONT_RIGHT_PORT_A,
+											 RobotMap.ENCODER.DRIVE_FRONT_RIGHT_PORT_B,
+											 RobotMap.AIO.DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT);
 		backLeft = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 										RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT, 
-										RobotMap.ENCODER.DRIVE_BACK_LEFT_PORT_A);
+										 RobotMap.ENCODER.DRIVE_BACK_LEFT_PORT_A,
+										 RobotMap.ENCODER.DRIVE_BACK_LEFT_PORT_B,
+										 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT);
 		backRight = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_BACK_RIGHT_ANGLE_PORT, 
 										RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
-										RobotMap.ENCODER.DRIVE_BACK_RIGHT_PORT_A);
+										 RobotMap.ENCODER.DRIVE_BACK_RIGHT_PORT_A,
+										 RobotMap.ENCODER.DRIVE_BACK_RIGHT_PORT_B,
+										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT);
 	}
 	
 	@Override
@@ -56,5 +69,30 @@ public final class SwerveDrive extends Subsystem {
 	    frontRight.drive (frontRightSpeed, frontRightAngle);
 	    frontLeft.drive (frontLeftSpeed, frontLeftAngle);	    
 	}
+
+	public void startZeroPointCalibration() {
+	    backRight.startZeroPointCalibration();
+	    backLeft.startZeroPointCalibration();
+	    frontRight.startZeroPointCalibration();
+	    frontLeft.startZeroPointCalibration();	    
+	    
+	    wheelsToCalibrate.clear();
+	    wheelsToCalibrate.add(frontLeft);
+	    wheelsToCalibrate.add(frontRight);
+	    wheelsToCalibrate.add(backLeft);
+	    wheelsToCalibrate.add(frontRight);
+	}
+	
+	public boolean isZeroPointCalibrationFinished() {
+		List<SwerveWheelDrive> dd = new ArrayList<>(wheelsToCalibrate);
+		for(SwerveWheelDrive d : dd) {
+			if(d.isOnZeroPoint()) {
+				wheelsToCalibrate.remove(d);
+			}
+		}
+		
+		return wheelsToCalibrate.isEmpty();
+	}
+
 
 }

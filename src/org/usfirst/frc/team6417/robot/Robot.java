@@ -63,7 +63,12 @@ public class Robot extends TimedRobot {
 //				swerveDrive = new SwerveDrive();
 			}
 			if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
-				swerveDriveWheel = new SwerveWheelDrive(1, 0, 0);
+				swerveDriveWheel = new SwerveWheelDrive(
+						RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
+						RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT,
+						RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_A, 
+						RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_B,
+						RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT);
 			}
 //			
 //			

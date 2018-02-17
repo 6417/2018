@@ -32,18 +32,20 @@ public class RobotMap {
 		public static final long LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 5000; /*encoder ticks*/
 		public static final long LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 6000; /*encoder ticks*/
 		public static final long LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 7000; /*encoder ticks*/
+		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
 		
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_GRAD = 360.0 * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_RADIANS = 2.0 * RobotMap.MATH.PI * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
 		
+		
 	}
 	
 	public static class SUBSYSTEM {
 		public static boolean IS_GRIPPER_IN_USE = false;
-		public static boolean IS_LIFTING_UNIT_IN_USE = false;
+		public static boolean IS_LIFTING_UNIT_IN_USE = true;
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
-		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
+		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = true;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
 	}
@@ -61,7 +63,10 @@ public class RobotMap {
 	public static class SENSOR {
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD = 530;
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD = 467;
-	}
+
+		public static final int DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD = LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD;
+		public static final int DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD = LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD;
+}
 	
 	public static class DIO {
 
@@ -70,6 +75,11 @@ public class RobotMap {
 	public static class AIO {
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_PORT = 5;
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_BACK_PORT = 6;
+
+		public static final int DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT = 0;
+		public static final int DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT = 1;
+		public static final int DRIVE_BACK_LEFT_POSITION_SENSOR_PORT = 2;
+		public static final int DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT = 3;
 	}
 	
 	/**
@@ -95,7 +105,7 @@ public class RobotMap {
 		public static final int GRIPPER_LEFT_PORT = 11;
 		public static final int GRIPPER_RIGHT_PORT = 12;
 		
-		public static final int DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT = 13;
+		public static final int DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT = DRIVE_FRONT_LEFT_VELOCITY_PORT;
 		public static final int DIFFERENTIAL_DRIVE_FRONT_RIGHT_PORT = 14;
 
 	}
