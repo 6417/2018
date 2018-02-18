@@ -10,12 +10,20 @@ import edu.wpi.first.wpilibj.command.Command;
  * https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
  */
 public final class SwerveDriveTeleoperated extends Command {
+	
+	public SwerveDriveTeleoperated() {
+		requires(Robot.swerveDrive);
+	}
 
 	@Override
 	protected void execute() {
-		Robot.swerveDrive.drive (OI.getInstance().joystickOne.getRawAxis (1), 
-								 OI.getInstance().joystickOne.getRawAxis (0), 
-								 OI.getInstance().joystickOne.getRawAxis (4));
+//		Robot.swerveDrive.drive (OI.getInstance().joystickOne.getY(), 
+//								 OI.getInstance().joystickOne.getX(), 
+//								 OI.getInstance().joystickOne.getZ());
+		Robot.swerveDrive.drive (
+				OI.getInstance().joystickOne.getRawAxis (1),
+				OI.getInstance().joystickOne.getRawAxis (0), 
+				OI.getInstance().joystickOne.getRawAxis (4));
 	}
 	
 	@Override

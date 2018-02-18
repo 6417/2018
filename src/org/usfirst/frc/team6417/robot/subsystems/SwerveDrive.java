@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team6417.robot.RobotMap;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -13,36 +14,28 @@ public final class SwerveDrive extends Subsystem {
 	
 	private final List<SwerveWheelDrive> wheelsToCalibrate = new ArrayList<>();
 	
-	private final SwerveWheelDrive frontLeft, frontRight, backLeft, backRight;
+	public final SwerveWheelDrive frontLeft, frontRight, backLeft, backRight;
 	
 	public SwerveDrive() {
 		super("SwerveDrive");
 		frontLeft = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
-										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT, 
-										 RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_A,
-										 RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_B,
+										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT,
 										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT);
 		frontRight = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
 										  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
-											 RobotMap.ENCODER.DRIVE_FRONT_RIGHT_PORT_A,
-											 RobotMap.ENCODER.DRIVE_FRONT_RIGHT_PORT_B,
 											 RobotMap.AIO.DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT);
 		backLeft = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 										RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT, 
-										 RobotMap.ENCODER.DRIVE_BACK_LEFT_PORT_A,
-										 RobotMap.ENCODER.DRIVE_BACK_LEFT_PORT_B,
 										 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT);
 		backRight = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_BACK_RIGHT_ANGLE_PORT, 
 										RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
-										 RobotMap.ENCODER.DRIVE_BACK_RIGHT_PORT_A,
-										 RobotMap.ENCODER.DRIVE_BACK_RIGHT_PORT_B,
 										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT);
 	}
 	
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-
+//		setDefaultCommand(new SwerveDriveShowZeroPointSensors());
+		setDefaultCommand(new SwerveDriveTeleoperated());
 	}
 	
 	public void drive (double x1, double y1, double x2) {
@@ -80,7 +73,7 @@ public final class SwerveDrive extends Subsystem {
 	    wheelsToCalibrate.add(frontLeft);
 	    wheelsToCalibrate.add(frontRight);
 	    wheelsToCalibrate.add(backLeft);
-	    wheelsToCalibrate.add(frontRight);
+	    wheelsToCalibrate.add(backRight);
 	}
 	
 	public boolean isZeroPointCalibrationFinished() {

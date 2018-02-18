@@ -60,15 +60,12 @@ public class Robot extends TimedRobot {
 				drive = new Drive(createPMS(Calibration.PD.powerOfDrive, Calibration.PL.powerOfDrive));
 			}
 			if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-//				swerveDrive = new SwerveDrive();
+				swerveDrive = new SwerveDrive();
 			}
 			if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
-				swerveDriveWheel = new SwerveWheelDrive(
-						RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
-						RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT,
-						RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_A, 
-						RobotMap.ENCODER.DRIVE_FRONT_LEFT_PORT_B,
-						RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT);
+				swerveDriveWheel = new SwerveWheelDrive(RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
+						RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT,
+						 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT);
 			}
 //			
 //			
@@ -153,6 +150,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+//		SmartDashboard.putNumber("Position-Sensor A "+
+//		Robot.swerveDrive.backLeft.positionSensor0.getChannel(), 
+//		Robot.swerveDrive.backLeft.positionSensor0.getValue());
 	}
 
 	@Override

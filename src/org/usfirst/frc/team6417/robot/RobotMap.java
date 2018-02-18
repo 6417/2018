@@ -45,7 +45,7 @@ public class RobotMap {
 		public static boolean IS_GRIPPER_IN_USE = false;
 		public static boolean IS_LIFTING_UNIT_IN_USE = true;
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
-		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = true;
+		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
 	}
@@ -58,14 +58,15 @@ public class RobotMap {
 		
 		public static final double SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY = 0.4;
 		public static final double SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY = -0.4;
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_ZEROPOINT_CALIBRATION_VELOCITY = 0.3;
 	}
 
 	public static class SENSOR {
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD = 530;
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD = 467;
 
-		public static final int DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD = LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD;
-		public static final int DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD = LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD;
+		public static final int DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD = 2150;
+		public static final int DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD = 1000;
 }
 	
 	public static class DIO {
@@ -79,7 +80,7 @@ public class RobotMap {
 		public static final int DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT = 0;
 		public static final int DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT = 1;
 		public static final int DRIVE_BACK_LEFT_POSITION_SENSOR_PORT = 2;
-		public static final int DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT = 3;
+		public static final int DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT = 3; // ok
 	}
 	
 	/**
@@ -115,6 +116,8 @@ public class RobotMap {
 	 * encoder and values to the encoder
 	 */
 	public static class ENCODER {
+		public static final int INITIAL_VALUE = 0;
+		
 		public static final int PULSE_PER_ROTATION = 512;
 		public static final int EPSILON = 1;
 		
@@ -122,14 +125,14 @@ public class RobotMap {
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
 		public static final int QUADRATURE_UNITS_PER_ROTATION = 4096;
 		
-		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
-		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
-		public static final int DRIVE_FRONT_RIGHT_PORT_A = 2;
-		public static final int DRIVE_FRONT_RIGHT_PORT_B = 3;
-		public static final int DRIVE_BACK_LEFT_PORT_A = 4;
-		public static final int DRIVE_BACK_LEFT_PORT_B = 5;
-		public static final int DRIVE_BACK_RIGHT_PORT_A = 6;
-		public static final int DRIVE_BACK_RIGHT_PORT_B = 7;
+//		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
+//		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
+//		public static final int DRIVE_FRONT_RIGHT_PORT_A = 2;
+//		public static final int DRIVE_FRONT_RIGHT_PORT_B = 3;
+//		public static final int DRIVE_BACK_LEFT_PORT_A = 4;
+//		public static final int DRIVE_BACK_LEFT_PORT_B = 5;
+//		public static final int DRIVE_BACK_RIGHT_PORT_A = 6;
+//		public static final int DRIVE_BACK_RIGHT_PORT_B = 7;
 		
 	}
 
