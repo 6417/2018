@@ -5,11 +5,10 @@ import java.util.Arrays;
 import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
+import org.usfirst.frc.team6417.robot.Util;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,29 +39,32 @@ public final class LiftingUnit extends Subsystem {
 		motorB = factory.create777ProWithPositionControl("Motor-B-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
 		motorA.follow(motorB);
 
+//		motorA.configOpenloopRamp(1, 0);
+		motorB.configOpenloopRamp(1, 0);
+		
 		// TODO nils: Move these 3 lines to the factory after testing
 		int allowedErrorPercentage = 10;
 //		Use this: 
 		allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION / allowedErrorPercentage;
 		motorB.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
 
-		State ground = currentState = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
-		State theSwitch = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS);
-		State exchange = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS);
-		State scaleLow = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS);
-		State scaleMiddle = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS);
-		State scaleHigh = new PositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
+		State ground = currentState = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
+		State theSwitch = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS);
+		State exchange = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS);
+		State scaleLow = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS);
+		State scaleMiddle = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS);
+		State scaleHigh = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
 
-		State metricPosition = new MetricPositionState(0.3/*meter*/);
+//		State metricPosition = new MetricPositionState(0.3/*meter*/);
 
-		Arrays.asList(ground,theSwitch,exchange,scaleLow,scaleMiddle,scaleHigh,metricPosition).stream().forEach( state -> {
+		Arrays.asList(ground,theSwitch,exchange,scaleLow,scaleMiddle,scaleHigh /* ,metricPosition */).stream().forEach( state -> {
 			state.addTransition(TO_GROUND, ground)
 			     .addTransition(TO_SWITCH, theSwitch)
 			     .addTransition(TO_EXCHANGE, exchange)
 			     .addTransition(TO_SCALE_LOW, scaleLow)
 			     .addTransition(TO_SCALE_MIDDLE, scaleMiddle)
 			     .addTransition(TO_SCALE_HIGH, scaleHigh)
-			     .addTransition(TO_POSITION, metricPosition);
+			     /*.addTransition(TO_POSITION, metricPosition)*/;
 		} );
 		
 	}
@@ -70,13 +72,13 @@ public final class LiftingUnit extends Subsystem {
 	private double calculateGearRatio() {
 		// See documentation here:
 		// https://docs.google.com/document/d/1cqJp1bNhLM5h0Qkk95_VV4HTZDqJ9aykWqInW393COQ/edit?usp=sharing
-		double b = 37;
-		double c = 13;
-		double d = 37;
-		double e = 12;
-		double f = 7;
-		
-		return ((b/c)*(d/e)*f);
+		double c = 37.0;
+		double d = 12.0;
+		double e = 13.0;
+		double f = 37.0;
+		double iGesamt = d/c * f/e;
+//		double divisor = 4.0 * RobotMap.MATH.PI * RobotMap.ROBOT.LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER;
+		return iGesamt;
 	}
 
 	public void liftToPosition(double positionInMeters) {
@@ -101,7 +103,7 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	private double calculateChainWheelRotations(double positionInMeters) {
-		double chainWheelRadiusInMeter = 0.05707;//m
+		double chainWheelRadiusInMeter = RobotMap.ROBOT.LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER;//m
 		return 2.0 * RobotMap.MATH.PI * chainWheelRadiusInMeter;
 	}
 
@@ -120,56 +122,72 @@ public final class LiftingUnit extends Subsystem {
 	}
 	
 	public boolean onTarget() {
-		return allowedErrorRelative <= motorB.getClosedLoopError(MotorController.kPIDLoopIdx);
+//		return allowedErrorRelative <= motorB.getClosedLoopError(MotorController.kPIDLoopIdx);
+		return currentState.isFinished();
 	}
 	
 	@Override
 	protected void initDefaultCommand() {;}
 	
-	private final class PositionState extends State {
-		private final long position;
-		
-		PositionState(long position){
-			this.position = position;
-		}
-		
-		@Override
-		public void init() {
-			SmartDashboard.putNumber("LiftingUnit nominal position", position);
-			motorB.set(ControlMode.Position, position);
-		}
-		
-		@Override
-		public void tick() {
-			SmartDashboard.putNumber("LiftingUnit actual position", motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
-			motorB.set(ControlMode.Position, position);
-		}
+	private int getCurrentPosition() {
+		return motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx);
 	}
 	
-
-	private final class MetricPositionState extends State {
-		private final double positionInMeter;
+	private final class TargetPositionState extends State {
+		private final int targetPosition;
 		
-		MetricPositionState(double positionInMeter){
-			this.positionInMeter = positionInMeter;
+		TargetPositionState(int targetPosition){
+			this.targetPosition = targetPosition;
 		}
 		
 		@Override
 		public void init() {
-			SmartDashboard.putNumber("LiftingUnit nominal metric position", positionInMeter);
-			liftToPosition(positionInMeter);
+			SmartDashboard.putNumber("LiftingUnit nominal position", targetPosition);
+//			motorB.set(ControlMode.Position, position);
+			int currPos = getCurrentPosition();
+			if(Util.greaterThen(targetPosition, currPos)) {
+				motorB.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
+			}else if(Util.smallerThen(targetPosition, currPos)) {
+				motorB.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
+			}
 		}
 		
 		@Override
 		public void tick() {
-			SmartDashboard.putNumber("LiftingUnit actual position", motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
+			SmartDashboard.putNumber("LiftingUnit actual position", getCurrentPosition());
+//			motorB.set(ControlMode.Position, position);
 		}
 		
 		@Override
 		public boolean isFinished() {
-			return onTarget();
+			return Util.eq(targetPosition, getCurrentPosition());
 		}
 	}
+	
+
+//	private final class MetricPositionState extends State {
+//		private final double positionInMeter;
+//		
+//		MetricPositionState(double positionInMeter){
+//			this.positionInMeter = positionInMeter;
+//		}
+//		
+//		@Override
+//		public void init() {
+//			SmartDashboard.putNumber("LiftingUnit nominal metric position", positionInMeter);
+//			liftToPosition(positionInMeter);
+//		}
+//		
+//		@Override
+//		public void tick() {
+//			SmartDashboard.putNumber("LiftingUnit actual position", motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
+//		}
+//		
+//		@Override
+//		public boolean isFinished() {
+//			return onTarget();
+//		}
+//	}
 	
 
 	

@@ -3,6 +3,7 @@ package org.usfirst.frc.team6417.robot.subsystems;
 import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
+import org.usfirst.frc.team6417.robot.Util;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogTrigger;
@@ -65,9 +66,9 @@ public final class SwerveWheelDrive extends Subsystem {
 		int currentTick = getAngleTicks();
 		currentTarget = currentTick + delta;
 		
-		if (greaterThen(currentTarget, currentTick)) {
+		if (Util.greaterThen(currentTarget, currentTick)) {
 			angleMotor.set(RobotMap.VELOCITY.SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY);
-		} else if (smallerThen(currentTarget, currentTick)) {
+		} else if (Util.smallerThen(currentTarget, currentTick)) {
 			angleMotor.set(RobotMap.VELOCITY.SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY);
 		} else {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
@@ -132,20 +133,6 @@ public final class SwerveWheelDrive extends Subsystem {
 		// pidController.setSetpoint (setpoint);
 	}
 
-
-
-	private boolean smallerThen(int a, int b) {
-		return (b - a > RobotMap.ENCODER.EPSILON);
-	}
-
-	private boolean greaterThen(int a, int b) {
-		return (a - b > RobotMap.ENCODER.EPSILON);
-	}
-
-	private boolean eq(int a, int b) {
-		return (a == b ? true : Math.abs(a - b) < RobotMap.ENCODER.EPSILON);
-	}
-
 	public void tick() {
 		SmartDashboard.putNumber("Angle encoder actual", getAngleTicks());
 		SmartDashboard.putNumber("Worm-gear pulses to go", currentTarget - getAngleTicks());
@@ -156,7 +143,7 @@ public final class SwerveWheelDrive extends Subsystem {
 	}
 
 	public boolean onTarget() {
-		boolean isOnTarget = eq(getAngleTicks(), currentTarget);
+		boolean isOnTarget = Util.eq(getAngleTicks(), currentTarget);
 		if (isOnTarget) {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		}

@@ -28,5 +28,16 @@ public class Util {
 	    return true;
 	}
 
+	public static boolean smallerThen(int a, int b) {
+		return (b - a > RobotMap.ENCODER.EPSILON);
+	}
+
+	public static boolean greaterThen(long a, long b) {
+		return (a - b > RobotMap.ENCODER.EPSILON);
+	}
+
+	public static boolean eq(int a, int b) {
+		return (a == b ? true : Math.abs(a - b) < RobotMap.ENCODER.EPSILON);
+	}
 	
 }
