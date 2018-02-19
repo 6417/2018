@@ -20,6 +20,7 @@ public final class SwerveWheelDrive extends Subsystem {
 	private final AnalogInput positionSensor0;
 
 	private int currentTarget;
+	private int correctionAngleInTicks = 1000;
 
 	public SwerveWheelDrive(int angleMotorPort, 
 							int velocityMotorPort,
@@ -33,7 +34,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		
 		positionSensor0 = new AnalogInput(positionSensorPort); // DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT
 		
-//		velocityMotor.setInverted(true);
+		velocityMotor.setInverted(true);
 		currentTarget = 0;
 
 		SmartDashboard.putNumber("Swerve Velocity", 0);
@@ -160,4 +161,31 @@ public final class SwerveWheelDrive extends Subsystem {
 		return isOnZeroPoint;
 	}
 
+	public void startParallelCalibration(boolean isRotateClockwise, boolean isForward) {
+		SmartDashboard.putBoolean("To parallel "+angleMotor.getDeviceID(), isRotateClockwise);
+		if(isRotateClockwise) {
+			angleMotor.set(0.22);
+//			correctionAngleInTicks = getAngleTicks() + 40000;
+		}else {
+			angleMotor.set(-0.22);
+//			correctionAngleInTicks = getAngleTicks() - 40000;
+		}
+		
+		if(isForward) {
+			correctionAngleInTicks = getAngleTicks() + 40000;
+		}else {
+			correctionAngleInTicks = getAngleTicks() - 40000;
+		}		
+	}
+	
+	public boolean isParallel() {
+		SmartDashboard.putNumber("Correction target "+angleMotor.getDeviceID(), correctionAngleInTicks);
+		SmartDashboard.putNumber("Current pos "+angleMotor.getDeviceID(), getAngleTicks());
+		if(Util.eq(correctionAngleInTicks, getAngleTicks())) {
+			angleMotor.stopMotor();
+			return true;
+		}
+		return false;
+	}
+	
 }

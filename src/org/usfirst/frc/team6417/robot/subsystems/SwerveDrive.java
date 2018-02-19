@@ -87,5 +87,28 @@ public final class SwerveDrive extends Subsystem {
 		return wheelsToCalibrate.isEmpty();
 	}
 
+	public void startParallelCalibration() {
+	    frontLeft.startParallelCalibration(false, false);	    
+	    frontRight.startParallelCalibration(true, true);
+	    backLeft.startParallelCalibration(true, false);
+	    backRight.startParallelCalibration(false, true);
+	    
+	    wheelsToCalibrate.clear();
+	    wheelsToCalibrate.add(frontLeft);
+	    wheelsToCalibrate.add(frontRight);
+	    wheelsToCalibrate.add(backLeft);
+	    wheelsToCalibrate.add(backRight);
+	}
+
+	public boolean isParallelCalibration() {
+		List<SwerveWheelDrive> dd = new ArrayList<>(wheelsToCalibrate);
+		for(SwerveWheelDrive d : dd) {
+			if(d.isParallel()) {
+				wheelsToCalibrate.remove(d);
+			}
+		}
+		
+		return wheelsToCalibrate.isEmpty();
+	}
 
 }
