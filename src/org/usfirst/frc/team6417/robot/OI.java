@@ -5,6 +5,7 @@ import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelAngleCalibration;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelCheck;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -32,6 +33,7 @@ public class OI {
 	private JoystickButton liftingUnitWagonForwardButton;
 
 	private JoystickButton liftingUnitWagonBackwardButton;
+	private JoystickButton swerveWheelCheckButton;
 
 	private static OI INSTANCE;
 	
@@ -83,6 +85,9 @@ public class OI {
 			// nothing to do. the drive uses the internal default command.
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 10);
 			swerveWheelForwardButton.whenPressed(new SwerveDriveWheelAngleCalibration());
+			swerveWheelCheckButton = new JoystickButton(joystickOne, 9);
+			swerveWheelCheckButton.whenPressed(new SwerveDriveWheelCheck());
+//						
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 //			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);

@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/part-2-driving.html
  */
 public final class SwerveWheelDrive extends Subsystem {
-	private final MotorController angleMotor;
-	private final MotorController velocityMotor;
+	public final MotorController angleMotor;
+	public final MotorController velocityMotor;
 	private final AnalogInput positionSensor0;
 
 	private int currentTarget;
