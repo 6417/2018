@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
 				gripper = new Gripper(createPMS(Calibration.PD.powerOfGripper, Calibration.PL.powerOfGripper));
 			}
 			if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
-//				liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
+				liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
 			}
 			if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 				liftingUnit = new LiftingUnit(createPMS(Calibration.PD.powerOfLiftingUnit, Calibration.PL.powerOfLiftingUnit));

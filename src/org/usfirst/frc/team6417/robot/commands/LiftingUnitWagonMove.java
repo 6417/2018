@@ -4,6 +4,7 @@ import org.usfirst.frc.team6417.robot.Robot;
 import org.usfirst.frc.team6417.robot.model.Event;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class LiftingUnitWagonMove extends Command {
 	
@@ -16,6 +17,7 @@ public final class LiftingUnitWagonMove extends Command {
 
 	@Override
 	protected void initialize() {
+		SmartDashboard.putString("Event", event.toString());
 		Robot.liftingUnitWagon.onEvent(event);
 	}
 	

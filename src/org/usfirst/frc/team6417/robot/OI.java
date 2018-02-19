@@ -3,6 +3,9 @@ package org.usfirst.frc.team6417.robot;
 import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelsToZeroPosition;
+import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -26,6 +29,9 @@ public class OI {
 	private JoystickButton liftingUnitToScaleHighAltitudeButton;
 	private JoystickButton liftingUnitResetButton;
 	private JoystickButton swerveWheelForwardButton;
+	private JoystickButton liftingUnitWagonForwardButton;
+
+	private JoystickButton liftingUnitWagonBackwardButton;
 
 	private static OI INSTANCE;
 	
@@ -47,7 +53,11 @@ public class OI {
 			gripperPushButton.whenReleased(new GripperStop());
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
-//			liftingUnitWagon = new LiftingUnitWagon(createPMS(Calibration.PD.powerOfLiftingUnitWagon, Calibration.PL.powerOfLiftingUnitWagon));
+			liftingUnitWagonForwardButton = new JoystickButton(joystickOne, 11);
+			liftingUnitWagonBackwardButton = new JoystickButton(joystickOne, 12);
+			
+			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
+			liftingUnitWagonBackwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 //			liftingUnitToGroundAltitudeButton = new JoystickButton(liftingUnitController, 1);
@@ -71,8 +81,8 @@ public class OI {
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 			// nothing to do. the drive uses the internal default command.
-//			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);
-//			swerveWheelForwardButton.whenPressed(new SwerveDriveWheelsToZeroPosition());
+			swerveWheelForwardButton = new JoystickButton(joystickOne, 10);
+			swerveWheelForwardButton.whenPressed(new SwerveDriveWheelsToZeroPosition());
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 //			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);

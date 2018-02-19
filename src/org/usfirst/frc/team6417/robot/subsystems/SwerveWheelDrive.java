@@ -6,8 +6,6 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.AnalogTrigger;
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,7 +18,6 @@ public final class SwerveWheelDrive extends Subsystem {
 	private final MotorController angleMotor;
 	private final MotorController velocityMotor;
 	private final AnalogInput positionSensor0;
-	private final Counter zeroPointCounter;
 
 	private int currentTarget;
 
@@ -35,15 +32,9 @@ public final class SwerveWheelDrive extends Subsystem {
 		velocityMotor.configOpenloopRamp(1, 0);
 		
 		positionSensor0 = new AnalogInput(positionSensorPort); // DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT
-
-		AnalogTrigger analogTrigger = new AnalogTrigger(positionSensor0);
-		analogTrigger.setLimitsRaw(RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD, 
-				                   RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
-		zeroPointCounter = new Counter(analogTrigger);
 		
-		velocityMotor.setInverted(true);
+//		velocityMotor.setInverted(true);
 		currentTarget = 0;
-		zeroPointCounter.reset();
 
 		SmartDashboard.putNumber("Swerve Velocity", 0);
 		SmartDashboard.putNumber("Swerve Angle Nominal", 0);
@@ -151,19 +142,21 @@ public final class SwerveWheelDrive extends Subsystem {
 	}
 
 	public void startZeroPointCalibration() {
-		zeroPointCounter.reset();
 		angleMotor.set(RobotMap.VELOCITY.SWERVE_DRIVE_ANGLE_MOTOR_ZEROPOINT_CALIBRATION_VELOCITY);
 	}
 	
 	public boolean isOnZeroPoint() {
-		final boolean isOnZeroPoint =  zeroPointCounter.get() > 0;
+		final boolean isOnZeroPoint = positionSensor0.getValue() > RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD;
 		if(isOnZeroPoint) {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 			angleMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
 												 MotorController.kSlotIdx, 
 												 MotorController.kTimeoutMs);
-			zeroPointCounter.reset();
 		}
+//		SmartDashboard.putBoolean("Is "+angleMotor.getDeviceID()+" on zero-point", isOnZeroPoint);
+//		SmartDashboard.putNumber("Zero-point of "+angleMotor.getDeviceID(), positionSensor0.getValue());
+//		SmartDashboard.putNumber("Zero-point voltage of "+angleMotor.getDeviceID(), positionSensor0.getVoltage());
+//		SmartDashboard.putNumber("Ticks of "+angleMotor.getDeviceID(), getAngleTicks());
 		return isOnZeroPoint;
 	}
 

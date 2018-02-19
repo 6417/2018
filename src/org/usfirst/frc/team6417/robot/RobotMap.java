@@ -61,25 +61,22 @@ public class RobotMap {
 
 		public static final double SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY = 0.4;
 		public static final double SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY = -0.4;
-		public static final double SWERVE_DRIVE_ANGLE_MOTOR_ZEROPOINT_CALIBRATION_VELOCITY = 0.3;
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_ZEROPOINT_CALIBRATION_VELOCITY = 0.2;
 	}
 
 	public static class SENSOR {
-		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_UPPER_THRESHOLD = 530;
-		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD = 467;
+		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_THRESHOLD = 650000;//750000;
+//		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD = 467;
 
-		public static final int DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD = 2150;
+		public static final int DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD = 2100;
 		public static final int DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD = 1000;
 }
 	
 	public static class DIO {
-
+		public static final int LIFTING_UNIT_WAGON_POSITION_BACK_PORT = 0;
 	}
 	
 	public static class AIO {
-		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_PORT = 5;
-		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_BACK_PORT = 6;
-
 		public static final int DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT = 0;
 		public static final int DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT = 1;
 		public static final int DRIVE_BACK_LEFT_POSITION_SENSOR_PORT = 2;
