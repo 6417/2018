@@ -6,6 +6,7 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -17,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public final class SwerveWheelDrive extends Subsystem {
 	public final MotorController angleMotor;
 	public final MotorController velocityMotor;
-	private final AnalogInput positionSensor0;
+	public final AnalogInput positionSensor0;
 
 	private int currentTarget;
 	private int correctionAngleInTicks = 1000;
@@ -25,7 +26,7 @@ public final class SwerveWheelDrive extends Subsystem {
 	public SwerveWheelDrive(int angleMotorPort, 
 							int velocityMotorPort,
 							int positionSensorPort) {
-		super("SwerveWheelDrive");
+		super("SwerveWheelDrive-"+angleMotorPort);
 
 		MotorControllerFactory factory = new MotorControllerFactory();
 		angleMotor = factory.createSmall("Angle-Motor", angleMotorPort);
@@ -147,6 +148,10 @@ public final class SwerveWheelDrive extends Subsystem {
 	}
 	
 	public boolean isOnZeroPoint() {
+		SmartDashboard.putNumber("0-P Wheel "+getName(), positionSensor0.getValue());
+		if(positionSensor0.getValue() > 2600) {
+			return false;
+		}
 		final boolean isOnZeroPoint = positionSensor0.getValue() > RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD;
 		if(isOnZeroPoint) {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
@@ -161,21 +166,24 @@ public final class SwerveWheelDrive extends Subsystem {
 		return isOnZeroPoint;
 	}
 
-	public void startParallelCalibration(boolean isRotateClockwise, boolean isForward) {
-		SmartDashboard.putBoolean("To parallel "+angleMotor.getDeviceID(), isRotateClockwise);
-		if(isRotateClockwise) {
-			angleMotor.set(0.22);
+	public void startParallelCalibration(double angleInRadians) {
+		SmartDashboard.putNumber("To parallel "+angleMotor.getDeviceID(), angleInRadians);
+		gotoAngle(angleInRadians);
+//		angleMotor.set(0.22);
+//		
+//		if(isRotateClockwise) {
+//			angleMotor.set(0.22);
+////			correctionAngleInTicks = getAngleTicks() + 40000;
+//		}else {
+//			angleMotor.set(-0.22);
+////			correctionAngleInTicks = getAngleTicks() - 40000;
+//		}
+//		
+//		if(isForward) {
 //			correctionAngleInTicks = getAngleTicks() + 40000;
-		}else {
-			angleMotor.set(-0.22);
+//		}else {
 //			correctionAngleInTicks = getAngleTicks() - 40000;
-		}
-		
-		if(isForward) {
-			correctionAngleInTicks = getAngleTicks() + 40000;
-		}else {
-			correctionAngleInTicks = getAngleTicks() - 40000;
-		}		
+//		}		
 	}
 	
 	public boolean isParallel() {

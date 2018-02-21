@@ -22,11 +22,11 @@ public final class SwerveDriveWheelCheck extends Command {
 		checkMotors("FR", Robot.swerveDrive.frontRight.angleMotor, Robot.swerveDrive.frontRight.velocityMotor);
 		checkMotors("BL", Robot.swerveDrive.backLeft.angleMotor, Robot.swerveDrive.backLeft.velocityMotor);
 		checkMotors("BR", Robot.swerveDrive.backRight.angleMotor, Robot.swerveDrive.backRight.velocityMotor);
-		
-		checkZeroPoint("FL", Robot.swerveDrive.frontLeft);
-		checkZeroPoint("FR", Robot.swerveDrive.frontRight);
-		checkZeroPoint("BL", Robot.swerveDrive.backLeft);
-		checkZeroPoint("BR", Robot.swerveDrive.backRight);
+//		
+//		checkZeroPoint("FL", Robot.swerveDrive.frontLeft);
+//		checkZeroPoint("FR", Robot.swerveDrive.frontRight);
+//		checkZeroPoint("BL", Robot.swerveDrive.backLeft);
+//		checkZeroPoint("BR", Robot.swerveDrive.backRight);
 
 		System.out.println("SwerveDriveWheelCheck. Done.");
 	}
@@ -53,7 +53,7 @@ public final class SwerveDriveWheelCheck extends Command {
 
 	private void checkMotor(MotorController motor) {		
 		motor.set(0.3);
-		Timer.delay(5);
+		Timer.delay(10);
 		motor.set(0.0);
 		Timer.delay(2);
 	}
