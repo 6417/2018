@@ -32,7 +32,7 @@ public class Util {
 		return (b - a > RobotMap.ENCODER.EPSILON);
 	}
 
-	public static boolean greaterThen(long a, long b) {
+	public static boolean greaterThen(int a, int b) {
 		return (a - b > RobotMap.ENCODER.EPSILON);
 	}
 

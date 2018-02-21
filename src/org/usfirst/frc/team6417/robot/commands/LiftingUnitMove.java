@@ -19,6 +19,11 @@ public final class LiftingUnitMove extends Command {
 	}
 	
 	@Override
+	protected void execute() {
+		Robot.liftingUnit.tick();
+	}
+	
+	@Override
 	protected boolean isFinished() {
 		return Robot.liftingUnit.onTarget();
 	}

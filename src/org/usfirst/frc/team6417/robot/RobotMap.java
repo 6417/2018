@@ -26,12 +26,13 @@ public class RobotMap {
 		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 45; /*cm*/
 		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 45; /*cm*/
 		
+		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
-		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = 10000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = 20000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 30000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 40000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 50000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = -20000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -40000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -60000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -80000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -100000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
 		
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
@@ -44,7 +45,7 @@ public class RobotMap {
 	public static class SUBSYSTEM {
 		public static boolean IS_GRIPPER_IN_USE = false;
 		public static boolean IS_LIFTING_UNIT_IN_USE = false;
-		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
+		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
@@ -119,7 +120,7 @@ public class RobotMap {
 		public static final int INITIAL_VALUE = 0;
 		
 		public static final int PULSE_PER_ROTATION = 512;
-		public static final int EPSILON = 1000; // Amount of ticks of fuzziness when compare two encoder-values on equal
+		public static final int EPSILON = 2000; // Amount of ticks of fuzziness when compare two encoder-values on equal
 		
 		// https://www.vexrobotics.com/vexpro/motors-electronics/encoders/217-5046.html :
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
@@ -141,6 +142,15 @@ public class RobotMap {
 		public static final int LIFTING_UNIT_CONTROLLER = 1;
 	}
 
+	public static class LIFTING_UNIT_CONTROLLER {
+		public static final int B01 = 1;
+		public static final int B02 = 2;
+		public static final int B03 = 3;
+		public static final int B04 = 4;
+		public static final int B05 = 5;
+		public static final int B06 = 6;
+	}
+
 	/**
 	 * In the RobotMap.JOYSTICK class you'll find the ports of the joysticks
 	 */
@@ -154,6 +164,19 @@ public class RobotMap {
 		}
 
 		public static class BUTTONS {
+			public static final int B01 = 1;
+			public static final int B02 = 2;
+			public static final int B03 = 3;
+			public static final int B04 = 4;
+			public static final int B05 = 5;
+			public static final int B06 = 6;
+			public static final int B07 = 7;
+			public static final int B08 = 8;
+			public static final int B09 = 9;
+			public static final int B10 = 10;
+			public static final int B11 = 11;
+			public static final int B12 = 12;
+			public static final int B13 = 13;
 		}
 
 		/**

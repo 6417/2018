@@ -35,18 +35,18 @@ public final class LiftingUnit extends Subsystem {
 		this.powerManagementStrategy = powerManagementStrategy;
 		
 		final MotorControllerFactory factory = new MotorControllerFactory();
-		motorA = factory.create775Pro("Motor-A-Slave", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
-		motorB = factory.create777ProWithPositionControl("Motor-B-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
-		motorA.follow(motorB);
+		motorA = factory.create777ProWithPositionControl("Motor-A-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
+		motorB = factory.create775Pro("Motor-B-Slave", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorB.follow(motorA);
 
 //		motorA.configOpenloopRamp(1, 0);
-		motorB.configOpenloopRamp(1, 0);
+		motorA.configOpenloopRamp(1, 0);
 		
 		// TODO nils: Move these 3 lines to the factory after testing
 		int allowedErrorPercentage = 10;
 //		Use this: 
 		allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION / allowedErrorPercentage;
-		motorB.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
+//		motorA.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
 
 		State ground = currentState = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
 		State theSwitch = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS);
@@ -109,16 +109,20 @@ public final class LiftingUnit extends Subsystem {
 
 	public void onEvent(Event event) {
 		SmartDashboard.putString("LiftingUnit event", event.toString());		
-		SmartDashboard.putString("LiftingUnit state (prev)", currentState.getClass().getSimpleName());		
+		SmartDashboard.putString("LiftingUnit state (prev)", currentState.toString());		
 		currentState = currentState.transition(event);
 		currentState.init();
-		SmartDashboard.putString("LiftingUnit state (current)", currentState.getClass().getSimpleName());		
+		SmartDashboard.putString("LiftingUnit state (current)", currentState.toString());		
 	}
 	
 	public void reset() {
 		// Reset the encoder to 0. 
 		// Only motorB has an encoder so only motorB gets the reset:
-		motorB.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
+		motorA.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
+	}
+	
+	public void tick() {
+		currentState.tick();
 	}
 	
 	public boolean onTarget() {
@@ -130,7 +134,7 @@ public final class LiftingUnit extends Subsystem {
 	protected void initDefaultCommand() {;}
 	
 	private int getCurrentPosition() {
-		return motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx);
+		return motorA.getSelectedSensorPosition(MotorController.kPIDLoopIdx);
 	}
 	
 	private final class TargetPositionState extends State {
@@ -143,12 +147,18 @@ public final class LiftingUnit extends Subsystem {
 		@Override
 		public void init() {
 			SmartDashboard.putNumber("LiftingUnit nominal position", targetPosition);
+			SmartDashboard.putNumber("LiftingUnit actual position", getCurrentPosition());
 //			motorB.set(ControlMode.Position, position);
 			int currPos = getCurrentPosition();
-			if(Util.greaterThen(targetPosition, currPos)) {
-				motorB.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
-			}else if(Util.smallerThen(targetPosition, currPos)) {
-				motorB.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
+			if(Util.greaterThen(currPos, targetPosition)) {
+				motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
+				SmartDashboard.putNumber("LiftingUnit motor", RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
+			}else if(Util.smallerThen(currPos, targetPosition)) {
+				motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
+				SmartDashboard.putNumber("LiftingUnit motor", RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
+			}else {
+				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+				System.out.println("LiftingUnit "+currPos+" to "+targetPosition);
 			}
 		}
 		
@@ -160,7 +170,16 @@ public final class LiftingUnit extends Subsystem {
 		
 		@Override
 		public boolean isFinished() {
-			return Util.eq(targetPosition, getCurrentPosition());
+//			return Util.eq(targetPosition, getCurrentPosition());
+			boolean isFinished = Util.eq(getCurrentPosition(), targetPosition);
+			if(isFinished) {
+				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			}
+			return isFinished;
+		}
+		
+		public String toString() {
+			return "state("+targetPosition+")";
 		}
 	}
 	
