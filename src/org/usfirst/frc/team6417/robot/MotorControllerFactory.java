@@ -41,8 +41,8 @@ public final class MotorControllerFactory {
 
 		/* set closed loop gains in slot0 - see documentation */
 		motor.selectProfileSlot(MotorController.kSlotIdx, MotorController.kPIDLoopIdx);
-		motor.config_kF(MotorController.kSlotIdx, 0.2, MotorController.kTimeoutMs);
-		motor.config_kP(MotorController.kSlotIdx, 0.2, MotorController.kTimeoutMs);
+		motor.config_kF(MotorController.kSlotIdx, 0, MotorController.kTimeoutMs);
+		motor.config_kP(MotorController.kSlotIdx, 0.1, MotorController.kTimeoutMs);
 		motor.config_kI(MotorController.kSlotIdx, 0, MotorController.kTimeoutMs);
 		motor.config_kD(MotorController.kSlotIdx, 0, MotorController.kTimeoutMs);
 		

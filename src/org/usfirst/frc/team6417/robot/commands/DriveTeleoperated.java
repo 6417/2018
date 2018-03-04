@@ -16,7 +16,7 @@ public final class DriveTeleoperated extends Command {
 		/* sign this so forward is positive */
 		double forward = -1.0 * OI.getInstance().joystickOne.getY();
 		/* sign this so right is positive. */
-		double turn = +1.0 * OI.getInstance().joystickOne.getZ();
+		double turn = +1.0 * OI.getInstance().joystickOne.getX();
 		/* deadband */
 		if (Math.abs(forward) < 0.10) {
 			/* within 10% joystick, make it zero */

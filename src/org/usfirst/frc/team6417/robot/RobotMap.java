@@ -28,17 +28,23 @@ public class RobotMap {
 		
 		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
-		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = -20000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -40000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -60000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -80000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -100000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = -2000; //-20000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -4000; //-40000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -6000;// -60000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -8000; //-80000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -10000; //-100000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
 		
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_GRAD = 360.0 * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_RADIANS = 2.0 * RobotMap.MATH.PI * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
 		
+		public static final String DRIVE_FRONT_LEFT_NAME = "FL";
+		public static final String DRIVE_FRONT_RIGHT_NAME = "FR";
+		public static final String DRIVE_BACK_LEFT_NAME = "BL";
+		public static final String DRIVE_BACK_RIGHT_NAME = "BR";
+		public static final String DRIVE_ANGLE = "A";
+		public static final String DRIVE_VELOCITY = "V";
 		
 	}
 	
@@ -49,6 +55,7 @@ public class RobotMap {
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
+		public static boolean IS_CAMERA_IN_USE = false;
 	}
 	
 	public static class VELOCITY {
@@ -62,7 +69,7 @@ public class RobotMap {
 
 		public static final double SWERVE_DRIVE_ANGLE_MOTOR_FORWARD_VELOCITY = 0.4;
 		public static final double SWERVE_DRIVE_ANGLE_MOTOR_BACKWARD_VELOCITY = -0.4;
-		public static final double SWERVE_DRIVE_ANGLE_MOTOR_ZEROPOINT_CALIBRATION_VELOCITY = 0.2;
+		public static final double SWERVE_DRIVE_ANGLE_MOTOR_ZEROPOINT_CALIBRATION_VELOCITY = 0.4;
 	}
 
 	public static class SENSOR {
@@ -120,11 +127,12 @@ public class RobotMap {
 		public static final int INITIAL_VALUE = 0;
 		
 		public static final int PULSE_PER_ROTATION = 512;
-		public static final int EPSILON = 2000; // Amount of ticks of fuzziness when compare two encoder-values on equal
+		public static final int PULSE_EPSILON = 500; // Amount of ticks of fuzziness when compare two encoder-values on equal
 		
 		// https://www.vexrobotics.com/vexpro/motors-electronics/encoders/217-5046.html :
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
 		public static final int QUADRATURE_UNITS_PER_ROTATION = 4096;
+		public static final int QUADRATURE_EPSILON = 2000; // Amount of ticks of fuzziness when compare two encoder-values on equal
 		
 //		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
 //		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
