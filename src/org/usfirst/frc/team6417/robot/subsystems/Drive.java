@@ -17,20 +17,25 @@ public final class Drive extends Subsystem {
 	private final PowerManagementStrategy powerManagementStrategy;
 	
 	// TODO nils Remove if all 4 motors are connected to the robot
-	private boolean isAll4MotorsConnected = false;
+	private boolean isAll4MotorsConnected = true;
+	private boolean isRobot1 = false;
 	
 	public Drive(PowerManagementStrategy powerManagementStrategy) {
 		super("Drive");
 		this.powerManagementStrategy = powerManagementStrategy;
 		
-		MotorController leftFrontMotor = new MotorController("Left-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT); 
-		MotorController rightFrontMotor = new MotorController("Right-Front-Motor", RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT);
+		MotorController leftFrontMotor = new MotorController("FLV/"+RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT, RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT); 
+		MotorController rightFrontMotor = new MotorController("FRV/"+RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT);
 		
 		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 		
 		if(isAll4MotorsConnected) {
-			MotorController leftRearMotor = new MotorController("Left-Rear-Motor-Slave", RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
-			MotorController rightRearMotor = new MotorController("Right-Rear-Motor-Slave", RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
+			MotorController leftRearMotor = new MotorController("BLV/"+RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT, RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT); 
+			MotorController rightRearMotor = new MotorController("BRV/"+RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT);
+			if(isRobot1) {
+				rightRearMotor.setInverted(true);
+			}
+			
 			leftRearMotor.follow(leftFrontMotor);
 			rightRearMotor.follow(rightFrontMotor);
 		}
@@ -38,8 +43,8 @@ public final class Drive extends Subsystem {
 	
 	public void arcadeDrive(double speed, double turn) {
 		drive.arcadeDrive(powerManagementStrategy.calculatePower() * speed, turn);
-		SmartDashboard.putNumber("Drive velocity", speed);
-		SmartDashboard.putNumber("Drive angle", turn);
+		SmartDashboard.putNumber(getName()+" velocity", speed);
+		SmartDashboard.putNumber(getName()+" angle", turn);
 	}
 	
 	public void stop() {
