@@ -16,11 +16,11 @@ public final class SwerveDriveRotateAll extends Command {
 	@Override
 	protected void execute() {
 		SmartDashboard.putBoolean("SwerveDriveRotateAll", true);
-		double speed = -OI.getInstance().joystickOne.getY() * 0.5;
-//		Robot.swerveDrive.frontLeft.angleMotor.set(speed);
-//		Robot.swerveDrive.frontRight.angleMotor.set(speed);
-//		Robot.swerveDrive.backLeft.angleMotor.set(speed);
-		Robot.swerveDrive.backRight.angleMotor.set(speed);
+		double speed = -OI.getInstance().joystickOne.getY();
+		Robot.swerveDrive.frontLeft.velocityMotor.set(speed);
+		Robot.swerveDrive.frontRight.velocityMotor.set(speed);
+		Robot.swerveDrive.backLeft.velocityMotor.set(speed);
+		Robot.swerveDrive.backRight.velocityMotor.set(speed);
 	}
 	
 	@Override

@@ -27,12 +27,6 @@ public final class SwerveDriveStraight extends Command {
 		Robot.swerveDrive.frontRight.gotoAngle(angle);
 		Robot.swerveDrive.backLeft.gotoAngle(angle);
 		Robot.swerveDrive.backRight.gotoAngle(angle);
-
-	
-//		Robot.swerveDrive.frontLeft.angleMotor.set(v);
-//		Robot.swerveDrive.frontRight.angleMotor.set(v);
-//		Robot.swerveDrive.backLeft.angleMotor.set(v);
-//		Robot.swerveDrive.backRight.angleMotor.set(v);
 }
 	
 	@Override
