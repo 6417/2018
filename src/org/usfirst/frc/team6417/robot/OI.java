@@ -6,8 +6,10 @@ import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMove;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelAngleCalibration;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelCheck;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelStop;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelTeleoperated;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
@@ -86,16 +88,18 @@ public class OI {
 		// nothing to do. the drive uses the internal default command.
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-			// nothing to do. the drive uses the internal default command.
-			swerveWheelCheckButton = new JoystickButton(joystickOne, 9);
-			swerveWheelCheckButton.whenPressed(new SwerveDriveWheelCheck());
-			swerveWheelForwardButton = new JoystickButton(joystickOne, 10);
-			swerveWheelForwardButton.whenPressed(new SwerveDriveWheelAngleCalibration());					
+//			// nothing to do. the drive uses the internal default command.
+			swerveWheelCheckButton = new JoystickButton(joystickOne, 8);
+			swerveWheelCheckButton.whenPressed(new SwerveDriveAngleOnSingleWheel());
+			swerveWheelForwardButton = new JoystickButton(joystickOne, 7);
+			swerveWheelForwardButton.whenPressed(new SwerveDriveSetPosToZero());					
+			JoystickButton b = new JoystickButton(joystickOne, 4);
+			b.whenPressed(new SwerveDriveTeleoperated());
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);
 			swerveWheelForwardButton.whenPressed(new SwerveDriveWheelTeleoperated());
-			
+			swerveWheelForwardButton.whenReleased(new SwerveDriveWheelStop());
 		}
 
 	}

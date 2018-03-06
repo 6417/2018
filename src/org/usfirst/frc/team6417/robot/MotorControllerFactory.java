@@ -42,7 +42,7 @@ public final class MotorControllerFactory {
 		/* set closed loop gains in slot0 - see documentation */
 		motor.selectProfileSlot(MotorController.kSlotIdx, MotorController.kPIDLoopIdx);
 		motor.config_kF(MotorController.kSlotIdx, 0, MotorController.kTimeoutMs);
-		motor.config_kP(MotorController.kSlotIdx, 0.1, MotorController.kTimeoutMs);
+		motor.config_kP(MotorController.kSlotIdx, 1.0, MotorController.kTimeoutMs);
 		motor.config_kI(MotorController.kSlotIdx, 0, MotorController.kTimeoutMs);
 		motor.config_kD(MotorController.kSlotIdx, 0, MotorController.kTimeoutMs);
 		
@@ -65,7 +65,6 @@ public final class MotorControllerFactory {
 		/* choose the sensor and sensor direction */
 		motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, MotorController.kPIDLoopIdx,
 				MotorController.kTimeoutMs);
-
 		/*
 		 * set the allowable closed-loop error, Closed-Loop output will be neutral
 		 * within this range. See Table in Section 17.2.1 for native units per rotation.
@@ -91,7 +90,7 @@ public final class MotorControllerFactory {
 			absolutePosition *= -1;
 		/* set the quadrature (relative) sensor to match absolute */
 		motor.setSelectedSensorPosition(absolutePosition, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
-            SmartDashboard.putNumber("Position",motor.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
+        SmartDashboard.putNumber(motor.getName()+" position",motor.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
 	}
 
 	private static void configure(MotorController motor) {
