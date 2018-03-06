@@ -23,8 +23,8 @@ public class RobotMap {
 		public static final double DIAGONAL_DISTANCE_BETWEEN_WHEELS = 0.0; /*cm*/
 		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
 
-		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 45; /*cm*/
-		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 45; /*cm*/
+		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 63; /*cm*/
+		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 53; /*cm*/
 		
 		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
@@ -56,7 +56,7 @@ public class RobotMap {
 		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
 		public static boolean IS_CAMERA_IN_USE = false;
-	}
+	}	
 	
 	public static class VELOCITY {
 		public static final double STOP_VELOCITY = 0.0;
@@ -133,16 +133,6 @@ public class RobotMap {
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
 		public static final int QUADRATURE_UNITS_PER_ROTATION = 4096;
 		public static final int QUADRATURE_EPSILON = 2000; // Amount of ticks of fuzziness when compare two encoder-values on equal
-		
-//		public static final int DRIVE_FRONT_LEFT_PORT_A = 0;
-//		public static final int DRIVE_FRONT_LEFT_PORT_B = 1;
-//		public static final int DRIVE_FRONT_RIGHT_PORT_A = 2;
-//		public static final int DRIVE_FRONT_RIGHT_PORT_B = 3;
-//		public static final int DRIVE_BACK_LEFT_PORT_A = 4;
-//		public static final int DRIVE_BACK_LEFT_PORT_B = 5;
-//		public static final int DRIVE_BACK_RIGHT_PORT_A = 6;
-//		public static final int DRIVE_BACK_RIGHT_PORT_B = 7;
-		
 	}
 
 	public static class CONTROLLER {
@@ -191,8 +181,8 @@ public class RobotMap {
 		 * contains Deadzones for different Joysticks
 		 */
 		public static class DEADZONES {
-			public static final double JOYSTICK1_X = 0.05;
-			public static final double JOYSTICK1_Y = 0.05;
+			public static final double JOYSTICK1_X = 0.01;
+			public static final double JOYSTICK1_Y = 0.01;
 			public static final double JOYSTICK1_TWIST = 0.08;
 
 			public static final double JOYSTICK2_X = 0.05;
