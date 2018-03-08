@@ -3,18 +3,12 @@ package org.usfirst.frc.team6417.robot;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public final class MotorControllerFactory {
 
 	public MotorController createCIM(String name, int id) {
 		return create775Pro(name, id);
 	}
-
-	public MotorController createSmall(String name, int id) {
-		return create775Pro(name, id);
-	}
-
+	
 	public MotorController create775Pro(String name, int id) {
 		MotorController motor = new MotorController(name, id);
 		configure(motor);
@@ -64,7 +58,7 @@ public final class MotorControllerFactory {
 	private static void configureForClosedLoop(MotorController motor) {
 		/* choose the sensor and sensor direction */
 		motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, MotorController.kPIDLoopIdx,
-				MotorController.kTimeoutMs);
+					MotorController.kTimeoutMs);
 		/*
 		 * set the allowable closed-loop error, Closed-Loop output will be neutral
 		 * within this range. See Table in Section 17.2.1 for native units per rotation.
@@ -90,7 +84,6 @@ public final class MotorControllerFactory {
 			absolutePosition *= -1;
 		/* set the quadrature (relative) sensor to match absolute */
 		motor.setSelectedSensorPosition(absolutePosition, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
-        SmartDashboard.putNumber(motor.getName()+" position",motor.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
 	}
 
 	private static void configure(MotorController motor) {
@@ -114,10 +107,10 @@ public final class MotorControllerFactory {
 	private static void configureCurrentLimits(MotorController motor) {
 		// /* Limits the current to 10 amps whenever the current has exceeded 15 amps
 		// for 100 Ms */
-		// motor.configContinuousCurrentLimit(10, 0);
-		// motor.configPeakCurrentLimit(15, 0);
-		// motor.configPeakCurrentDuration(100, 0);
-		// motor.enableCurrentLimit(true);
+		 motor.configContinuousCurrentLimit(10, 0);
+		 motor.configPeakCurrentLimit(15, 0);
+		 motor.configPeakCurrentDuration(100, 0);
+		 motor.enableCurrentLimit(true);
 		// /* Motor is configured to ramp from neutral to full within 2 seconds */
 		// motor.configOpenloopRamp(0.7, 0);
 	}

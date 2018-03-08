@@ -7,6 +7,7 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class SwerveDrive extends Subsystem {
 	public final double L = RobotMap.ROBOT.WHEEL_DISTANCE_FRONT_TO_BACK;
@@ -29,7 +30,8 @@ public final class SwerveDrive extends Subsystem {
 		frontLeft = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_FRONT_LEFT_NAME, 
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT,
-										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT);
+										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT,
+										 false);
 		frontRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_FRONT_RIGHT_NAME, 
 				 						  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
 										  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
@@ -79,21 +81,22 @@ public final class SwerveDrive extends Subsystem {
 //	    SmartDashboard.putNumber("b", b);
 //	    SmartDashboard.putNumber("c", c);
 //	    SmartDashboard.putNumber("d", d);
-//	    SmartDashboard.putNumber("FL-V", frontLeftSpeed);
-//	    SmartDashboard.putNumber("FR-V", frontRightSpeed);
-//	    SmartDashboard.putNumber("BL-V", backLeftSpeed);
-//	    SmartDashboard.putNumber("BR-V", backRightSpeed);
-//	    SmartDashboard.putNumber("FL-A", frontLeftAngle);
-//	    SmartDashboard.putNumber("FR-A", frontRightAngle);
-//	    SmartDashboard.putNumber("BL-A", backLeftAngle);
-//	    SmartDashboard.putNumber("BR-A", backRightAngle);
+	    SmartDashboard.putNumber("FL-V", frontLeftSpeed);
+	    SmartDashboard.putNumber("FR-V", frontRightSpeed);
+	    SmartDashboard.putNumber("BL-V", backLeftSpeed);
+	    SmartDashboard.putNumber("BR-V", backRightSpeed);
+	    SmartDashboard.putNumber("FL-A", frontLeftAngle);
+	    SmartDashboard.putNumber("FR-A", -frontRightAngle);
+	    SmartDashboard.putNumber("BL-A", backLeftAngle);
+	    SmartDashboard.putNumber("BR-A", backRightAngle);
 	    
 	    backRight.drive (backRightSpeed, -backRightAngle);
 	    backLeft.drive (-backLeftSpeed, backLeftAngle);
 	    
 	    // TODO Uncomment when front wheel mechanics is ready.
-//	    frontRight.drive (frontRightSpeed, -frontRightAngle);
-//	    frontLeft.drive (frontLeftSpeed, -frontLeftAngle);	    
+	    frontRight.drive (frontRightSpeed, -frontRightAngle);
+	    frontLeft.drive (frontLeftSpeed, frontLeftAngle);	    
+//	    frontLeft.drive (0, 0);
 	}
 	
 	public void checkAnglesOnTarget() {

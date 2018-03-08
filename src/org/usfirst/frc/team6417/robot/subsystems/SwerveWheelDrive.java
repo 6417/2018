@@ -31,23 +31,27 @@ public final class SwerveWheelDrive extends Subsystem {
 	private ANGLE_ROTATION_DIRECTION currentAngleMotorRotationDirection = ANGLE_ROTATION_DIRECTION.STOP;
 
 	public SwerveWheelDrive(String name,
+			int angleMotorPort, 
+			int velocityMotorPort,
+			int positionSensorPort) {
+		this(name, angleMotorPort, velocityMotorPort, positionSensorPort, true);
+	}
+	
+	public SwerveWheelDrive(String name,
 							int angleMotorPort, 
 							int velocityMotorPort,
-							int positionSensorPort) {
+							int positionSensorPort,
+							boolean isInvertSensor) {
 		super(name);
 
 		MotorControllerFactory factory = new MotorControllerFactory();
 		angleMotor = factory.create775ProWithEncoder(name+RobotMap.ROBOT.DRIVE_ANGLE+"/"+angleMotorPort, angleMotorPort);
-
-// TODO Remove commented code when clear that this encoder is not used here
-//		angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 
-//												MotorController.kPIDLoopIdx, 
-//												MotorController.kTimeoutMs);
+		angleMotor.setSensorPhase(isInvertSensor);
 		
 		angleMotor.config_kP(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
 		angleMotor.config_kD(MotorController.kPIDLoopIdx, 1.0, MotorController.kTimeoutMs);
 		// TODO Use when kI parameter is neccessary
-		//		angleMotor.config_kI(MotorController.kPIDLoopIdx, 1.7, MotorController.kTimeoutMs);
+		angleMotor.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
 		
 		angleMotor.configAllowableClosedloopError(MotorController.kPIDLoopIdx, 100, MotorController.kTimeoutMs);
 		velocityMotor = factory.createCIM(name+RobotMap.ROBOT.DRIVE_VELOCITY+"/"+velocityMotorPort, velocityMotorPort);
@@ -55,7 +59,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		
 		positionSensor0 = new AnalogInput(positionSensorPort);
 		
-		velocityMotor.setInverted(true);
+//		velocityMotor.setInverted(true);
 		currentTarget = getAngleTicks();
 
 		SmartDashboard.putNumber(velocityMotor.getName(), 0);
@@ -89,9 +93,8 @@ public final class SwerveWheelDrive extends Subsystem {
 	public void drive(double speed, double angle) {
 		velocityMotor.set(speed);
 		SmartDashboard.putNumber(velocityMotor.getName(), speed);
-
 		SmartDashboard.putNumber(angleMotor.getName(), angle);
-		gotoAngle(angle/* * RobotMap.MATH.PI*/);
+		gotoAngle(angle);
 	}
 
 	public void tick() {;}
