@@ -31,6 +31,7 @@ public final class SwerveDrive extends Subsystem {
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT,
 										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT,
+										 false,
 										 false);
 		frontRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_FRONT_RIGHT_NAME, 
 				 						  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
@@ -43,7 +44,9 @@ public final class SwerveDrive extends Subsystem {
 		backRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_RIGHT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_RIGHT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
-										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT);
+										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT,
+										 true,
+										 true);
 	}
 	
 	@Override
@@ -73,14 +76,6 @@ public final class SwerveDrive extends Subsystem {
 	    double frontRightAngle = Math.atan2 (b, c) * RobotMap.MATH.PI;
 	    double frontLeftAngle = Math.atan2 (b, d) * RobotMap.MATH.PI;
 
-//	    SmartDashboard.putNumber("FWD", vy);
-//	    SmartDashboard.putNumber("STR", vx);
-//	    SmartDashboard.putNumber("RCW", rotationClockwise);
-//	    
-//	    SmartDashboard.putNumber("a", a);
-//	    SmartDashboard.putNumber("b", b);
-//	    SmartDashboard.putNumber("c", c);
-//	    SmartDashboard.putNumber("d", d);
 	    SmartDashboard.putNumber("FL-V", frontLeftSpeed);
 	    SmartDashboard.putNumber("FR-V", frontRightSpeed);
 	    SmartDashboard.putNumber("BL-V", backLeftSpeed);
@@ -90,13 +85,17 @@ public final class SwerveDrive extends Subsystem {
 	    SmartDashboard.putNumber("BL-A", backLeftAngle);
 	    SmartDashboard.putNumber("BR-A", backRightAngle);
 	    
-	    backRight.drive (backRightSpeed, -backRightAngle);
-	    backLeft.drive (-backLeftSpeed, backLeftAngle);
-	    
-	    // TODO Uncomment when front wheel mechanics is ready.
-	    frontRight.drive (frontRightSpeed, -frontRightAngle);
+	    backRight.drive (-backRightSpeed, -backRightAngle);
+	    backLeft.drive (backLeftSpeed, backLeftAngle);
+	    frontRight.drive (frontRightSpeed, frontRightAngle);
 	    frontLeft.drive (frontLeftSpeed, frontLeftAngle);	    
-//	    frontLeft.drive (0, 0);
+	}
+	
+	public void driveParallel(double velocity, double angle) {
+		frontLeft.drive(velocity, angle);
+		frontRight.drive(velocity, angle);
+		backLeft.drive(velocity, angle);
+		backRight.drive(velocity, angle);
 	}
 	
 	public void checkAnglesOnTarget() {

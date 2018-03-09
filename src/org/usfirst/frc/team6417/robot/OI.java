@@ -95,6 +95,10 @@ public class OI {
 			swerveWheelForwardButton.whenPressed(new SwerveDriveSetPosToZero());					
 			JoystickButton b = new JoystickButton(joystickOne, 4);
 			b.whenPressed(new SwerveDriveTeleoperated());
+//			JoystickButton c = new JoystickButton(joystickOne, 5);
+//			c.whenPressed(new SwerveDriveStraight());
+//			c.whenPressed(new SwerveDriveParallelTeleoperated());
+			
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);

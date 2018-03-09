@@ -34,14 +34,15 @@ public final class SwerveWheelDrive extends Subsystem {
 			int angleMotorPort, 
 			int velocityMotorPort,
 			int positionSensorPort) {
-		this(name, angleMotorPort, velocityMotorPort, positionSensorPort, true);
+		this(name, angleMotorPort, velocityMotorPort, positionSensorPort, true, false);
 	}
 	
 	public SwerveWheelDrive(String name,
 							int angleMotorPort, 
 							int velocityMotorPort,
 							int positionSensorPort,
-							boolean isInvertSensor) {
+							boolean isInvertSensor,
+							boolean isInvertVelocityMotor) {
 		super(name);
 
 		MotorControllerFactory factory = new MotorControllerFactory();
@@ -56,7 +57,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		angleMotor.configAllowableClosedloopError(MotorController.kPIDLoopIdx, 100, MotorController.kTimeoutMs);
 		velocityMotor = factory.createCIM(name+RobotMap.ROBOT.DRIVE_VELOCITY+"/"+velocityMotorPort, velocityMotorPort);
 		velocityMotor.configOpenloopRamp(1, 0);
-		
+		velocityMotor.setInverted(isInvertVelocityMotor);
 		positionSensor0 = new AnalogInput(positionSensorPort);
 		
 //		velocityMotor.setInverted(true);

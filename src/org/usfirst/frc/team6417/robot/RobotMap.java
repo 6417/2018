@@ -53,7 +53,7 @@ public class RobotMap {
 		public static boolean IS_LIFTING_UNIT_IN_USE = false;
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
-		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
+		public static boolean IS_SWERVE_DRIVE_IN_USE = true;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
 		public static boolean IS_CAMERA_IN_USE = false;
 	}	
@@ -128,6 +128,7 @@ public class RobotMap {
 		
 		public static final int PULSE_PER_ROTATION = 512;
 		public static final int PULSE_EPSILON = 500; // Amount of ticks of fuzziness when compare two encoder-values on equal
+		public static final int PULSE_PER_ROTATION_WORM_GEAR = 2048; // TODO Verify this empirically measured value
 		
 		// https://www.vexrobotics.com/vexpro/motors-electronics/encoders/217-5046.html :
 		public static final int PULSE_PER_ROTATION_VERSA_PLANETARY = 1024;
