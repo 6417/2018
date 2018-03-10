@@ -59,8 +59,6 @@ public final class SwerveDrive extends Subsystem {
 	}
 	
 	public void drive (double vy, double vx, double rotationClockwise) {
-	    vx *= -1.0;
-
 	    double a = vx - rotationClockwise * (L / r);
 	    double b = vx + rotationClockwise * (L / r);
 	    double c = vy - rotationClockwise * (W / r);
