@@ -4,21 +4,23 @@ import org.usfirst.frc.team6417.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public final class LiftingUnitMoveMetric extends Command {
+public final class LiftingUnitMoveToPosition extends Command {
+
+	private final int absolutePosition;
 	
-	public LiftingUnitMoveMetric() {
+	public LiftingUnitMoveToPosition(int absolutePosition) {
+		this.absolutePosition = absolutePosition;
 		requires(Robot.liftingUnit);
 	}
-
+	
 	@Override
 	protected void initialize() {
-//		Robot.liftingUnit.onEvent(LiftingUnit.TO_POSITION);
+		Robot.liftingUnit.moveToAbsolutePos(absolutePosition);
 	}
 	
 	@Override
 	protected boolean isFinished() {
-//		return Robot.liftingUnit.onTarget();
-		return true;
+		return false;
 	}
 
 }

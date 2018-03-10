@@ -1,33 +1,27 @@
 package org.usfirst.frc.team6417.robot.subsystems;
 
-import java.util.Arrays;
-
 import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
-import org.usfirst.frc.team6417.robot.model.Event;
-import org.usfirst.frc.team6417.robot.model.State;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitTeleoperated;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class LiftingUnit extends Subsystem {
-	public static final Event TO_GROUND = new Event("TO_GROUND");
-	public static final Event TO_SWITCH = new Event("TO_SWITCH");
-	public static final Event TO_EXCHANGE = new Event("TO_EXCHANGE");
-	public static final Event TO_SCALE_LOW = new Event("TO_SCALE_LOW");
-	public static final Event TO_SCALE_MIDDLE = new Event("TO_SCALE_MIDDLE");
-	public static final Event TO_SCALE_HIGH = new Event("TO_SCALE_HIGH");
-	public static final Event TO_POSITION = new Event("TO_POSITION");
-
 	private final double MOTOR_ROTATIONS_PER_CHAIN_WHEEL_ROTATION = calculateGearRatio();
 
 	private final MotorController motorA, motorB;
-	private State currentState;
 	private final PowerManagementStrategy powerManagementStrategy;
-	private int allowedErrorRelative;
+
+	private int currentPosition;
+	private boolean isHoldingPosition;
 	
 	public LiftingUnit(PowerManagementStrategy powerManagementStrategy) {
 		super("LiftingUnit");
@@ -36,38 +30,131 @@ public final class LiftingUnit extends Subsystem {
 		
 		final MotorControllerFactory factory = new MotorControllerFactory();
 		motorA = factory.create777ProWithPositionControl("Motor-A-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
+		motorA.setInverted(true);
+		motorA.setSensorPhase(false);
+		motorA.setNeutralMode(NeutralMode.Brake);
+		motorA.configOpenloopRamp(0, MotorController.kTimeoutMs);
+		motorA.configClosedloopRamp(0, MotorController.kTimeoutMs);
+		
+		motorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, MotorController.kPIDLoopIdx ,
+				MotorController.kTimeoutMs );
+		
+		motorA.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+		motorA.config_kP(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
+		motorA.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+		motorA.config_kD(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+		
+		int allowedErrorPercentage = 10;
+		int allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY / allowedErrorPercentage;
+		motorA.configAllowableClosedloopError(0, allowedErrorRelative, MotorController.kTimeoutMs);
+		
 		motorB = factory.create775Pro("Motor-B-Slave", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorB.setNeutralMode(NeutralMode.Brake);
+		motorB.setInverted(true);
 		motorB.follow(motorA);
 
-//		motorA.configOpenloopRamp(1, 0);
-		motorA.configOpenloopRamp(1, 0);
-		
-		// TODO nils: Move these 3 lines to the factory after testing
-		int allowedErrorPercentage = 10;
-//		Use this: 
-		allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION / allowedErrorPercentage;
-//		motorA.configAllowableClosedloopError(MotorController.kSlotIdx, allowedErrorRelative, MotorController.kTimeoutMs);
-
-		State ground = currentState = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
-		State theSwitch = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS);
-		State exchange = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS);
-		State scaleLow = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS);
-		State scaleMiddle = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS);
-		State scaleHigh = new TargetPositionState(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
-
-//		State metricPosition = new MetricPositionState(0.3/*meter*/);
-
-		Arrays.asList(ground,theSwitch,exchange,scaleLow,scaleMiddle,scaleHigh /* ,metricPosition */).stream().forEach( state -> {
-			state.addTransition(TO_GROUND, ground)
-			     .addTransition(TO_SWITCH, theSwitch)
-			     .addTransition(TO_EXCHANGE, exchange)
-			     .addTransition(TO_SCALE_LOW, scaleLow)
-			     .addTransition(TO_SCALE_MIDDLE, scaleMiddle)
-			     .addTransition(TO_SCALE_HIGH, scaleHigh)
-			     /*.addTransition(TO_POSITION, metricPosition)*/;
-		} );
-		
+		reset();
 	}
+	
+	@Override
+	protected void initDefaultCommand() {
+		setDefaultCommand(new LiftingUnitTeleoperated());
+	}
+
+	public void moveToPos(double posRelative) {
+		posRelative = Util.limit(posRelative, -1.0, 1.0);
+		SmartDashboard.putNumber("LU pos rel", posRelative);
+		double absolutePos = posRelative * RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS;
+		moveToAbsolutePos(absolutePos);
+	}
+	
+	public void moveToAbsolutePos(double posAbsolute) {
+		if(isHoldingPosition) {
+			return;
+		}
+		
+		SmartDashboard.putNumber("LU pos abs", posAbsolute);
+		motorA.set(ControlMode.Position, posAbsolute);
+		setHoldPosition(true);
+	}
+
+	public void move(double velocity) {
+		velocity = Util.limit(velocity, -1.0, 1.0);
+		SmartDashboard.putNumber("LU vel", velocity);
+
+		if(isInEndpointTop()) {
+			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			holdPosition();
+		} else if(isInEndpointBottom()) {
+			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			holdPosition();
+		} else {
+			motorA.set(ControlMode.PercentOutput, velocity);
+			setHoldPosition(false);
+		}
+//		
+//		if(velocity > 0) {
+//			if(isInEndpointTop()) {
+//				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+//				holdPosition();
+//			}else {
+//				motorA.set(ControlMode.PercentOutput, velocity);
+//			}
+//		}else if(velocity < 0) {
+//			if(isInEndpointBottom()) {
+//				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+//				holdPosition();
+//			}else {
+//				motorA.set(ControlMode.PercentOutput, velocity);
+//			}
+//		}else {
+//			holdPosition();
+//		}
+	}
+	
+
+	public void reset() {
+		// Reset the encoder to 0. 
+		// Only motorA has an encoder so only motorA gets the reset:
+		motorA.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
+		SmartDashboard.putNumber(motorA.getName()+" curr pos", motorA.getSelectedSensorPosition(0));
+	}
+		
+	private int getCurrentPosition() {
+		return motorA.getSelectedSensorPosition(MotorController.kPIDLoopIdx);
+	}
+	
+	private boolean isInEndpointTop() {
+		final boolean isInEndpoint = Util.greaterThen(getCurrentPosition(), 
+				RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS - RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY, 
+				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
+		SmartDashboard.putBoolean(motorA.getName()+" up", isInEndpoint);
+		return isInEndpoint;
+	}
+
+	private boolean isInEndpointBottom() {
+		final boolean isInEndpoint = Util.smallerThen(getCurrentPosition(), 
+				RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY, 
+				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
+		SmartDashboard.putBoolean(motorA.getName()+" down", isInEndpoint);
+		return isInEndpoint;
+	}
+	
+	public boolean isInEndpoint() {
+		return isInEndpointBottom() || isInEndpointTop();
+	}
+
+	public void holdPosition() {
+		currentPosition = getCurrentPosition();
+		moveToAbsolutePos(currentPosition);
+	}
+	
+	private void setHoldPosition(boolean isPosCtrl) {
+		isHoldingPosition = isPosCtrl;
+		SmartDashboard.putBoolean("LU pos ctrl", isHoldingPosition);
+		SmartDashboard.putBoolean("LU vel ctrl", !isHoldingPosition);
+	}
+
 
 	private double calculateGearRatio() {
 		// See documentation here:
@@ -89,13 +176,13 @@ public final class LiftingUnit extends Subsystem {
 		int ticksToTarget = (int)pulsesToTarget;
 		double error = pulsesToTarget - ticksToTarget;
 		
-		SmartDashboard.putNumber("LiftingUnit lift to pos in m", positionInMeters);
-		SmartDashboard.putNumber("LiftingUnit chain-wheel rotations", chainWheelRotations);
-		SmartDashboard.putNumber("LiftingUnit motor rotations", motorRotations);
-		SmartDashboard.putNumber("LiftingUnit ticks to target", ticksToTarget);
-		SmartDashboard.putNumber("LiftingUnit error", error);
+		SmartDashboard.putNumber("LU lift to pos in m", positionInMeters);
+		SmartDashboard.putNumber("LU chain-wheel rotations", chainWheelRotations);
+		SmartDashboard.putNumber("LU motor rotations", motorRotations);
+		SmartDashboard.putNumber("LU ticks to target", ticksToTarget);
+		SmartDashboard.putNumber("LU error", error);
 		
-//		motorB.set(ControlMode.MotionMagic, ticksToTarget);
+		motorA.set(ControlMode.Position, ticksToTarget);
 	}
 
 	private double calculateMotorRotations(double chainWheelRotations) {
@@ -107,107 +194,4 @@ public final class LiftingUnit extends Subsystem {
 		return 2.0 * RobotMap.MATH.PI * chainWheelRadiusInMeter;
 	}
 
-	public void onEvent(Event event) {
-		SmartDashboard.putString("LiftingUnit event", event.toString());		
-		SmartDashboard.putString("LiftingUnit state (prev)", currentState.toString());		
-		currentState = currentState.transition(event);
-		currentState.init();
-		SmartDashboard.putString("LiftingUnit state (current)", currentState.toString());		
-	}
-	
-	public void reset() {
-		// Reset the encoder to 0. 
-		// Only motorB has an encoder so only motorB gets the reset:
-		motorA.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
-	}
-	
-	public void tick() {
-		currentState.tick();
-	}
-	
-	public boolean onTarget() {
-//		return allowedErrorRelative <= motorB.getClosedLoopError(MotorController.kPIDLoopIdx);
-		return currentState.isFinished();
-	}
-	
-	@Override
-	protected void initDefaultCommand() {;}
-	
-	private int getCurrentPosition() {
-		return motorA.getSelectedSensorPosition(MotorController.kPIDLoopIdx);
-	}
-	
-	private final class TargetPositionState extends State {
-		private final int targetPosition;
-		
-		TargetPositionState(int targetPosition){
-			this.targetPosition = targetPosition;
-		}
-		
-		@Override
-		public void init() {
-			SmartDashboard.putNumber("LiftingUnit nominal position", targetPosition);
-			SmartDashboard.putNumber("LiftingUnit actual position", getCurrentPosition());
-//			motorB.set(ControlMode.Position, position);
-			int currPos = getCurrentPosition();
-			if(Util.greaterThen(currPos, targetPosition)) {
-				motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
-				SmartDashboard.putNumber("LiftingUnit motor", RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY);
-			}else if(Util.smallerThen(currPos, targetPosition)) {
-				motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
-				SmartDashboard.putNumber("LiftingUnit motor", RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
-			}else {
-				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				System.out.println("LiftingUnit "+currPos+" to "+targetPosition);
-			}
-		}
-		
-		@Override
-		public void tick() {
-			SmartDashboard.putNumber("LiftingUnit actual position", getCurrentPosition());
-//			motorB.set(ControlMode.Position, position);
-		}
-		
-		@Override
-		public boolean isFinished() {
-//			return Util.eq(targetPosition, getCurrentPosition());
-			boolean isFinished = Util.eq(getCurrentPosition(), targetPosition);
-			if(isFinished) {
-				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-			}
-			return isFinished;
-		}
-		
-		public String toString() {
-			return "state("+targetPosition+")";
-		}
-	}
-	
-
-//	private final class MetricPositionState extends State {
-//		private final double positionInMeter;
-//		
-//		MetricPositionState(double positionInMeter){
-//			this.positionInMeter = positionInMeter;
-//		}
-//		
-//		@Override
-//		public void init() {
-//			SmartDashboard.putNumber("LiftingUnit nominal metric position", positionInMeter);
-//			liftToPosition(positionInMeter);
-//		}
-//		
-//		@Override
-//		public void tick() {
-//			SmartDashboard.putNumber("LiftingUnit actual position", motorB.getSelectedSensorPosition(MotorController.kPIDLoopIdx));
-//		}
-//		
-//		@Override
-//		public boolean isFinished() {
-//			return onTarget();
-//		}
-//	}
-	
-
-	
 }

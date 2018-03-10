@@ -4,21 +4,20 @@ import org.usfirst.frc.team6417.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public final class LiftingUnitMoveMetric extends Command {
+public final class LiftingUnitHoldPosition extends Command {
 	
-	public LiftingUnitMoveMetric() {
+	public LiftingUnitHoldPosition() {
 		requires(Robot.liftingUnit);
 	}
-
+	
 	@Override
 	protected void initialize() {
-//		Robot.liftingUnit.onEvent(LiftingUnit.TO_POSITION);
+		Robot.liftingUnit.holdPosition();
 	}
 	
 	@Override
 	protected boolean isFinished() {
-//		return Robot.liftingUnit.onTarget();
-		return true;
+		return false;
 	}
 
 }

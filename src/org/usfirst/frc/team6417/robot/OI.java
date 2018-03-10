@@ -3,15 +3,14 @@ package org.usfirst.frc.team6417.robot;
 import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitMove;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitHoldPosition;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelStop;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelTeleoperated;
-import org.usfirst.frc.team6417.robot.subsystems.LiftingUnit;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -27,19 +26,13 @@ public class OI {
 	
 	private JoystickButton gripperPullButton;
 	private JoystickButton gripperPushButton;
-	
-	private JoystickButton liftingUnitToGroundAltitudeButton;
-	private JoystickButton liftingUnitToExchangeAltitudeButton;
-	private JoystickButton liftingUnitToSwitchAltitudeButton;
-	private JoystickButton liftingUnitToScaleLowAltitudeButton;
-	private JoystickButton liftingUnitToScaleMiddleAltitudeButton;
-	private JoystickButton liftingUnitToScaleHighAltitudeButton;
-	private JoystickButton liftingUnitResetButton;
 	private JoystickButton swerveWheelForwardButton;
 	private JoystickButton liftingUnitWagonForwardButton;
-
 	private JoystickButton liftingUnitWagonBackwardButton;
 	private JoystickButton swerveWheelCheckButton;
+	private JoystickButton liftingUnitHoldPositionButton;
+	private JoystickButton liftingUnitGoToSwitchButton;
+	private JoystickButton liftingUnitGoToGroundButton;
 
 	private static OI INSTANCE;
 	
@@ -68,37 +61,25 @@ public class OI {
 			liftingUnitWagonBackwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
-			liftingUnitToGroundAltitudeButton = new JoystickButton(liftingUnitController, 1);
-			liftingUnitToExchangeAltitudeButton = new JoystickButton(liftingUnitController, 2);
-			liftingUnitToSwitchAltitudeButton = new JoystickButton(liftingUnitController, 3);
-			liftingUnitToScaleLowAltitudeButton = new JoystickButton(liftingUnitController, 6);
-			liftingUnitToScaleMiddleAltitudeButton = new JoystickButton(liftingUnitController, 5);
-			liftingUnitToScaleHighAltitudeButton = new JoystickButton(liftingUnitController, 4);
-			liftingUnitResetButton = new JoystickButton(joystickOne, 8);
-
-			liftingUnitToGroundAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_GROUND));
-			liftingUnitToSwitchAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SWITCH));
-			liftingUnitToExchangeAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_EXCHANGE));
-			liftingUnitToScaleLowAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_LOW));
-			liftingUnitToScaleMiddleAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_MIDDLE));
-			liftingUnitToScaleHighAltitudeButton.whenPressed(new LiftingUnitMove(LiftingUnit.TO_SCALE_HIGH));
-			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
+			liftingUnitHoldPositionButton = new JoystickButton(liftingUnitController, 1);
+			liftingUnitHoldPositionButton.whenPressed(new LiftingUnitHoldPosition());
+			liftingUnitGoToSwitchButton = new JoystickButton(liftingUnitController, 2);
+			liftingUnitGoToSwitchButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
+			liftingUnitGoToGroundButton = new JoystickButton(liftingUnitController, 3);
+			liftingUnitGoToGroundButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS));
+//			liftingUnitResetButton = new JoystickButton(liftingUnitController, 5);
+//			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
 		}
 		if(RobotMap.SUBSYSTEM.IS_DIFFERENTIAL_DRIVE_IN_USE) {
 		// nothing to do. the drive uses the internal default command.
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-//			// nothing to do. the drive uses the internal default command.
 			swerveWheelCheckButton = new JoystickButton(joystickOne, 8);
 			swerveWheelCheckButton.whenPressed(new SwerveDriveAngleOnSingleWheel());
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 7);
 			swerveWheelForwardButton.whenPressed(new SwerveDriveSetPosToZero());					
 			JoystickButton b = new JoystickButton(joystickOne, 4);
 			b.whenPressed(new SwerveDriveTeleoperated());
-//			JoystickButton c = new JoystickButton(joystickOne, 5);
-//			c.whenPressed(new SwerveDriveStraight());
-//			c.whenPressed(new SwerveDriveParallelTeleoperated());
-			
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);
