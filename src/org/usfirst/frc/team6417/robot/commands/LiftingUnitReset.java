@@ -11,7 +11,7 @@ public final class LiftingUnitReset extends Command {
 
 	@Override
 	protected void initialize() {
-		Robot.liftingUnit.reset();
+		Robot.liftingUnit.resetEncoder();
 	}
 	
 	@Override

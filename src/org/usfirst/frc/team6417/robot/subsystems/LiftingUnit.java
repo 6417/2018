@@ -5,6 +5,8 @@ import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitTeleoperated;
+import org.usfirst.frc.team6417.robot.model.velocitymanagement.MinVelocitySelector;
+import org.usfirst.frc.team6417.robot.model.velocitymanagement.VelocityByPositionCalculator;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -25,7 +27,20 @@ public final class LiftingUnit extends Subsystem {
 	private boolean isHoldingPosition;
 
 	private DigitalInput endpointFrontSensor;
-	
+
+	MinVelocitySelector endpointTopVelocitySelector = new MinVelocitySelector(new VelocityByPositionCalculator(
+			RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS,
+			RobotMap.VELOCITY.STOP_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS				
+			));
+	MinVelocitySelector endpointBottomVelocitySelector = new MinVelocitySelector(new VelocityByPositionCalculator(
+			RobotMap.VELOCITY.STOP_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS,
+			RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS
+			));
+
 	public LiftingUnit(PowerManagementStrategy powerManagementStrategy) {
 		super(RobotMap.ROBOT.LIFTING_UNIT_NAME);
 		
@@ -62,7 +77,7 @@ public final class LiftingUnit extends Subsystem {
 		motorB.setInverted(true);
 		motorB.follow(motorA);
 
-		reset();
+		resetEncoder();
 		
 		endpointFrontSensor = new DigitalInput(RobotMap.DIO.LIFTING_UNIT_POSITION_DOWN_PORT);
 		endpointFrontSensor.setName(RobotMap.ROBOT.LIFTING_UNIT_POSITION_DOWN_SENSOR_NAME+"/"+RobotMap.DIO.LIFTING_UNIT_POSITION_DOWN_PORT);
@@ -93,18 +108,19 @@ public final class LiftingUnit extends Subsystem {
 	public void move(double velocity) {
 		velocity = Util.limit(velocity, -1.0, 1.0);
 		
-		// velocity = this.powerManagementStrategy.calculatePower() * velocity;
+		velocity = this.powerManagementStrategy.calculatePower() * velocity;
 		velocity *= 0.3; // TODO remove after testing
 		
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel", velocity);
 		SmartDashboard.putBoolean(endpointFrontSensor.getName(), !endpointFrontSensor.get());
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", motorA.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", getCurrentPosition());
 		
 		if(velocity > 0) {
 			if(isInEndpointTop()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
 			}else {
+				velocity = endpointTopVelocitySelector.calculateVelocityInv(getCurrentPosition(), velocity);
 				motorA.set(ControlMode.PercentOutput, velocity);
 			}
 		}else if(velocity < 0) {
@@ -112,15 +128,49 @@ public final class LiftingUnit extends Subsystem {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
 			}else {
+				velocity = endpointBottomVelocitySelector.calculateVelocity(getCurrentPosition(), velocity);
 				motorA.set(ControlMode.PercentOutput, velocity);
 			}
 		}else {
 			holdPosition();
 		}
+		
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel", velocity);
 	}
 	
 
-	public void reset() {
+//	/**
+//	 * Reduce the velocity when moving near endpoint down. 
+//	 * The velocity-reduction is a linear reduction of velocity over distance.
+//	 * @param velocity
+//	 * @return the altitude-corrected velocity or the lower velocity. If the input velocity is below the calculated velocity, the given input velocity is returned.
+//	 */
+//	private double calculateVelocityReductionCurrentPositionRelatedToEndpointDown(double velocity) {
+//		int currPos = getCurrentPosition();
+//		if(currPos <= RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS) {
+//			double vel2 = (RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS - (RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS - currPos) ) * velocity;
+//			if(velocity > vel2) {
+//				return vel2;
+//			}
+//		}
+//		return velocity;
+//	}
+//	
+//	private double calculateVelocityReductionCurrentPositionRelatedToEndpointUp(double velocity) {
+//		int currPos = getCurrentPosition();
+//		if(currPos >= RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS) {
+//			double m = (RobotMap.VELOCITY.STOP_VELOCITY-RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY) / (RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS - RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS);
+//			double vel2 = m * currPos + RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY;
+//			
+//			//double vel2 = (RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS - (RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS - currPos) ) * velocity;
+//			if(velocity > vel2) {
+//				return vel2;
+//			}
+//		}
+//		return velocity;
+//	}
+//	
+	public void resetEncoder() {
 		// Reset the encoder to 0. 
 		// Only motorA has an encoder so only motorA gets the reset:
 		motorA.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
@@ -139,7 +189,7 @@ public final class LiftingUnit extends Subsystem {
 		return isInEndpoint;
 	}
 
-	private boolean isInEndpointBottom() {
+	public boolean isInEndpointBottom() {
 //		final boolean isInEndpoint = Util.smallerThen(getCurrentPosition(), 
 //				RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY, 
 //				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
@@ -201,6 +251,20 @@ public final class LiftingUnit extends Subsystem {
 	private double calculateChainWheelRotations(double positionInMeters) {
 		double chainWheelRadiusInMeter = RobotMap.ROBOT.LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER;//m
 		return 2.0 * RobotMap.MATH.PI * chainWheelRadiusInMeter;
+	}
+
+	public void startMoveToEndpointDown() {
+		if(isInEndpointBottom()) {
+			return;
+		}
+		
+		motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
+	}
+
+	public void stopMoveToEndpointDown() {
+		motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+		resetEncoder();
+		moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
 	}
 
 }
