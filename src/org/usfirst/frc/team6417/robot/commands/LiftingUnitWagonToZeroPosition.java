@@ -8,12 +8,12 @@ public final class LiftingUnitWagonToZeroPosition extends Command {
 
 	
 	public LiftingUnitWagonToZeroPosition() {
-		requires(Robot.swerveDrive);
+		requires(Robot.liftingUnitWagon);
 	}
 	
 	@Override
 	protected void initialize() {
-		Robot.swerveDrive.startZeroPointCalibration();
+//		Robot.liftingUnitWagon.onEvent(LiftingUni);.startZeroPointCalibration();
 	}
 	
 	@Override

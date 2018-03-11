@@ -27,13 +27,15 @@ public class RobotMap {
 		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 53; /*cm*/
 		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
-		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = 557283; //-20000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = 200000;// 857283; //-40000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 1057283;// -60000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 1157283; //-80000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 500000;//1357283; //-100000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = 300000; //-20000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = 500000;// 857283; //-40000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = 900000;// -60000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 1050000; //-80000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 1350000;//1357283; //-100000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
-		
+
+		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_BACK_IN_TICKS = 100000;//1357283; //-100000; /*encoder ticks*/
+
 		// public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear *
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 160.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_GRAD = 360.0 * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
@@ -43,9 +45,20 @@ public class RobotMap {
 		public static final String DRIVE_FRONT_RIGHT_NAME = "FR";
 		public static final String DRIVE_BACK_LEFT_NAME = "BL";
 		public static final String DRIVE_BACK_RIGHT_NAME = "BR";
-		public static final String DRIVE_ANGLE = "A";
-		public static final String DRIVE_VELOCITY = "V";
+		public static final String DRIVE_ANGLE = "-A";
+		public static final String DRIVE_VELOCITY = "-V";
 		
+		public static final String LIFTING_UNIT_NAME = "LU";
+		public static final String LIFTING_UNIT_POSITION_DOWN_SENSOR_NAME = LIFTING_UNIT_NAME+"-S";
+		public static final String LIFTING_UNIT_MOTOR_A_NAME = LIFTING_UNIT_NAME + "-A";
+		public static final String LIFTING_UNIT_MOTOR_B_NAME = LIFTING_UNIT_NAME + "-B";
+		public static final String LIFTING_UNIT_WAGON_NAME = "LUW";
+		public static final String LIFTING_UNIT_WAGON_MOTOR_NAME = LIFTING_UNIT_WAGON_NAME+"-A";
+		public static final String LIFTING_UNIT_WAGON_POSITION_FRONT_SENSOR_NAME = LIFTING_UNIT_WAGON_NAME+"-S";
+		
+		public static final String GRIPPER_NAME = "GR";
+		public static final String GRIPPER_LEFT_NAME = GRIPPER_NAME+"-L";
+		public static final String GRIPPER_RIGHT_NAME = GRIPPER_NAME+"-R";
 	}
 	
 	public static class SUBSYSTEM {
@@ -81,7 +94,8 @@ public class RobotMap {
 }
 	
 	public static class DIO {
-		public static final int LIFTING_UNIT_WAGON_POSITION_BACK_PORT = 0;
+		public static final int LIFTING_UNIT_WAGON_POSITION_FRONT_PORT = 0;
+		public static final int LIFTING_UNIT_POSITION_DOWN_PORT = 1;
 	}
 	
 	public static class AIO {
@@ -113,7 +127,7 @@ public class RobotMap {
 
 		public static final int GRIPPER_LEFT_PORT = 11;
 		public static final int GRIPPER_RIGHT_PORT = 12;
-		
+		 
 		public static final int DIFFERENTIAL_DRIVE_FRONT_LEFT_PORT = DRIVE_FRONT_LEFT_VELOCITY_PORT;
 		public static final int DIFFERENTIAL_DRIVE_FRONT_RIGHT_PORT = 14;
 

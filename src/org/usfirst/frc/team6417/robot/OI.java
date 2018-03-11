@@ -5,6 +5,7 @@ import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitHoldPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
@@ -33,6 +34,7 @@ public class OI {
 	private JoystickButton liftingUnitHoldPositionButton;
 	private JoystickButton liftingUnitGoToSwitchButton;
 	private JoystickButton liftingUnitGoToGroundButton;
+	private JoystickButton liftingUnitResetButton;
 
 	private static OI INSTANCE;
 	
@@ -54,8 +56,8 @@ public class OI {
 			gripperPushButton.whenReleased(new GripperStop());
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
-			liftingUnitWagonForwardButton = new JoystickButton(joystickOne, 11);
-			liftingUnitWagonBackwardButton = new JoystickButton(joystickOne, 12);
+			liftingUnitWagonForwardButton = new JoystickButton(liftingUnitController, 5);
+			liftingUnitWagonBackwardButton = new JoystickButton(liftingUnitController, 6);
 			
 			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
 			liftingUnitWagonBackwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));

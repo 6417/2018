@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,21 +23,27 @@ public final class LiftingUnit extends Subsystem {
 
 	private int currentPosition;
 	private boolean isHoldingPosition;
+
+	private DigitalInput endpointFrontSensor;
 	
 	public LiftingUnit(PowerManagementStrategy powerManagementStrategy) {
-		super("LiftingUnit");
+		super(RobotMap.ROBOT.LIFTING_UNIT_NAME);
 		
 		this.powerManagementStrategy = powerManagementStrategy;
 		
 		final MotorControllerFactory factory = new MotorControllerFactory();
-		motorA = factory.create777ProWithPositionControl("Motor-A-Master", RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
+		motorA = factory.create777ProWithPositionControl(
+				RobotMap.ROBOT.LIFTING_UNIT_MOTOR_A_NAME+"/"+RobotMap.MOTOR.LIFTING_UNIT_PORT_A, 
+				RobotMap.MOTOR.LIFTING_UNIT_PORT_A);
 		motorA.setInverted(true);
 		motorA.setSensorPhase(false);
 		motorA.setNeutralMode(NeutralMode.Brake);
 		motorA.configOpenloopRamp(0, MotorController.kTimeoutMs);
 		motorA.configClosedloopRamp(0, MotorController.kTimeoutMs);
 		
-		motorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, MotorController.kPIDLoopIdx ,
+		motorA.configSelectedFeedbackSensor(
+				FeedbackDevice.QuadEncoder, 
+				MotorController.kPIDLoopIdx ,
 				MotorController.kTimeoutMs );
 		
 		motorA.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
@@ -48,12 +55,17 @@ public final class LiftingUnit extends Subsystem {
 		int allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY / allowedErrorPercentage;
 		motorA.configAllowableClosedloopError(0, allowedErrorRelative, MotorController.kTimeoutMs);
 		
-		motorB = factory.create775Pro("Motor-B-Slave", RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
+		motorB = factory.create775Pro(
+				RobotMap.ROBOT.LIFTING_UNIT_MOTOR_B_NAME+"/"+RobotMap.MOTOR.LIFTING_UNIT_PORT_B, 
+				RobotMap.MOTOR.LIFTING_UNIT_PORT_B);
 		motorB.setNeutralMode(NeutralMode.Brake);
 		motorB.setInverted(true);
 		motorB.follow(motorA);
 
 		reset();
+		
+		endpointFrontSensor = new DigitalInput(RobotMap.DIO.LIFTING_UNIT_POSITION_DOWN_PORT);
+		endpointFrontSensor.setName(RobotMap.ROBOT.LIFTING_UNIT_POSITION_DOWN_SENSOR_NAME+"/"+RobotMap.DIO.LIFTING_UNIT_POSITION_DOWN_PORT);
 	}
 	
 	@Override
@@ -63,7 +75,7 @@ public final class LiftingUnit extends Subsystem {
 
 	public void moveToPos(double posRelative) {
 		posRelative = Util.limit(posRelative, -1.0, 1.0);
-		SmartDashboard.putNumber("LU pos rel", posRelative);
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos rel", posRelative);
 		double absolutePos = posRelative * RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS;
 		moveToAbsolutePos(absolutePos);
 	}
@@ -73,43 +85,38 @@ public final class LiftingUnit extends Subsystem {
 			return;
 		}
 		
-		SmartDashboard.putNumber("LU pos abs", posAbsolute);
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos abs", posAbsolute);
 		motorA.set(ControlMode.Position, posAbsolute);
 		setHoldPosition(true);
 	}
 
 	public void move(double velocity) {
 		velocity = Util.limit(velocity, -1.0, 1.0);
-		SmartDashboard.putNumber("LU vel", velocity);
-
-		if(isInEndpointTop()) {
-			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+		
+		// velocity = this.powerManagementStrategy.calculatePower() * velocity;
+		velocity *= 0.3; // TODO remove after testing
+		
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel", velocity);
+		SmartDashboard.putBoolean(endpointFrontSensor.getName(), !endpointFrontSensor.get());
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", motorA.getSelectedSensorPosition(0));
+		
+		if(velocity > 0) {
+			if(isInEndpointTop()) {
+				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
+			}else {
+				motorA.set(ControlMode.PercentOutput, velocity);
+			}
+		}else if(velocity < 0) {
+			if(isInEndpointBottom()) {
+				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
+			}else {
+				motorA.set(ControlMode.PercentOutput, velocity);
+			}
+		}else {
 			holdPosition();
-		} else if(isInEndpointBottom()) {
-			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-			holdPosition();
-		} else {
-			motorA.set(ControlMode.PercentOutput, velocity);
-			setHoldPosition(false);
 		}
-//		
-//		if(velocity > 0) {
-//			if(isInEndpointTop()) {
-//				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-//				holdPosition();
-//			}else {
-//				motorA.set(ControlMode.PercentOutput, velocity);
-//			}
-//		}else if(velocity < 0) {
-//			if(isInEndpointBottom()) {
-//				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-//				holdPosition();
-//			}else {
-//				motorA.set(ControlMode.PercentOutput, velocity);
-//			}
-//		}else {
-//			holdPosition();
-//		}
 	}
 	
 
@@ -133,11 +140,13 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	private boolean isInEndpointBottom() {
-		final boolean isInEndpoint = Util.smallerThen(getCurrentPosition(), 
-				RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY, 
-				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
-		SmartDashboard.putBoolean(motorA.getName()+" down", isInEndpoint);
-		return isInEndpoint;
+//		final boolean isInEndpoint = Util.smallerThen(getCurrentPosition(), 
+//				RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY, 
+//				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
+//		SmartDashboard.putBoolean(motorA.getName()+" down", isInEndpoint);
+//		return isInEndpoint;
+		SmartDashboard.putBoolean(motorA.getName()+" down", (!endpointFrontSensor.get()));
+		return !endpointFrontSensor.get();
 	}
 	
 	public boolean isInEndpoint() {
@@ -151,8 +160,8 @@ public final class LiftingUnit extends Subsystem {
 	
 	private void setHoldPosition(boolean isPosCtrl) {
 		isHoldingPosition = isPosCtrl;
-		SmartDashboard.putBoolean("LU pos ctrl", isHoldingPosition);
-		SmartDashboard.putBoolean("LU vel ctrl", !isHoldingPosition);
+		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos ctrl", isHoldingPosition);
+		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel ctrl", !isHoldingPosition);
 	}
 
 
