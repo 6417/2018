@@ -114,7 +114,7 @@ public final class LiftingUnit extends Subsystem {
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel", velocity);
 		SmartDashboard.putBoolean(endpointFrontSensor.getName(), !endpointFrontSensor.get());
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", getCurrentPosition());
-		
+		 
 		if(velocity > 0) {
 			if(isInEndpointTop()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);

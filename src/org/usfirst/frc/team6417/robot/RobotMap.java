@@ -33,7 +33,10 @@ public class RobotMap {
 		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = 1050000; //-80000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = 1350000;//1357283; //-100000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
+		public static final int LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS = 20000 + LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS - 20000;
 
+		
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_BACK_IN_TICKS = 100000;//1357283; //-100000; /*encoder ticks*/
 
 		// public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear *
@@ -76,6 +79,7 @@ public class RobotMap {
 		
 		public static final double LIFTING_UNIT_MOTOR_UP_VELOCITY = 0.25;
 		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = -0.3;
+		public static final double LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY = -0.1;
 		
 		public static final double LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY = 0.25;
 		public static final double LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY = -0.3;
