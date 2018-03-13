@@ -18,11 +18,6 @@ public final class LiftingUnitFindEndpointDown extends Command {
 	}
 	
 	@Override
-	protected void execute() {
-		Robot.liftingUnit.tickMoveToEndpointDown();
-	}
-	
-	@Override
 	protected boolean isFinished() {
 		if( Robot.liftingUnit.isInEndpointBottom()) {
 			Robot.liftingUnit.stopMoveToEndpointDown();

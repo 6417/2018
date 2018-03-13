@@ -13,8 +13,8 @@ public final class LiftingUnitWagonFindEndpointFront extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.liftingUnitWagon.startMoveToEndpointFront();
 		SmartDashboard.putBoolean("LUW calibration", true);
+		Robot.liftingUnitWagon.startMoveToEndpointFront();
 	}
 	
 	@Override

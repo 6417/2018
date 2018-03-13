@@ -92,6 +92,10 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	public void moveToPos(double posRelative) {
+		if(!isCalibrated) {
+			return;
+		}
+		
 		posRelative = Util.limit(posRelative, -1.0, 1.0);
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos rel", posRelative);
 		double absolutePos = posRelative * RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS;
@@ -115,6 +119,7 @@ public final class LiftingUnit extends Subsystem {
 		if(!isCalibrated) {
 			return;
 		}
+		
 		internalMove(velocity);
 	}
 	
@@ -137,12 +142,13 @@ public final class LiftingUnit extends Subsystem {
 				setHoldPosition(false);
 				motorA.set(ControlMode.PercentOutput, velocity);
 			}else {
+				setHoldPosition(false);
 				motorA.set(ControlMode.PercentOutput, velocity);
 			}
 		}else if(velocity < 0) {
 			if(isInEndpointBottom()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-//				holdPosition();
+				holdPosition();
 			} else if (Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS)) {
 				setHoldPosition(false);
 				motorA.set(ControlMode.PercentOutput, velocity);
@@ -153,9 +159,6 @@ public final class LiftingUnit extends Subsystem {
 		}else {
 			holdPosition();
 		}
-		
-		System.out.println("LiftingUnit.move(7)");
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel", velocity);
 	}
 
 	public void resetEncoder() {
@@ -250,14 +253,9 @@ public final class LiftingUnit extends Subsystem {
 			return;
 		}
 		
-//		motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
-		internalMove(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
+		motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
 	}
 	
-	public void tickMoveToEndpointDown() {
-		internalMove(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
-	}
-
 	public void stopMoveToEndpointDown() {
 		motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		resetEncoder();
