@@ -1,10 +1,23 @@
 package org.usfirst.frc.team6417.robot.commands;
 
+import org.usfirst.frc.team6417.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public final class TestBehavior extends CommandGroup {
 	public TestBehavior() {
 		addSequential(new GetFieldInformation());
+		
+		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
+			addSequential(new LiftingUnitFindEndpointDown());
+		}
+		
+
+//		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
+//			addSequential(new SwerveDriveWheelsToZeroPosition());
+//		}
+//		addSequential(new SwerveDriveStraight());
+		
 //		addSequential(new Command() {
 //
 //			@Override

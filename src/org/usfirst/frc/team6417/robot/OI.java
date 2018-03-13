@@ -3,9 +3,9 @@ package org.usfirst.frc.team6417.robot;
 import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitFindEndpointDown;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitHoldPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
@@ -35,6 +35,8 @@ public class OI {
 	private JoystickButton liftingUnitGoToSwitchButton;
 	private JoystickButton liftingUnitGoToGroundButton;
 	private JoystickButton liftingUnitResetButton;
+	private JoystickButton liftingUnitFindEndpointDownButton;
+	private JoystickButton liftingUnitTeleoperated;
 
 	private static OI INSTANCE;
 	
@@ -69,6 +71,11 @@ public class OI {
 			liftingUnitGoToSwitchButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
 			liftingUnitGoToGroundButton = new JoystickButton(liftingUnitController, 3);
 			liftingUnitGoToGroundButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS));
+//			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
+//			liftingUnitTeleoperated.whenPressed(new LiftingUnitTeleoperated());
+			
+			liftingUnitFindEndpointDownButton = new JoystickButton(joystickOne, 11);
+			liftingUnitFindEndpointDownButton.whenPressed(new LiftingUnitFindEndpointDown());
 //			liftingUnitResetButton = new JoystickButton(liftingUnitController, 5);
 //			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
 		}
