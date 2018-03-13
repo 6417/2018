@@ -6,11 +6,11 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonTeleoperated;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
+import org.usfirst.frc.team6417.robot.model.velocitymanagement.MotionPathVelocityCalculator;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -29,6 +29,16 @@ public final class LiftingUnitWagon extends Subsystem {
 	
 	private PowerManagementStrategy powerManagementStrategy;
 	
+	private final MotionPathVelocityCalculator motionPathVelocityCalculator = new MotionPathVelocityCalculator(
+			RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS,
+			RobotMap.VELOCITY.STOP_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS,
+			RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_WAGON_FRONT_POSITION_BREAK_IN_TICKS,
+			RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY,
+			RobotMap.ROBOT.LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS,
+			RobotMap.VELOCITY.STOP_VELOCITY
+			);
 	private boolean isCalibrated = false;
 	private boolean isHoldingPosition;
 
@@ -40,8 +50,8 @@ public final class LiftingUnitWagon extends Subsystem {
 		motor = factory.create777ProWithPositionControl(RobotMap.ROBOT.LIFTING_UNIT_WAGON_MOTOR_NAME + "/"+RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT, RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
 //		motor.setInverted(true);
 //		motor.setSensorPhase(false);
-		motor.setNeutralMode(NeutralMode.Brake);
-		motor.configOpenloopRamp(0, MotorController.kTimeoutMs);
+//		motor.setNeutralMode(NeutralMode.Brake);
+		motor.configOpenloopRamp(1, MotorController.kTimeoutMs);
 		motor.configClosedloopRamp(0, MotorController.kTimeoutMs);
 		
 		motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, MotorController.kPIDLoopIdx ,
@@ -83,7 +93,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	public void tick() {
 		currentState.tick();
 		SmartDashboard.putBoolean(frontEndpointPositionDetector.getName(), frontEndpointPositionDetector.get());
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" pos", motor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" pos", getCurrentPosition());
 	}
 	
 	@Override
@@ -92,16 +102,10 @@ public final class LiftingUnitWagon extends Subsystem {
 	}
 	
 	public boolean isInEndpositionFront() {
-		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" is front", !frontEndpointPositionDetector.get());		
-		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" is back", (motor.getSelectedSensorPosition(0) > 100000));		
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" pos", motor.getSelectedSensorPosition(0));		
 		return !frontEndpointPositionDetector.get();
 	}
 	public boolean isInEndpositionBack() {
-		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" is front", !frontEndpointPositionDetector.get());		
-		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" is back", (motor.getSelectedSensorPosition(0) > 100000));		
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" pos", motor.getSelectedSensorPosition(0));		
-		return motor.getSelectedSensorPosition(0) > RobotMap.ROBOT.LIFTING_UNIT_WAGON_ENDPOSITION_BACK_IN_TICKS; //100000;
+		return getCurrentPosition() > RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
 	}
 	public boolean isInEndpoint() {
 		return isInEndpositionBack() || isInEndpositionFront();
@@ -199,28 +203,46 @@ public final class LiftingUnitWagon extends Subsystem {
 			return;
 		}
 		
-		motor.set(ControlMode.Position, motor.getSelectedSensorPosition(MotorController.kSlotIdx));
+		motor.set(ControlMode.Position, getCurrentPosition());
 		setHoldPosition(true);
 	}
 
-	public void move(double x) {
-		if(x > 0) {
+	/**
+	 * Manual control for the lifting-unit.
+	 * @param x
+	 */
+	public void move(double velocity) {
+		if(!isCalibrated) {
+			System.err.println("LU not calibrated.");
+			return;
+		}
+		
+		internalMove(velocity);
+	}
+	
+	private void internalMove(double velocity) {
+		velocity = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
+		if(velocity > 0) {
 			if(isInEndpositionFront()) {
 				holdPosition();
 			}else{
-				motor.set(ControlMode.Velocity, x);	
+				motor.set(ControlMode.PercentOutput, velocity);	
 				setHoldPosition(false);
 			}
-		}else if(x < 0) {
+		}else if(velocity < 0) {
 			if(isInEndpositionBack()) {
 				holdPosition();
 			}else{
-				motor.set(ControlMode.Velocity, x);				
+				motor.set(ControlMode.PercentOutput, velocity);				
 				setHoldPosition(false);
 			}
 		}else{
 			holdPosition();
 		}
+	}
+
+	private int getCurrentPosition() {
+		return motor.getSelectedSensorPosition(MotorController.kSlotIdx);
 	}
 
 	public void resetEncoder() {
@@ -231,6 +253,21 @@ public final class LiftingUnitWagon extends Subsystem {
 		this.isHoldingPosition = isHoldPos;
 		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" pos ctrl", isHoldPos);
 		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_WAGON_NAME+" vel ctrl", !isHoldPos);
+	}
+
+	public void startMoveToEndpointFront() {
+		internalMove(RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_VERY_SLOW_FORWARD_VELOCITY);		
+	}
+
+	public void tickMoveToEndpointFront() {
+		internalMove(RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_VERY_SLOW_FORWARD_VELOCITY);		
+	}
+
+	public void stopMoveToEndpointFront() {
+		motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+		resetEncoder();
+		isCalibrated = true;
+		holdPosition();
 	}
 }
 
