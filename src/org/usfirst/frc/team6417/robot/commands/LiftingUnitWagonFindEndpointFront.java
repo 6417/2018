@@ -18,11 +18,6 @@ public final class LiftingUnitWagonFindEndpointFront extends Command {
 	}
 	
 	@Override
-	protected void execute() {
-		Robot.liftingUnitWagon.tickMoveToEndpointFront();
-	}
-	
-	@Override
 	protected boolean isFinished() {
 		if( Robot.liftingUnitWagon.isInEndpositionFront() ) {
 			Robot.liftingUnitWagon.stopMoveToEndpointFront();
