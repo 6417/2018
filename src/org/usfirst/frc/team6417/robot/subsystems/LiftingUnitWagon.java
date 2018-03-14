@@ -3,6 +3,7 @@ package org.usfirst.frc.team6417.robot.subsystems;
 import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
+import org.usfirst.frc.team6417.robot.Util;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonTeleoperated;
 import org.usfirst.frc.team6417.robot.model.Event;
 import org.usfirst.frc.team6417.robot.model.State;
@@ -48,8 +49,8 @@ public final class LiftingUnitWagon extends Subsystem {
 		
 		final MotorControllerFactory factory = new MotorControllerFactory();
 		motor = factory.create777ProWithPositionControl(RobotMap.ROBOT.LIFTING_UNIT_WAGON_MOTOR_NAME + "/"+RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT, RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
-//		motor.setInverted(true);
-//		motor.setSensorPhase(false);
+		motor.setInverted(true);
+		motor.setSensorPhase(false);
 //		motor.setNeutralMode(NeutralMode.Brake);
 		motor.configOpenloopRamp(1, MotorController.kTimeoutMs);
 		motor.configClosedloopRamp(0, MotorController.kTimeoutMs);
@@ -94,7 +95,7 @@ public final class LiftingUnitWagon extends Subsystem {
 		return !frontEndpointPositionDetector.get();
 	}
 	public boolean isInEndpositionBack() {
-		return getCurrentPosition() >= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
+		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
 	}
 	public boolean isInEndpoint() {
 		return isInEndpositionBack() || isInEndpositionFront();
@@ -123,7 +124,12 @@ public final class LiftingUnitWagon extends Subsystem {
 	}
 	
 	private void internalMove(double velocity) {
-		velocity = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
+		SmartDashboard.putNumber("LUW pos", getCurrentPosition());
+		SmartDashboard.putNumber("LUW vel", velocity);
+		velocity = Util.limit(velocity, 
+							  RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY, 
+							  RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY);
+//		velocity = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
 		if(velocity > 0) {
 			if(isInEndpositionFront()) {
 				holdPosition();

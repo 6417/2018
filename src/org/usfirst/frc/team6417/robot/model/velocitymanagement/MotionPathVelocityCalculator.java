@@ -60,6 +60,9 @@ public final class MotionPathVelocityCalculator {
 	 * Calculates the boundary of the given position and direction of movement
 	 */
 	private double calculateVelocityBoundary(double velocity, int position) {
+		if(velocity == 0) {
+			return velocity;
+		}
 		// Define the correct boundary-velocity depending on direction of movement in motion-phase (b)
 		double boundaryVelocity = yBPF;
 		if( velocity < 0 ) {
@@ -76,7 +79,9 @@ public final class MotionPathVelocityCalculator {
 		// Calculate the boundary-velocity if necessary
 		if(velocity < 0) {
 			// Moving backwards
+			System.out.println("1 MotionPathVelocityCalculator bwd");
 			if(position > xBPB) {
+				System.out.println("2 MotionPathVelocityCalculator [pos:"+position+", bp:"+xBPB+"]");
 				// Calculate boundary-velocity in motion-phase (c)
 				double m = (yEPB - yBPB)/(xEPB - xBPB);
 				double q = yEPB - m * xEPB;
@@ -84,7 +89,9 @@ public final class MotionPathVelocityCalculator {
 			}
 		}else if(velocity > 0) {
 			// Moving forwards
+			System.out.println("3 MotionPathVelocityCalculator fwd");
 			if(position < xBPF) {
+				System.out.println("4 MotionPathVelocityCalculator [pos:"+position+", bp:"+xBPF+"]");
 				// Calculate the boundary-velocity in motion-phase (a)
 				double m = (yBPF - yEPF) / (xBPF - xEPF);
 				double q = yEPF - m * xEPF;

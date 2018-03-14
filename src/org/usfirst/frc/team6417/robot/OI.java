@@ -6,6 +6,8 @@ import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitFindEndpointDown;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitHoldPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFindEndpointFront;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
@@ -57,12 +59,12 @@ public class OI {
 			gripperPushButton.whenPressed(new GripperPush());
 			gripperPushButton.whenReleased(new GripperStop());
 		}
-		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
+		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {			
 			liftingUnitWagonForwardButton = new JoystickButton(liftingUnitController, 5);
-			liftingUnitWagonBackwardButton = new JoystickButton(liftingUnitController, 6);
-			
-			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
-			liftingUnitWagonBackwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
+//			liftingUnitWagonBackwardButton = new JoystickButton(liftingUnitController, 6);
+//			
+			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonFindEndpointFront());//new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
+//			liftingUnitWagonBackwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 			liftingUnitHoldPositionButton = new JoystickButton(liftingUnitController, 1);
@@ -74,7 +76,7 @@ public class OI {
 //			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
 //			liftingUnitTeleoperated.whenPressed(new LiftingUnitTeleoperated());
 			
-			liftingUnitFindEndpointDownButton = new JoystickButton(joystickOne, 11);
+			liftingUnitFindEndpointDownButton = new JoystickButton(liftingUnitController, 6);
 			liftingUnitFindEndpointDownButton.whenPressed(new LiftingUnitFindEndpointDown());
 //			liftingUnitResetButton = new JoystickButton(liftingUnitController, 5);
 //			liftingUnitResetButton.whenPressed(new LiftingUnitReset());

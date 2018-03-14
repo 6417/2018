@@ -52,7 +52,7 @@ public final class LiftingUnit extends Subsystem {
 //		motorA.setInverted(true); // TODO Remove when direction is correct
 //		motorA.setSensorPhase(false); // TODO Remove when encoder-direction is correct
 		motorA.setInverted(false);
-		motorA.setSensorPhase(true);
+		motorA.setSensorPhase(false);
 		
 		motorA.setNeutralMode(NeutralMode.Brake);
 		motorA.configOpenloopRamp(0, MotorController.kTimeoutMs);
@@ -81,6 +81,7 @@ public final class LiftingUnit extends Subsystem {
 		motorB.follow(motorA);
 
 		resetEncoder();
+		isCalibrated = true;
 		
 		endpointFrontSensor = new DigitalInput(RobotMap.DIO.LIFTING_UNIT_POSITION_DOWN_PORT);
 		endpointFrontSensor.setName(RobotMap.ROBOT.LIFTING_UNIT_POSITION_DOWN_SENSOR_NAME+"/"+RobotMap.DIO.LIFTING_UNIT_POSITION_DOWN_PORT);
@@ -103,14 +104,15 @@ public final class LiftingUnit extends Subsystem {
 	}
 	
 	public void moveToAbsolutePos(double posAbsolute) {
-		if(!isCalibrated) {
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos abs", posAbsolute);
+
+		 if(!isCalibrated) {
 			return;
 		}
 		if(isHoldingPosition) {
 			return;
 		}
 		
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos abs", posAbsolute);
 		motorA.set(ControlMode.Position, posAbsolute);
 		setHoldPosition(true);
 	}
@@ -123,41 +125,74 @@ public final class LiftingUnit extends Subsystem {
 		internalMove(velocity);
 	}
 	
+	double calcVel(double vel, int pos) {
+		if(vel < 0) {
+			if(pos < RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS) {
+				double m = (RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY - RobotMap.VELOCITY.STOP_VELOCITY) / (RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS - RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
+				double q = RobotMap.VELOCITY.STOP_VELOCITY - m * RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS;
+				double v = m * pos + q;
+				if(vel > v) {
+					return vel;
+				}
+				return v;
+			}
+		} else if(vel > 0) {
+			System.out.println("1. LiftingUnit.calcVel("+pos+")");
+			if(pos > RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS) {
+				System.out.println("2. LiftingUnit.calcVel("+pos+")");
+				double m = (RobotMap.VELOCITY.STOP_VELOCITY - RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY) / (RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS - RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS);
+				double q = RobotMap.VELOCITY.STOP_VELOCITY - m * RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS;
+				double v = m * pos + q;
+				if(vel < v) {
+					return vel;
+				}
+				return v;
+			}
+		}
+		System.out.println("3. LiftingUnit.calcVel("+pos+")");
+		return vel;
+	}
+	
 	private void internalMove(double velocity) {
-		velocity = Util.limit(velocity, -1.0, 1.0);
+		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel given", velocity);
 
-		velocity = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
+		double velocity2 = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
+		double calcVel = calcVel(velocity, getCurrentPosition());
+		
 //		velocity = this.powerManagementStrategy.calculatePower() * velocity;
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound", velocity);
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound", velocity2);
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound x", calcVel);
+		
 		SmartDashboard.putBoolean(endpointFrontSensor.getName(), !endpointFrontSensor.get());
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", getCurrentPosition());
 		
-		if(velocity > 0) {
+		if(velocity < 0) {
 			if(isInEndpointTop()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 //				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
 				holdPosition();
-			} else if(Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS)) {
-				setHoldPosition(false);
-				motorA.set(ControlMode.PercentOutput, velocity);
+//			} else if(Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS)) {
+//				setHoldPosition(false);
+//				motorA.set(ControlMode.PercentOutput, velocity);
 			}else {
 				setHoldPosition(false);
-				motorA.set(ControlMode.PercentOutput, velocity);
+				motorA.set(ControlMode.PercentOutput, calcVel);
 			}
-		}else if(velocity < 0) {
+		}else if(velocity > 0) {
 			if(isInEndpointBottom()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 				holdPosition();
-			} else if (Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS)) {
-				setHoldPosition(false);
-				motorA.set(ControlMode.PercentOutput, velocity);
+//			} else if (Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS)) {
+//				setHoldPosition(false);
+//				motorA.set(ControlMode.PercentOutput, velocity);
 			}else {
 				setHoldPosition(false);
-				motorA.set(ControlMode.PercentOutput, velocity);
+				motorA.set(ControlMode.PercentOutput, calcVel);
 			}
 		}else {
-			holdPosition();
+			//holdPosition();
+			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		}
 	}
 
@@ -173,7 +208,7 @@ public final class LiftingUnit extends Subsystem {
 	}
 	
 	private boolean isInEndpointTop() {
-		final boolean isInEndpoint = Util.greaterThen(getCurrentPosition(),
+		final boolean isInEndpoint = Util.smallerThen(getCurrentPosition(),
 				RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS,
 				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
 		SmartDashboard.putBoolean(motorA.getName()+" up", isInEndpoint);
@@ -181,11 +216,19 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	public boolean isInEndpointBottom() {
-//		final boolean isInEndpoint = Util.smallerThen(getCurrentPosition(), 
-//				RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY, 
+//		final boolean isInEndpoint = Util.eq(getCurrentPosition(), 
+//				RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS, 
 //				RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
-//		SmartDashboard.putBoolean(motorA.getName()+" down", isInEndpoint);
-//		return isInEndpoint;
+//		if(getCurrentPosition() > RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON) {
+//			SmartDashboard.putBoolean(motorA.getName()+" down", false);
+//			return false;
+//		}
+//		if(getCurrentPosition() >= RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS) {
+//			SmartDashboard.putBoolean(motorA.getName()+" down", true);
+//			return true;
+//		}
+//		SmartDashboard.putBoolean(motorA.getName()+" down", false);
+//		return false;
 		SmartDashboard.putBoolean(motorA.getName()+" down", (!endpointFrontSensor.get()));
 		return !endpointFrontSensor.get();
 	}
@@ -197,6 +240,7 @@ public final class LiftingUnit extends Subsystem {
 	public void holdPosition() {
 		currentPosition = getCurrentPosition();
 		moveToAbsolutePos(currentPosition);
+//		motorA.set(0);
 	}
 	
 	private void setHoldPosition(boolean isPosCtrl) {
@@ -250,17 +294,23 @@ public final class LiftingUnit extends Subsystem {
 
 	public void startMoveToEndpointDown() {
 		if(isInEndpointBottom()) {
+			System.out.println(getName()+" startMoveToEndpointDown is in endpoint");
 			return;
 		}
 		
+		System.out.println(getName()+" startMoveToEndpointDown with v="+RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY+" ...");
 		motorA.set(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
 	}
 	
 	public void stopMoveToEndpointDown() {
 		motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		resetEncoder();
+		System.out.println(getName()+" startMoveToEndpointDown DONE");
 		isCalibrated = true;
-		moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
+		System.out.println(getName()+" startMoveToEndpointDown RESET");
+		//moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
+		
+		System.out.println(getName()+" startMoveToEndpointDown HOLD POS");
 	}
 
 }
