@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6417.robot;
 
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.commands.CalibrationBehavior;
 import org.usfirst.frc.team6417.robot.commands.TestBehavior;
 import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
 import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
 	
 	private Command autonomousBehavior;
 	private Command testBehavior;
+	private Command calibrationBehavior;
 	
 	public static SwerveWheelDrive swerveDriveWheel;
 
@@ -88,7 +90,8 @@ public class Robot extends TimedRobot {
 
 			autonomousBehavior = new AutonomousBehavior();
 			testBehavior = new TestBehavior();
-
+			calibrationBehavior = new CalibrationBehavior();
+			
 			oi = OI.getInstance();
 			
 			
@@ -169,7 +172,9 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void testInit() {
-		testBehavior.start();
+		System.out.println("Robot.testInit()");
+		calibrationBehavior.start();
+//		testBehavior.start();
 	}
 
 	/**

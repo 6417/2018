@@ -9,5 +9,8 @@ public final class CalibrationBehavior extends CommandGroup {
 		addSequential(new LiftingUnitFindEndpointDown());
 		addSequential(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
 		addSequential(new LiftingUnitWagonFindEndpointFront());
+		addSequential(new SwerveDriveWheelsToZeroPosition());
+		addSequential(new SwerveDriveWheelsToParallelPosition());
+		addSequential(new SwerveDriveSetPosToZero());
 	}
 }

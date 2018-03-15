@@ -18,7 +18,7 @@ public final class SwerveDriveSetPosToZero extends Command {
 	
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 }

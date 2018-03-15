@@ -25,6 +25,7 @@ public final class LiftingUnit extends Subsystem {
 	private boolean isCalibrated = false;
 	
 	private int currentPosition;
+	private double targetPosition;
 	private boolean isHoldingPosition;
 
 	private DigitalInput endpointFrontSensor;
@@ -113,8 +114,15 @@ public final class LiftingUnit extends Subsystem {
 			return;
 		}
 		
-		motorA.set(ControlMode.Position, posAbsolute);
+		int currPos = getCurrentPosition();
+		if(Util.eq((int)posAbsolute, currPos, RobotMap.ROBOT.LIFTING_UNIT_ALTITUDE_TOLERANCE)) {
+			targetPosition = currPos;
+		}else {
+			targetPosition = posAbsolute;
+		}
+
 		setHoldPosition(true);
+		motorA.set(ControlMode.Position, targetPosition);
 	}
 
 	public void move(double velocity) {
@@ -137,9 +145,7 @@ public final class LiftingUnit extends Subsystem {
 				return v;
 			}
 		} else if(vel > 0) {
-			System.out.println("1. LiftingUnit.calcVel("+pos+")");
 			if(pos > RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS) {
-				System.out.println("2. LiftingUnit.calcVel("+pos+")");
 				double m = (RobotMap.VELOCITY.STOP_VELOCITY - RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY) / (RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS - RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS);
 				double q = RobotMap.VELOCITY.STOP_VELOCITY - m * RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS;
 				double v = m * pos + q;
@@ -149,7 +155,6 @@ public final class LiftingUnit extends Subsystem {
 				return v;
 			}
 		}
-		System.out.println("3. LiftingUnit.calcVel("+pos+")");
 		return vel;
 	}
 	
@@ -199,7 +204,7 @@ public final class LiftingUnit extends Subsystem {
 	public void resetEncoder() {
 		// Reset the encoder to 0. 
 		// Only motorA has an encoder so only motorA gets the reset:
-		motorA.setSelectedSensorPosition(0, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
+		motorA.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, MotorController.kPIDLoopIdx, MotorController.kTimeoutMs);
 		SmartDashboard.putNumber(motorA.getName()+" curr pos", motorA.getSelectedSensorPosition(0));
 	}
 		
@@ -311,6 +316,13 @@ public final class LiftingUnit extends Subsystem {
 		//moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
 		
 		System.out.println(getName()+" startMoveToEndpointDown HOLD POS");
+	}
+	
+	public boolean isOnTarget() {
+		if(Util.eq(getCurrentPosition(), (int)targetPosition, RobotMap.ROBOT.LIFTING_UNIT_ALTITUDE_TOLERANCE)) {
+			return true;
+		}
+		return false;
 	}
 
 }

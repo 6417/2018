@@ -20,7 +20,7 @@ public final class LiftingUnitMoveToPosition extends Command {
 	
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return Robot.liftingUnit.isOnTarget();
 	}
 
 }

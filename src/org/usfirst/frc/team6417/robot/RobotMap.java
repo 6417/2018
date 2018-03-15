@@ -33,6 +33,7 @@ public class RobotMap {
 		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -500000; // 1050000; //-80000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -520000;// 1350000;//1357283; //-100000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
+		public static final int LIFTING_UNIT_ALTITUDE_TOLERANCE = 10000;// 857283; //-40000; /*encoder ticks*/
 		
 		public static final int LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS = 150000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS - LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS;
@@ -48,7 +49,12 @@ public class RobotMap {
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 160.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_GRAD = 360.0 * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */
 		public static final double SWERVE_ANGLE_PER_WORM_GEAR_ROTATION_IN_RADIANS = 2.0 * RobotMap.MATH.PI * SWERVE_ANGLE_GEAR_RATIO; // 360.0 * SWERVE_ANGLE_GEAR_RATIO; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
-		
+
+		public static final double DRIVE_FRONT_LEFT_ZERO_POINT_CORRECTION_IN_RADIANS = - MATH.PI * 0.25; // How many rad from the current position to have the wheel be straight forward
+		public static final double DRIVE_FRONT_RIGHT_ZERO_POINT_CORRECTION_IN_RADIANS = MATH.PI * 0.25; // How many rad from the current position to have the wheel be straight forward
+		public static final double DRIVE_BACK_LEFT_ZERO_POINT_CORRECTION_IN_RADIANS = MATH.PI * 0.25; // How many rad from the current position to have the wheel be straight forward
+		public static final double DRIVE_BACK_RIGHT_ZERO_POINT_CORRECTION_IN_RADIANS = -MATH.PI * 0.25; // How many rad from the current position to have the wheel be straight forward
+
 		public static final String DRIVE_FRONT_LEFT_NAME = "FL";
 		public static final String DRIVE_FRONT_RIGHT_NAME = "FR";
 		public static final String DRIVE_BACK_LEFT_NAME = "BL";

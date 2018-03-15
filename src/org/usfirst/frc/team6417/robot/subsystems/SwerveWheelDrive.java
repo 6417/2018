@@ -143,9 +143,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		SmartDashboard.putNumber(getName()+" logic zero-point", isOnZeroPoint?1:0);
 		if(isOnZeroPoint) {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-			angleMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
-												 MotorController.kSlotIdx, 
-												 MotorController.kTimeoutMs);
+			resetEncoder();
 		}
 //		SmartDashboard.putBoolean("Is "+angleMotor.getDeviceID()+" on zero-point", isOnZeroPoint);
 //		SmartDashboard.putNumber("Zero-point of "+angleMotor.getDeviceID(), positionSensor0.getValue());
@@ -170,7 +168,9 @@ public final class SwerveWheelDrive extends Subsystem {
 	}
 
 	public void resetEncoder() {
-		angleMotor.setSelectedSensorPosition(0, 0, 10);
+		angleMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
+				 MotorController.kSlotIdx, 
+				 MotorController.kTimeoutMs);
 	}
 
 }
