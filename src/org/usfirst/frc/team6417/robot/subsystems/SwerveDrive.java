@@ -74,6 +74,18 @@ public final class SwerveDrive extends Subsystem {
 	    double frontRightAngle = Math.atan2 (b, c) * RobotMap.MATH.PI;
 	    double frontLeftAngle = Math.atan2 (b, d) * RobotMap.MATH.PI;
 
+	    // Scale all velocities to the 0..1 range
+	    double max=frontLeftSpeed; 
+	    if(frontRightSpeed>max) {max=frontRightSpeed;} 
+	    if(backLeftSpeed>max) {max=backLeftSpeed;}
+	    if(backRightSpeed>max) {max=backRightSpeed;}
+	    if(max>1.0){
+	    	frontLeftSpeed/=max; 
+	    	frontRightSpeed/=max; 
+	    	backLeftSpeed/=max; 
+	    	backRightSpeed/=max;
+	    }
+	    
 	    SmartDashboard.putNumber("FL-V", frontLeftSpeed);
 	    SmartDashboard.putNumber("FR-V", frontRightSpeed);
 	    SmartDashboard.putNumber("BL-V", backLeftSpeed);
