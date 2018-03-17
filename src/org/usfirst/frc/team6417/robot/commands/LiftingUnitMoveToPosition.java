@@ -15,11 +15,13 @@ public final class LiftingUnitMoveToPosition extends Command {
 	
 	@Override
 	protected void initialize() {
+		System.out.println("LiftingUnitMoveToPosition.initialize()");
 		Robot.liftingUnit.moveToAbsolutePos(absolutePosition);
 	}
 	
 	@Override
 	protected boolean isFinished() {
+		System.out.println("LiftingUnitMoveToPosition.isFinished()");
 		return Robot.liftingUnit.isOnTarget();
 	}
 

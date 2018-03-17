@@ -61,7 +61,7 @@ public final class LiftingUnitWagon extends Subsystem {
 		motor.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
 		motor.config_kP(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
 		motor.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
-		motor.config_kD(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+		motor.config_kD(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
 		
 		int allowedErrorPercentage = 10;
 		int allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION / allowedErrorPercentage;
@@ -122,6 +122,17 @@ public final class LiftingUnitWagon extends Subsystem {
 		
 		internalMove(velocity);
 	}
+	
+	public void moveToPos(double positionInTicks) {
+		if(!isCalibrated) {
+			System.err.println(getName()+" not calibrated.");
+			return;
+		}
+		
+		motor.set(ControlMode.Position, positionInTicks);
+	}
+	
+	
 	
 	private void internalMove(double velocity) {
 		SmartDashboard.putNumber("LUW pos", getCurrentPosition());
@@ -197,70 +208,67 @@ public final class LiftingUnitWagon extends Subsystem {
 		return powerManagementStrategy.calculatePower();
 	}
 	
-	class Back extends State {
-		
-		@Override
-		public void init() {
-			if(!isCalibrated) {
-				return;
-			}
-			motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
-		}
-		@Override
-		public void tick() {
-			if(!isCalibrated) {
-				return;
-			}
-			
-			if(isInEndPosition()) {
-				motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-			}else {
-				motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
-			}
-			SmartDashboard.putNumber("LUW ticks", motor.getSelectedSensorPosition(MotorController.kSlotIdx));			
-		}
-		@Override
-		public boolean isFinished() {
-			if(!isCalibrated) {
-				return true;
-			}
-
-			return isInEndPosition();
-		}
-		
-		private boolean isInEndPosition() {
-			return motor.getSelectedSensorPosition(MotorController.kSlotIdx) >= RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_THRESHOLD; 
-		}
-		
-	}
+//	class Back extends State {
+//		
+//		@Override
+//		public void init() {
+//			if(!isCalibrated) {
+//				return;
+//			}
+//			motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
+//		}
+//		@Override
+//		public void tick() {
+//			if(!isCalibrated) {
+//				return;
+//			}
+//			
+//			if(isInEndPosition()) {
+//				motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+//			}else {
+//				motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
+//			}
+//			SmartDashboard.putNumber("LUW ticks", motor.getSelectedSensorPosition(MotorController.kSlotIdx));			
+//		}
+//		@Override
+//		public boolean isFinished() {
+//			if(!isCalibrated) {
+//				return true;
+//			}
+//
+//			return isInEndPosition();
+//		}
+//		
+//		private boolean isInEndPosition() {
+//			return motor.getSelectedSensorPosition(MotorController.kSlotIdx) >= RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_THRESHOLD; 
+//		}
+//		
+//	}
 	
 	class Front extends State {
 		@Override
 		public void init() {
-			motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY);
+			moveToPos(RobotMap.ROBOT.LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS);
 		}
-		@Override
-		public void tick() {
-			if(isInEndPosition()) {
-				motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				motor.setSelectedSensorPosition(0, MotorController.kSlotIdx, MotorController.kTimeoutMs);
-				isCalibrated = true;
-			}else {
-				motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY);
-			}
-			SmartDashboard.putNumber("LUW ticks", motor.getSelectedSensorPosition(MotorController.kSlotIdx));
-		}
+		
 		@Override
 		public boolean isFinished() {
-			boolean isFinished = isInEndPosition();
-			SmartDashboard.putNumber("LUW ticks", motor.getSelectedSensorPosition(MotorController.kSlotIdx));
-			return isFinished;
+			return isInEndpositionFront();
+		}
+
+	}
+
+	class Back extends State {
+		@Override
+		public void init() {
+			moveToPos(RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS);
 		}
 		
-		private boolean isInEndPosition() {
-			return !frontEndpointPositionDetector.get() ;
+		@Override
+		public boolean isFinished() {
+			return isInEndpositionBack();
 		}
-		
+
 	}
 
 	class Stop extends State {

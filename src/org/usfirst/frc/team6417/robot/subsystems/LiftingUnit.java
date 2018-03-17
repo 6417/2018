@@ -67,7 +67,7 @@ public final class LiftingUnit extends Subsystem {
 		motorA.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
 		motorA.config_kP(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
 		motorA.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
-		motorA.config_kD(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
+		motorA.config_kD(MotorController.kPIDLoopIdx, 0.8, MotorController.kTimeoutMs);
 		
 		int allowedErrorPercentage = 10;
 		int allowedErrorRelative = RobotMap.ENCODER.PULSE_PER_ROTATION_VERSA_PLANETARY / allowedErrorPercentage;
@@ -121,6 +121,7 @@ public final class LiftingUnit extends Subsystem {
 			targetPosition = posAbsolute;
 		}
 
+		System.out.println("LiftingUnit.moveToAbsolutePos()");
 		setHoldPosition(true);
 		motorA.set(ControlMode.Position, targetPosition);
 	}
@@ -314,7 +315,6 @@ public final class LiftingUnit extends Subsystem {
 		isCalibrated = true;
 		System.out.println(getName()+" startMoveToEndpointDown RESET");
 		//moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS);
-		
 		System.out.println(getName()+" startMoveToEndpointDown HOLD POS");
 	}
 	
@@ -323,6 +323,26 @@ public final class LiftingUnit extends Subsystem {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isAboveSafetyAltitude() {
+		return Util.smallerThen(getCurrentPosition(), 
+								RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS, 
+								RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
+	}
+
+	public void moveToAboveSafetyAltitude() {
+		if(isAboveSafetyAltitude()) {
+			System.out.println(getName()+" is above safety-altitude");
+			return;
+		}
+		
+		if(isInEndpointBottom()) {
+			return;
+		}
+		
+		System.out.println(getName()+" startMoveToEndpointDown with v="+RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY+" ...");
+		moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS);
 	}
 
 }

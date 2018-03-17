@@ -56,17 +56,15 @@ public final class SwerveWheelDrive extends Subsystem {
 		
 		angleMotor.configAllowableClosedloopError(MotorController.kPIDLoopIdx, 100, MotorController.kTimeoutMs);
 		velocityMotor = factory.createCIM(name+RobotMap.ROBOT.DRIVE_VELOCITY+"/"+velocityMotorPort, velocityMotorPort);
-		velocityMotor.configOpenloopRamp(0.3, 0);
+		velocityMotor.configOpenloopRamp(0.01, 0);
 		velocityMotor.setInverted(isInvertVelocityMotor);
 		positionSensor0 = new AnalogInput(positionSensorPort);
 		
 //		velocityMotor.setInverted(true);
 		currentTarget = getAngleTicks();
 
-		SmartDashboard.putNumber(velocityMotor.getName(), 0);
-		SmartDashboard.putNumber(angleMotor.getName(), 0);
-		SmartDashboard.putNumber(angleMotor.getName()+" target", currentTarget);
-		SmartDashboard.putNumber(angleMotor.getName()+" current", getAngleTicks());
+		debugVel(0);
+		debugAngle(0,0);
 	}
 
 	@Override
@@ -74,9 +72,7 @@ public final class SwerveWheelDrive extends Subsystem {
 
 	public void gotoAngle(double absoluteAngleInRadians) {
 		int position = calculateEncoderTicksForWormGearByAngleOfAngleGear(absoluteAngleInRadians);
-		SmartDashboard.putNumber(angleMotor.getName()+" to-pos", position);
-		SmartDashboard.putNumber(angleMotor.getName()+" curr-pos", getAngleTicks());
-		
+		debugAngle(absoluteAngleInRadians,position);
 		angleMotor.set(ControlMode.Position, position);
 	}
 	
@@ -93,9 +89,18 @@ public final class SwerveWheelDrive extends Subsystem {
 
 	public void drive(double speed, double angle) {
 		velocityMotor.set(speed);
-		SmartDashboard.putNumber(velocityMotor.getName(), speed);
-		SmartDashboard.putNumber(angleMotor.getName(), angle);
+		debugVel(speed);
 		gotoAngle(angle);
+	}
+
+	private void debugVel(double vel) {
+		SmartDashboard.putNumber(velocityMotor.getName()+" vel", vel);
+		SmartDashboard.putNumber(velocityMotor.getName()+" pos", velocityMotor.getSelectedSensorPosition(0));		
+	}
+	private void debugAngle(double angle, int pos) {
+		SmartDashboard.putNumber(angleMotor.getName()+" pos nom", pos);
+		SmartDashboard.putNumber(angleMotor.getName()+" pos act", angleMotor.getSelectedSensorPosition(0));		
+		SmartDashboard.putNumber(angleMotor.getName()+" angle", angle);		
 	}
 
 	public void tick() {;}

@@ -6,15 +6,14 @@ import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitFindEndpointDown;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitHoldPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitReset;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFindEndpointFront;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveMecanumSimilarTeleoperated;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveParallelTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelStop;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelTeleoperated;
-import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -39,6 +38,9 @@ public class OI {
 	private JoystickButton liftingUnitResetButton;
 	private JoystickButton liftingUnitFindEndpointDownButton;
 	private JoystickButton liftingUnitTeleoperated;
+	private JoystickButton swerveDriveTeleopButton;
+	private JoystickButton swerveDriveParallelTeleopButton;
+	private JoystickButton swerveDriveMecanumSimilarTeleopButton;
 
 	private static OI INSTANCE;
 	
@@ -51,8 +53,8 @@ public class OI {
 	
 	private OI() {
 		if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
-			gripperPushButton = new JoystickButton(joystickOne, 1);
-			gripperPullButton = new JoystickButton(joystickOne, 2);
+			gripperPushButton = new JoystickButton(liftingUnitController, 7);
+			gripperPullButton = new JoystickButton(liftingUnitController, 8);
 
 			gripperPullButton.whenPressed(new GripperPull());
 			gripperPullButton.whenReleased(new GripperStop());
@@ -89,8 +91,12 @@ public class OI {
 			swerveWheelCheckButton.whenPressed(new SwerveDriveAngleOnSingleWheel());
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 7);
 			swerveWheelForwardButton.whenPressed(new SwerveDriveSetPosToZero());					
-			JoystickButton b = new JoystickButton(joystickOne, 4);
-			b.whenPressed(new SwerveDriveTeleoperated());
+			swerveDriveTeleopButton = new JoystickButton(joystickOne, 4);
+			swerveDriveTeleopButton.whenPressed(new SwerveDriveTeleoperated());
+			swerveDriveParallelTeleopButton = new JoystickButton(joystickOne, 5);
+			swerveDriveParallelTeleopButton.whenPressed(new SwerveDriveParallelTeleoperated());
+			swerveDriveMecanumSimilarTeleopButton = new JoystickButton(joystickOne, 6);
+			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);

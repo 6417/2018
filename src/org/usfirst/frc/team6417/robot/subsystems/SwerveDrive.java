@@ -77,12 +77,13 @@ public final class SwerveDrive extends Subsystem {
 	    SmartDashboard.putNumber("FL-V", frontLeftSpeed);
 	    SmartDashboard.putNumber("FR-V", frontRightSpeed);
 	    SmartDashboard.putNumber("BL-V", backLeftSpeed);
-	    SmartDashboard.putNumber("BR-V", backRightSpeed);
+	    SmartDashboard.putNumber("BR-V", -backRightSpeed);
 	    SmartDashboard.putNumber("FL-A", frontLeftAngle);
-	    SmartDashboard.putNumber("FR-A", -frontRightAngle);
+	    SmartDashboard.putNumber("FR-A", frontRightAngle);
 	    SmartDashboard.putNumber("BL-A", backLeftAngle);
-	    SmartDashboard.putNumber("BR-A", backRightAngle);
+	    SmartDashboard.putNumber("BR-A", -backRightAngle);
 	    
+//	    backRight.drive (-backRightSpeed, -backRightAngle);
 	    backRight.drive (-backRightSpeed, -backRightAngle);
 	    backLeft.drive (backLeftSpeed, backLeftAngle);
 	    frontRight.drive (frontRightSpeed, frontRightAngle);
@@ -90,12 +91,29 @@ public final class SwerveDrive extends Subsystem {
 	}
 	
 	public void driveParallel(double velocity, double angle) {
+		angle *= (RobotMap.MATH.PI);
+		
+		SmartDashboard.putNumber(getName()+"-V", velocity);
+		SmartDashboard.putNumber(getName()+"-A", angle);
+		
+		frontLeft.drive(velocity, angle);
+		frontRight.drive(velocity, angle);
+		backLeft.drive(velocity, angle);
+		backRight.drive(-velocity, -angle);
+	}
+
+	public void driveMecanumSimilar(double velocity, double angle) {
+		angle *= (RobotMap.MATH.PI);
+		
+		SmartDashboard.putNumber(getName()+"-V", velocity);
+		SmartDashboard.putNumber(getName()+"-A", angle);
+		
 		frontLeft.drive(velocity, angle);
 		frontRight.drive(velocity, angle);
 		backLeft.drive(velocity, angle);
 		backRight.drive(velocity, angle);
 	}
-	
+
 	public void checkAnglesOnTarget() {
 	    frontLeft.onTarget();	    
 	    frontRight.onTarget();

@@ -13,12 +13,14 @@ public final class LiftingUnitFindEndpointDown extends Command {
 	
 	@Override
 	protected void initialize() {
+		System.out.println("LiftingUnitFindEndpointDown.initialize()");
 		Robot.liftingUnit.startMoveToEndpointDown();
 		SmartDashboard.putBoolean("LU calibration", true);
 	}
 	
 	@Override
 	protected boolean isFinished() {
+		System.out.println("LiftingUnitFindEndpointDown.isFinished()");
 		if( Robot.liftingUnit.isInEndpointBottom()) {
 			Robot.liftingUnit.stopMoveToEndpointDown();
 			return true;
@@ -29,6 +31,7 @@ public final class LiftingUnitFindEndpointDown extends Command {
 	@Override
 	protected void end() {
 		SmartDashboard.putBoolean("LU calibration", false);
+		System.out.println("LiftingUnitFindEndpointDown.end()");
 	}
 
 }

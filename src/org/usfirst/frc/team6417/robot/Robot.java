@@ -139,6 +139,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousBehavior.start();
+//		calibrationBehavior.start();
 	}
 
 	/**
@@ -173,7 +174,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 		System.out.println("Robot.testInit()");
-		calibrationBehavior.start();
+//		calibrationBehavior.start();
 //		testBehavior.start();
 	}
 
