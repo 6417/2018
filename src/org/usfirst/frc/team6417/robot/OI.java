@@ -53,8 +53,8 @@ public class OI {
 	
 	private OI() {
 		if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
-			gripperPushButton = new JoystickButton(liftingUnitController, 7);
-			gripperPullButton = new JoystickButton(liftingUnitController, 8);
+			gripperPushButton = new JoystickButton(liftingUnitController, 6);
+			gripperPullButton = new JoystickButton(liftingUnitController, 5);
 
 			gripperPullButton.whenPressed(new GripperPull());
 			gripperPullButton.whenReleased(new GripperStop());
@@ -62,7 +62,7 @@ public class OI {
 			gripperPushButton.whenReleased(new GripperStop());
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {			
-			liftingUnitWagonForwardButton = new JoystickButton(liftingUnitController, 5);
+			liftingUnitWagonForwardButton = new JoystickButton(liftingUnitController, 7);
 //			liftingUnitWagonBackwardButton = new JoystickButton(liftingUnitController, 6);
 //			
 			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonFindEndpointFront());//new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
@@ -78,7 +78,7 @@ public class OI {
 //			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
 //			liftingUnitTeleoperated.whenPressed(new LiftingUnitTeleoperated());
 			
-			liftingUnitFindEndpointDownButton = new JoystickButton(liftingUnitController, 6);
+			liftingUnitFindEndpointDownButton = new JoystickButton(liftingUnitController, 8);
 			liftingUnitFindEndpointDownButton.whenPressed(new LiftingUnitFindEndpointDown());
 //			liftingUnitResetButton = new JoystickButton(liftingUnitController, 5);
 //			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
