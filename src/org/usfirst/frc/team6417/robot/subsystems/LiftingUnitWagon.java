@@ -79,12 +79,18 @@ public final class LiftingUnitWagon extends Subsystem {
 		State stop = currentState = new Stop();
 		State front = new Front();
 		State back = new Back();
+		State fullBack = new FullBack();
 		
 		stop.addTransition(LiftingUnitWagon.FRONT, front);
 		front.addTransition(LiftingUnitWagon.BACK, back);
 		front.addTransition(LiftingUnitWagon.STOP, stop);
 		back.addTransition(LiftingUnitWagon.FRONT, front);
 		back.addTransition(LiftingUnitWagon.STOP, stop);
+		fullBack.addTransition(LiftingUnitWagon.STOP, stop);
+		fullBack.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
+		front.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
+		back.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
+		stop.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 	}
 	
 	@Override

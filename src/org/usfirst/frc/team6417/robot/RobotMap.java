@@ -32,6 +32,7 @@ public class RobotMap {
 		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -480000;// 900000;// -60000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -500000; // 1050000; //-80000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -1500000;// 1350000;//1357283; //-100000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_HANGING_ALTITUDE_IN_TICKS = -500000;// 857283; //-40000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
 		public static final int LIFTING_UNIT_ALTITUDE_TOLERANCE = 1024;// 857283; //-40000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS = -8000; /*encoder ticks*/
