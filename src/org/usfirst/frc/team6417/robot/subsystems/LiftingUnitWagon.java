@@ -135,7 +135,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	
 	
 	private void internalMove(double velocity) {
-		SmartDashboard.putNumber("LUW pos", getCurrentPosition());
+		SmartDashboard.putNumber("LUW pos curr", getCurrentPosition());
 		SmartDashboard.putNumber("LUW vel", velocity);
 		velocity = Util.limit(velocity, 
 							  RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY, 
