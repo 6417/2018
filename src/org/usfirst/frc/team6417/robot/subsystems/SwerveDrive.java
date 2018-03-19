@@ -46,19 +46,20 @@ public final class SwerveDrive extends Subsystem {
 										 RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
 										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT,
 										 true,
-										 true);
+										 false);
 	}
 	
 	@Override
 	protected void initDefaultCommand() {
 //		setDefaultCommand(new SwerveDriveShowZeroPointSensors());
 //		setDefaultCommand(new SwerveDriveAngleOnSingleWheel());
-		setDefaultCommand(new SwerveDriveTeleoperated());
+//		setDefaultCommand(new SwerveDriveTeleoperated());
 //		setDefaultCommand(new SwerveDriveRotateAll());
 //		setDefaultCommand(new SwerveDriveWheelTeleoperated());
 	}
 	
 	public void drive (double vy, double vx, double rotationClockwise) {
+		System.out.println("SwerveDrive.drive()");
 	    double a = vx - rotationClockwise * (L / r);
 	    double b = vx + rotationClockwise * (L / r);
 	    double c = vy - rotationClockwise * (W / r);
@@ -95,14 +96,14 @@ public final class SwerveDrive extends Subsystem {
 	    SmartDashboard.putNumber("BL-A", backLeftAngle);
 	    SmartDashboard.putNumber("BR-A", -backRightAngle);
 	    
-//	    backRight.drive (-backRightSpeed, -backRightAngle);
-	    backRight.drive (-backRightSpeed, -backRightAngle);
+	    backRight.drive (backRightSpeed, -backRightAngle);
 	    backLeft.drive (backLeftSpeed, backLeftAngle);
 	    frontRight.drive (frontRightSpeed, frontRightAngle);
 	    frontLeft.drive (frontLeftSpeed, frontLeftAngle);	    
 	}
 	
 	public void driveParallel(double velocity, double angle) {
+		System.out.println("SwerveDrive.driveParallel()");
 		angle *= (RobotMap.MATH.PI);
 		
 		SmartDashboard.putNumber(getName()+"-V", velocity);
@@ -111,7 +112,7 @@ public final class SwerveDrive extends Subsystem {
 		frontLeft.drive(velocity, angle);
 		frontRight.drive(velocity, angle);
 		backLeft.drive(velocity, angle);
-		backRight.drive(-velocity, -angle);
+		backRight.drive(velocity, -angle);
 	}
 
 	public void driveMecanumSimilar(double velocity, double angle) {
@@ -182,10 +183,10 @@ public final class SwerveDrive extends Subsystem {
 	}
 
 	public void resetEncoders() {
-		frontLeft.resetEncoder();
-		frontRight.resetEncoder();
-		backLeft.resetEncoder();
-		backRight.resetEncoder();
+		frontLeft.resetAngleEncoder();
+		frontRight.resetAngleEncoder();
+		backLeft.resetAngleEncoder();
+		backRight.resetAngleEncoder();
 	}
 
 }

@@ -58,6 +58,8 @@ public final class SwerveWheelDrive extends Subsystem {
 		velocityMotor = factory.createCIM(name+RobotMap.ROBOT.DRIVE_VELOCITY+"/"+velocityMotorPort, velocityMotorPort);
 		velocityMotor.configOpenloopRamp(0.01, 0);
 		velocityMotor.setInverted(isInvertVelocityMotor);
+		resetVelocityEncoder();
+
 		positionSensor0 = new AnalogInput(positionSensorPort);
 		
 //		velocityMotor.setInverted(true);
@@ -148,7 +150,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		SmartDashboard.putNumber(getName()+" logic zero-point", isOnZeroPoint?1:0);
 		if(isOnZeroPoint) {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-			resetEncoder();
+			resetAngleEncoder();
 		}
 //		SmartDashboard.putBoolean("Is "+angleMotor.getDeviceID()+" on zero-point", isOnZeroPoint);
 //		SmartDashboard.putNumber("Zero-point of "+angleMotor.getDeviceID(), positionSensor0.getValue());
@@ -172,8 +174,13 @@ public final class SwerveWheelDrive extends Subsystem {
 		return false;
 	}
 
-	public void resetEncoder() {
+	public void resetAngleEncoder() {
 		angleMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
+				 MotorController.kSlotIdx, 
+				 MotorController.kTimeoutMs);
+	}
+	public void resetVelocityEncoder() {
+		velocityMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
 				 MotorController.kSlotIdx, 
 				 MotorController.kTimeoutMs);
 	}
