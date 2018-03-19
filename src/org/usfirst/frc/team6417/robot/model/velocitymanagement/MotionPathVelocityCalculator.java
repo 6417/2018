@@ -3,7 +3,7 @@ package org.usfirst.frc.team6417.robot.model.velocitymanagement;
 import org.usfirst.frc.team6417.robot.RobotMap;
 
 public final class MotionPathVelocityCalculator {
-	int xEPB = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
+	int xEPB = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS;
 	int xBPB = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS;
 	int xBPF = RobotMap.ROBOT.LIFTING_UNIT_WAGON_FRONT_POSITION_BREAK_IN_TICKS;
 	int xEPF = RobotMap.ROBOT.LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS;
@@ -115,7 +115,7 @@ public final class MotionPathVelocityCalculator {
 		int xBPB_ = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS;
 		double yBPB = RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY; // 1
 		
-		int xEPB_ = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
+		int xEPB_ = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS;
 		double yEPB = RobotMap.VELOCITY.STOP_VELOCITY;	
 
 		MotionPathVelocityCalculator test = new MotionPathVelocityCalculator(
@@ -146,7 +146,7 @@ public final class MotionPathVelocityCalculator {
 		System.out.println("3. vel:"+vel+", vel-bounded:"+res+", pos:"+pos);
 
 		vel = RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY;
-		pos = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS - RobotMap.ROBOT.LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS / div; 
+		pos = RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS - RobotMap.ROBOT.LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS / div; 
 		res = test.calculateVelocity(vel, pos);
 		System.out.println("4. vel:"+vel+", vel-bounded:"+res+", pos:"+pos);
 		}

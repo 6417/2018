@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public final class LiftingUnitWagon extends Subsystem {
 	public static final Event FRONT = new Event("FRONT");
 	public static final Event BACK = new Event("BACK");
+	public static final Event FULL_BACK = new Event("FULL_BACK");
 	public static final Event STOP = new Event("STOP");
 
 	private final MotorController motor;
@@ -31,7 +32,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	private PowerManagementStrategy powerManagementStrategy;
 	
 	private final MotionPathVelocityCalculator motionPathVelocityCalculator = new MotionPathVelocityCalculator(
-			RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS,
+			RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS,
 			RobotMap.VELOCITY.STOP_VELOCITY,
 			RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS,
 			RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY,
@@ -95,10 +96,14 @@ public final class LiftingUnitWagon extends Subsystem {
 		return !frontEndpointPositionDetector.get();
 	}
 	public boolean isInEndpositionBack() {
-		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
+		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS;
 	}
 	public boolean isInEndpoint() {
 		return isInEndpositionBack() || isInEndpositionFront();
+	}
+
+	public boolean isInEndpositionFullBack() {
+		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS;
 	}
 	
 	public void holdPosition() {
@@ -261,12 +266,25 @@ public final class LiftingUnitWagon extends Subsystem {
 	class Back extends State {
 		@Override
 		public void init() {
-			moveToPos(RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS);
+			moveToPos(RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS);
 		}
 		
 		@Override
 		public boolean isFinished() {
 			return isInEndpositionBack();
+		}
+
+	}
+
+	class FullBack extends State {
+		@Override
+		public void init() {
+			moveToPos(RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS);
+		}
+		
+		@Override
+		public boolean isFinished() {
+			return isInEndpositionFullBack();
 		}
 
 	}
