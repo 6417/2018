@@ -31,17 +31,18 @@ public class RobotMap {
 		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -440000;// 857283; //-40000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -480000;// 900000;// -60000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -500000; // 1050000; //-80000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -1350000;// 1350000;//1357283; //-100000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -1500000;// 1350000;//1357283; //-100000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
 		public static final int LIFTING_UNIT_ALTITUDE_TOLERANCE = 1024;// 857283; //-40000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS = -150000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS = -8000; /*encoder ticks*/
 		
 		public static final int LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS = 150000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS - LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS;
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS + LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS;
 
 		public static final int LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS = 10000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS = -800000;
+		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS = -835000;
+		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS = -810000;
 		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS = LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS - LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS;
 		public static final int LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS = 0;
 		public static final int LIFTING_UNIT_WAGON_FRONT_POSITION_BREAK_IN_TICKS = LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS + LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS;
@@ -95,6 +96,7 @@ public class RobotMap {
 		public static final double LIFTING_UNIT_MOTOR_UP_VELOCITY = -1;
 		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = 0.75;
 		public static final double LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY = 0.05;
+		public static final double LIFTING_UNIT_MOTOR_SLOW_UP_VELOCITY = -0.25;
 		
 		public static final double LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY = 1.0;//0.25;
 		public static final double LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY = -1.0;//-0.3;
