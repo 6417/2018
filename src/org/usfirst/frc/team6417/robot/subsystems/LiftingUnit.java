@@ -2,9 +2,11 @@ package org.usfirst.frc.team6417.robot.subsystems;
 
 import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.MotorControllerFactory;
+import org.usfirst.frc.team6417.robot.OI;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitTeleoperated;
+import org.usfirst.frc.team6417.robot.model.State;
 import org.usfirst.frc.team6417.robot.model.velocitymanagement.MotionPathVelocityCalculator;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 
@@ -26,7 +28,7 @@ public final class LiftingUnit extends Subsystem {
 	
 	private int currentPosition;
 	private double targetPosition;
-	private boolean isHoldingPosition;
+	private boolean isHoldingPosition = false;
 
 	private DigitalInput endpointFrontSensor;
 	
@@ -65,7 +67,7 @@ public final class LiftingUnit extends Subsystem {
 				MotorController.kTimeoutMs );
 		
 		motorA.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
-		motorA.config_kP(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
+		motorA.config_kP(MotorController.kPIDLoopIdx, 0.02, MotorController.kTimeoutMs);
 		motorA.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
 		motorA.config_kD(MotorController.kPIDLoopIdx, 0.8, MotorController.kTimeoutMs);
 		
@@ -108,26 +110,32 @@ public final class LiftingUnit extends Subsystem {
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos abs", posAbsolute);
 
 		 if(!isCalibrated) {
+			System.out.println(RobotMap.ROBOT.LIFTING_UNIT_NAME+" not calibrated");
 			return;
 		}
 		if(isHoldingPosition) {
+			System.out.println(RobotMap.ROBOT.LIFTING_UNIT_NAME+" already holding pos");
 			return;
 		}
 		
 		int currPos = getCurrentPosition();
 		if(Util.eq((int)posAbsolute, currPos, RobotMap.ROBOT.LIFTING_UNIT_ALTITUDE_TOLERANCE)) {
+			System.out.println("LU in tolerance. Using current pos. Not move. Pos: "+currPos+", Target: "+posAbsolute);
 			targetPosition = currPos;
 		}else {
 			targetPosition = posAbsolute;
 		}
 
-		System.out.println("LiftingUnit.moveToAbsolutePos()");
+		System.out.println("LiftingUnit.moveToAbsolutePos("+targetPosition+")");
 		setHoldPosition(true);
 		motorA.set(ControlMode.Position, targetPosition);
+//		motorA.set(ControlMode.MotionMagic, targetPosition);
+		
 	}
 
 	public void move(double velocity) {
 		if(!isCalibrated) {
+			System.out.println("LiftingUnit not calibrated. Can not move with velocity "+velocity);
 			return;
 		}
 		
@@ -160,6 +168,7 @@ public final class LiftingUnit extends Subsystem {
 	}
 	
 	private void internalMove(double velocity) {
+		System.out.println("LiftingUnit.internalMove("+velocity+")");
 		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel given", velocity);
 
@@ -198,6 +207,7 @@ public final class LiftingUnit extends Subsystem {
 			}
 		}else {
 			//holdPosition();
+			setHoldPosition(false);
 			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		}
 	}
@@ -326,9 +336,11 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	public boolean isAboveSafetyAltitude() {
-		return Util.smallerThen(getCurrentPosition(), 
-								RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS, 
-								RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
+		System.out.println("LiftingUnit.isAboveSafetyAltitude Pos: "+getCurrentPosition()+", Target: "+RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS+", eps: "+RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON+" -> "+((getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON)));
+//		return Util.smallerThen(getCurrentPosition(), 
+//								RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS, 
+//								RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
+		return (getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);
 	}
 
 	public void moveToAboveSafetyAltitude() {
@@ -337,12 +349,77 @@ public final class LiftingUnit extends Subsystem {
 			return;
 		}
 		
-		if(isInEndpointBottom()) {
-			return;
+		setHoldPosition(false);
+		
+//		if(isInEndpointBottom()) {
+//			return;
+//		}
+//		
+		System.out.println(getName()+" moveToAboveSafetyAltitude from pos "+getCurrentPosition()+" to pos "+RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS+" ...");
+//		moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS);
+		move(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY / 8.0);
+	}
+	
+	class MoveToSafetyAltitude extends State {
+		private boolean isAboveSafetyAltitude = false;
+		
+		@Override
+		public void init() {
+			final int currPos = getCurrentPosition();
+			if(currPos <= RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS) {
+				isAboveSafetyAltitude = true;
+			}else if(currPos > RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS) {
+				move(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_SLOW_UP_VELOCITY);
+			}			
 		}
 		
-		System.out.println(getName()+" startMoveToEndpointDown with v="+RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY+" ...");
-		moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS);
+		@Override
+		public boolean isFinished() {
+			return isAboveSafetyAltitude || isAboveSafetyAltitude();
+		}
+		
+	}
+	
+	class HoldPosition extends State {
+		
+		@Override
+		public void init() {
+			holdPosition();
+		}
+		
+		@Override
+		public boolean isFinished() {
+			return false;
+		}
+		
+	}
+	
+	class MoveTeleoperated extends State {
+		@Override
+		public void tick() {
+			move(-OI.getInstance().liftingUnitController.getY());
+		}
+	}
+	
+	class Calibrate extends State {
+		private boolean isCalibrated = false;
+		
+		@Override
+		public void init() {
+			if(isInEndpointBottom()) {
+				isCalibrated = true;
+			}
+
+			internalMove(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY);
+		}
+		
+		@Override
+		public boolean isFinished() {
+			if(isInEndpointBottom()) {
+				stopMoveToEndpointDown();
+			}
+			return isCalibrated;
+		}
 	}
 
 }

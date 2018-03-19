@@ -18,7 +18,11 @@ public final class LiftingUnitMoveToSavePosition extends Command {
 	@Override
 	protected boolean isFinished() {
 		System.out.println("LiftingUnitMoveToSavePosition.isFinished()");
-		return Robot.liftingUnit.isAboveSafetyAltitude();
+		if( Robot.liftingUnit.isAboveSafetyAltitude() ) {
+			Robot.liftingUnit.holdPosition();
+			return true;
+		}
+		return false;
 	}
 
 }
