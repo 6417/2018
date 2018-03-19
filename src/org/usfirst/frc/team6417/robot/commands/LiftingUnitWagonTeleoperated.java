@@ -14,15 +14,15 @@ public final class LiftingUnitWagonTeleoperated extends Command {
 
 	@Override
 	protected void execute() {
-		double x = OI.getInstance().liftingUnitController.getRawAxis(4);
-		if(Math.abs(x) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK2_X) {
-			x = 0.0;
+		double y = OI.getInstance().liftingUnitController.getRawAxis(5);
+		if(Math.abs(y) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK2_X) {
+			y = 0.0;
 		}
 		
-		if(x == 0.0) {
+		if(y == 0.0) {
 			Robot.liftingUnitWagon.holdPosition();
 		} else {
-			Robot.liftingUnitWagon.move(x);
+			Robot.liftingUnitWagon.move(-y);
 		}
 	}
 	
