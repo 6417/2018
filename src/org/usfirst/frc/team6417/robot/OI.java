@@ -4,14 +4,14 @@ import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitFindEndpointDown;
-import org.usfirst.frc.team6417.robot.commands.LiftingUnitHoldPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFindEndpointFront;
+import org.usfirst.frc.team6417.robot.commands.PrepareRobotElevationBehavior;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveMecanumSimilarTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveParallelTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelAngleCalibration;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelStop;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelTeleoperated;
 
@@ -62,7 +62,7 @@ public class OI {
 			gripperPushButton.whenReleased(new GripperStop());
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {			
-			liftingUnitWagonForwardButton = new JoystickButton(liftingUnitController, 7);
+			liftingUnitWagonForwardButton = new JoystickButton(liftingUnitController, 8);
 //			liftingUnitWagonBackwardButton = new JoystickButton(liftingUnitController, 6);
 //			
 			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonFindEndpointFront());//new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
@@ -70,7 +70,8 @@ public class OI {
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 			liftingUnitHoldPositionButton = new JoystickButton(liftingUnitController, 1);
-			liftingUnitHoldPositionButton.whenPressed(new LiftingUnitHoldPosition());
+//			liftingUnitHoldPositionButton.whenPressed(new LiftingUnitHoldPosition());
+			liftingUnitHoldPositionButton.whenPressed(new PrepareRobotElevationBehavior());
 			liftingUnitGoToSwitchButton = new JoystickButton(liftingUnitController, 2);
 			liftingUnitGoToSwitchButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
 			liftingUnitGoToGroundButton = new JoystickButton(liftingUnitController, 3);
@@ -78,7 +79,7 @@ public class OI {
 //			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
 //			liftingUnitTeleoperated.whenPressed(new LiftingUnitTeleoperated());
 			
-			liftingUnitFindEndpointDownButton = new JoystickButton(liftingUnitController, 8);
+			liftingUnitFindEndpointDownButton = new JoystickButton(liftingUnitController, 7);
 			liftingUnitFindEndpointDownButton.whenPressed(new LiftingUnitFindEndpointDown());
 //			liftingUnitResetButton = new JoystickButton(liftingUnitController, 5);
 //			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
@@ -96,7 +97,8 @@ public class OI {
 			swerveDriveParallelTeleopButton = new JoystickButton(joystickOne, 5);
 			swerveDriveParallelTeleopButton.whenPressed(new SwerveDriveParallelTeleoperated());
 			swerveDriveMecanumSimilarTeleopButton = new JoystickButton(joystickOne, 6);
-			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
+//			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
+			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveWheelAngleCalibration());
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);

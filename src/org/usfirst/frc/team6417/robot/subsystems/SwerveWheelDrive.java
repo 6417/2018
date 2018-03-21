@@ -30,11 +30,14 @@ public final class SwerveWheelDrive extends Subsystem {
 	private int correctionAngleInTicks = 1000;
 	private ANGLE_ROTATION_DIRECTION currentAngleMotorRotationDirection = ANGLE_ROTATION_DIRECTION.STOP;
 
+	private int zeroPointThreshold;
+	
 	public SwerveWheelDrive(String name,
 			int angleMotorPort, 
 			int velocityMotorPort,
-			int positionSensorPort) {
-		this(name, angleMotorPort, velocityMotorPort, positionSensorPort, true, false);
+			int positionSensorPort,
+			int zeroPointThreshold) {
+		this(name, angleMotorPort, velocityMotorPort, positionSensorPort, true, false, zeroPointThreshold);
 	}
 	
 	public SwerveWheelDrive(String name,
@@ -42,9 +45,11 @@ public final class SwerveWheelDrive extends Subsystem {
 							int velocityMotorPort,
 							int positionSensorPort,
 							boolean isInvertSensor,
-							boolean isInvertVelocityMotor) {
+							boolean isInvertVelocityMotor,
+							int zeroPointThreshold) {
 		super(name);
 
+		this.zeroPointThreshold = zeroPointThreshold;
 		MotorControllerFactory factory = new MotorControllerFactory();
 		angleMotor = factory.create775ProWithEncoder(name+RobotMap.ROBOT.DRIVE_ANGLE+"/"+angleMotorPort, angleMotorPort);
 		angleMotor.setSensorPhase(isInvertSensor);
@@ -90,7 +95,7 @@ public final class SwerveWheelDrive extends Subsystem {
 	}
 
 	public void drive(double speed, double angle) {
-		velocityMotor.set(speed);
+//		velocityMotor.set(speed);
 		debugVel(speed);
 		gotoAngle(angle);
 	}
@@ -146,8 +151,8 @@ public final class SwerveWheelDrive extends Subsystem {
 //		if(positionSensor0.getValue() > 2600) {
 //			return false;
 //		}
-		final boolean isOnZeroPoint = positionSensor0.getValue() > RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD;
-		SmartDashboard.putNumber(getName()+" logic zero-point", isOnZeroPoint?1:0);
+		final boolean isOnZeroPoint = positionSensor0.getValue() > zeroPointThreshold;
+		SmartDashboard.putBoolean(getName()+" logic zero-point", isOnZeroPoint);
 		if(isOnZeroPoint) {
 			angleMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 			resetAngleEncoder();

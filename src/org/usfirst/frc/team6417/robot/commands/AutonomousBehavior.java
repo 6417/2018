@@ -10,6 +10,9 @@ public final class AutonomousBehavior extends CommandGroup {
 	
 	 public AutonomousBehavior() {
 	    	addSequential(new GetFieldInformation());
+	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
+		    	addParallel(new SwerveDriveResetVelocityEncoder());
+	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 		    	addParallel(new LiftingUnitMoveToSavePosition());
 	    	}
@@ -17,7 +20,10 @@ public final class AutonomousBehavior extends CommandGroup {
 	    		addSequential(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-		    	addParallel(new SwerveDriveStraight(3));
+	    		addParallel(new SwerveDriveRotateWheelOnlyToAngle());
+		    	addSequential(new SwerveDriveStraight(30000));
+		    	addSequential(new SwerveDriveRotateWheelOnlyToAngle());
+		    	addSequential(new SwerveDriveStraight(10000));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 	    		addSequential(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));

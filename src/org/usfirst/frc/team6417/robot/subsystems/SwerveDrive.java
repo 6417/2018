@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team6417.robot.RobotMap;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,21 +31,25 @@ public final class SwerveDrive extends Subsystem {
 										 RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT,
 										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT,
 										 false,
-										 false);
+										 false,
+										 RobotMap.SENSOR.DRIVE_FRONT_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
 		frontRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_FRONT_RIGHT_NAME, 
 				 						  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
 										  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
-										  RobotMap.AIO.DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT);
+										  RobotMap.AIO.DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT,
+										  RobotMap.SENSOR.DRIVE_FRONT_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
 		backLeft = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_LEFT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT, 
-										 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT);
+										 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
+										 RobotMap.SENSOR.DRIVE_BACK_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
 		backRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_RIGHT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_RIGHT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
 										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT,
 										 true,
-										 false);
+										 false,
+										 RobotMap.SENSOR.DRIVE_BACK_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
 	}
 	
 	@Override
@@ -58,8 +61,8 @@ public final class SwerveDrive extends Subsystem {
 //		setDefaultCommand(new SwerveDriveWheelTeleoperated());
 	}
 	
-	public void drive (double vy, double vx, double rotationClockwise) {
-		System.out.println("SwerveDrive.drive()");
+	public void drive(double vy, double vx, double rotationClockwise) {
+//		System.out.println("SwerveDrive.drive()");
 	    double a = vx - rotationClockwise * (L / r);
 	    double b = vx + rotationClockwise * (L / r);
 	    double c = vy - rotationClockwise * (W / r);
@@ -87,14 +90,14 @@ public final class SwerveDrive extends Subsystem {
 	    	backRightSpeed/=max;
 	    }
 	    
-	    SmartDashboard.putNumber("FL-V", frontLeftSpeed);
-	    SmartDashboard.putNumber("FR-V", frontRightSpeed);
-	    SmartDashboard.putNumber("BL-V", backLeftSpeed);
-	    SmartDashboard.putNumber("BR-V", -backRightSpeed);
-	    SmartDashboard.putNumber("FL-A", frontLeftAngle);
-	    SmartDashboard.putNumber("FR-A", frontRightAngle);
-	    SmartDashboard.putNumber("BL-A", backLeftAngle);
-	    SmartDashboard.putNumber("BR-A", -backRightAngle);
+	    SmartDashboard.putNumber("FL-V vel", frontLeftSpeed);
+	    SmartDashboard.putNumber("FR-V vel", frontRightSpeed);
+	    SmartDashboard.putNumber("BL-V vel", backLeftSpeed);
+	    SmartDashboard.putNumber("BR-V vel", -backRightSpeed);
+	    SmartDashboard.putNumber("FL-A angle", frontLeftAngle);
+	    SmartDashboard.putNumber("FR-A angle", frontRightAngle);
+	    SmartDashboard.putNumber("BL-A angle", backLeftAngle);
+	    SmartDashboard.putNumber("BR-A angle", -backRightAngle);
 	    
 	    backRight.drive (backRightSpeed, -backRightAngle);
 	    backLeft.drive (backLeftSpeed, backLeftAngle);
@@ -103,7 +106,7 @@ public final class SwerveDrive extends Subsystem {
 	}
 	
 	public void driveParallel(double velocity, double angle) {
-		System.out.println("SwerveDrive.driveParallel()");
+//		System.out.println("SwerveDrive.driveParallel()");
 		angle *= (RobotMap.MATH.PI);
 		
 		SmartDashboard.putNumber(getName()+"-V", velocity);
@@ -127,11 +130,11 @@ public final class SwerveDrive extends Subsystem {
 		backRight.drive(velocity, angle);
 	}
 
-	public void checkAnglesOnTarget() {
-	    frontLeft.onTarget();	    
-	    frontRight.onTarget();
-	    backLeft.onTarget();
-	    backRight.onTarget();
+	public boolean isAnglesOnTarget() {
+	    return (frontLeft.onTarget() && 
+	    		frontRight.onTarget() && 
+	    		backLeft.onTarget() && 
+	    		backRight.onTarget());
 	}
 
 	public void startZeroPointCalibration() {
@@ -182,11 +185,17 @@ public final class SwerveDrive extends Subsystem {
 		return wheelsToCalibrateParallel.isEmpty();
 	}
 
-	public void resetEncoders() {
+	public void resetAngleEncoders() {
 		frontLeft.resetAngleEncoder();
 		frontRight.resetAngleEncoder();
 		backLeft.resetAngleEncoder();
 		backRight.resetAngleEncoder();
+	}
+	public void resetVelocityEncoders() {
+		frontLeft.resetVelocityEncoder();
+		frontRight.resetVelocityEncoder();		
+		backLeft.resetVelocityEncoder();
+		backRight.resetVelocityEncoder();
 	}
 
 }

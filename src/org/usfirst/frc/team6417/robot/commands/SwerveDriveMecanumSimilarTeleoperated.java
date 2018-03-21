@@ -17,7 +17,7 @@ public final class SwerveDriveMecanumSimilarTeleoperated extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.swerveDrive.resetEncoders();
+		Robot.swerveDrive.resetAngleEncoders();
 	}
 
 	@Override

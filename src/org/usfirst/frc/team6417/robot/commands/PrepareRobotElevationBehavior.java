@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public final class PrepareRobotElevationBehavior extends CommandGroup {
 	public PrepareRobotElevationBehavior() {
-		addSequential(new LiftingUnitMoveToSavePosition());
-		addSequential(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
-		addParallel(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_HANGING_ALTITUDE_IN_TICKS));
+//		addSequential(new LiftingUnitMoveToSavePosition());
+		addSequential(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_HANGING_ALTITUDE_IN_TICKS));
+		addParallel(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
 		addSequential(new LiftingUnitWagonMoveToFullBack());
 	}
 }

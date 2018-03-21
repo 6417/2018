@@ -16,7 +16,7 @@ public final class SwerveDriveWheelCheck extends Command {
 	
 	@Override
 	protected void execute() {
-		System.out.println("SwerveDriveWheelCheck. This is goint to take while ...");
+//		System.out.println("SwerveDriveWheelCheck. This is goint to take while ...");
 		
 		checkMotors("FL", Robot.swerveDrive.frontLeft.angleMotor, Robot.swerveDrive.frontLeft.velocityMotor);
 		checkMotors("FR", Robot.swerveDrive.frontRight.angleMotor, Robot.swerveDrive.frontRight.velocityMotor);
@@ -32,22 +32,22 @@ public final class SwerveDriveWheelCheck extends Command {
 	}
 	
 	private void checkZeroPoint(String label, SwerveWheelDrive swerveWheelDrive) {
-		System.out.print("Checking "+label+" position sensor ...");
+//		System.out.print("Checking "+label+" position sensor ...");
 		swerveWheelDrive.startZeroPointCalibration();
 		while(!swerveWheelDrive.isOnZeroPoint()) {
 			System.out.print(".");
 			swerveWheelDrive.tick();
 			Timer.delay(0.002);
 		}
-		System.out.println();
-		System.out.print("Checking "+label+" position sensor DONE");
+//		System.out.println();
+//		System.out.print("Checking "+label+" position sensor DONE");
 	}
 
 	private void checkMotors(String label, MotorController angleMotor, MotorController velocityMotor) {
-		System.out.println("Checking "+label);
-		System.out.println("Checking angle motor "+label);
+//		System.out.println("Checking "+label);
+//		System.out.println("Checking angle motor "+label);
 		checkMotor(angleMotor);
-		System.out.println("Checking velocity motor "+label);
+//		System.out.println("Checking velocity motor "+label);
 		checkMotor(velocityMotor);
 	}
 

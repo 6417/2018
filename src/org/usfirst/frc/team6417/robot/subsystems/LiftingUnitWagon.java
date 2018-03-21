@@ -91,6 +91,7 @@ public final class LiftingUnitWagon extends Subsystem {
 		front.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 		back.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 		stop.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
+		stop.addTransition(LiftingUnitWagon.BACK, back);
 	}
 	
 	@Override
@@ -102,6 +103,7 @@ public final class LiftingUnitWagon extends Subsystem {
 		return !frontEndpointPositionDetector.get();
 	}
 	public boolean isInEndpositionBack() {
+		System.out.println("LiftingUnitWagon.isInEndpositionBack("+getCurrentPosition()+" "+RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS+")");
 		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS;
 	}
 	public boolean isInEndpoint() {
@@ -204,6 +206,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	public void onEvent(Event event) {
 		currentState = currentState.transition(event);
 		currentState.init();
+		System.out.println("LiftingUnitWagon.onEvent("+event+", "+currentState+")");
 	}
 	
 	public void tick() {

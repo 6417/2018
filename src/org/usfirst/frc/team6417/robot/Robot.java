@@ -68,7 +68,8 @@ public class Robot extends TimedRobot {
 				swerveDriveWheel = new SwerveWheelDrive("BL",
 														RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 														RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT,
-														RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT);
+														RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
+														RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
 			}
 			if(RobotMap.SUBSYSTEM.IS_CAMERA_IN_USE) {
 				//CameraServer.getInstance().startAutomaticCapture();

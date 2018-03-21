@@ -66,6 +66,10 @@ public final class LiftingUnit extends Subsystem {
 				MotorController.kPIDLoopIdx ,
 				MotorController.kTimeoutMs );
 		
+//		motorA.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+//		motorA.config_kP(MotorController.kPIDLoopIdx, 0.02, MotorController.kTimeoutMs);
+//		motorA.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
+//		motorA.config_kD(MotorController.kPIDLoopIdx, 0.8, MotorController.kTimeoutMs);
 		motorA.config_kF(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
 		motorA.config_kP(MotorController.kPIDLoopIdx, 0.02, MotorController.kTimeoutMs);
 		motorA.config_kI(MotorController.kPIDLoopIdx, 0.0, MotorController.kTimeoutMs);
@@ -114,7 +118,7 @@ public final class LiftingUnit extends Subsystem {
 			return;
 		}
 		if(isHoldingPosition) {
-			System.out.println(RobotMap.ROBOT.LIFTING_UNIT_NAME+" already holding pos");
+//			System.out.println(RobotMap.ROBOT.LIFTING_UNIT_NAME+" already holding pos");
 			return;
 		}
 		
@@ -126,7 +130,7 @@ public final class LiftingUnit extends Subsystem {
 			targetPosition = posAbsolute;
 		}
 
-		System.out.println("LiftingUnit.moveToAbsolutePos("+targetPosition+")");
+//		System.out.println("LiftingUnit.moveToAbsolutePos("+targetPosition+")");
 		setHoldPosition(true);
 		motorA.set(ControlMode.Position, targetPosition);
 //		motorA.set(ControlMode.MotionMagic, targetPosition);
@@ -168,7 +172,7 @@ public final class LiftingUnit extends Subsystem {
 	}
 	
 	private void internalMove(double velocity) {
-		System.out.println("LiftingUnit.internalMove("+velocity+")");
+//		System.out.println("LiftingUnit.internalMove("+velocity+")");
 		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel given", velocity);
 
@@ -259,7 +263,7 @@ public final class LiftingUnit extends Subsystem {
 //		motorA.set(0);
 	}
 	
-	private void setHoldPosition(boolean isPosCtrl) {
+	public void setHoldPosition(boolean isPosCtrl) {
 		isHoldingPosition = isPosCtrl;
 		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos ctrl", isHoldingPosition);
 		SmartDashboard.putBoolean(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel ctrl", !isHoldingPosition);
@@ -329,7 +333,8 @@ public final class LiftingUnit extends Subsystem {
 	}
 	
 	public boolean isOnTarget() {
-		if(Util.eq(getCurrentPosition(), (int)targetPosition, RobotMap.ROBOT.LIFTING_UNIT_ALTITUDE_TOLERANCE)) {
+		System.out.println("LiftingUnit.isOnTarget: curr:"+(getCurrentPosition()+", target: "+(int)targetPosition+", tol: "+5*RobotMap.ROBOT.LIFTING_UNIT_ALTITUDE_TOLERANCE));
+		if(Util.eq(getCurrentPosition(), (int)targetPosition, 5*RobotMap.ROBOT.LIFTING_UNIT_ALTITUDE_TOLERANCE)) {
 			return true;
 		}
 		return false;
@@ -355,7 +360,7 @@ public final class LiftingUnit extends Subsystem {
 //			return;
 //		}
 //		
-		System.out.println(getName()+" moveToAboveSafetyAltitude from pos "+getCurrentPosition()+" to pos "+RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS+" ...");
+//		System.out.println(getName()+" moveToAboveSafetyAltitude from pos "+getCurrentPosition()+" to pos "+RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS+" ...");
 //		moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS);
 		move(RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY / 8.0);
 	}

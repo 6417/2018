@@ -17,7 +17,7 @@ public final class SwerveDriveParallelTeleoperated extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.swerveDrive.resetEncoders();
+		Robot.swerveDrive.resetAngleEncoders();
 	}
 
 	@Override
