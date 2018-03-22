@@ -18,13 +18,13 @@ public class RobotMap {
 	 * robot
 	 */
 	public static class ROBOT {
-		public static final double WHEEL_DIAMETER = 15.24; /*cm*/
+			
+		public static final double WHEEL_DIAMETER = 10.16; /*cm*/
 		public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * MATH.PI; /*cm*/
-		public static final double DIAGONAL_DISTANCE_BETWEEN_WHEELS = 0.0; /*cm*/
-		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
-
-		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 63; /*cm*/
+		public static final double WHEEL_DISTANCE_FRONT_TO_BACK = 65; /*cm*/
 		public static final double WHEEL_DISTANCE_LEFT_TO_RIGHT = 53; /*cm*/
+		public static final double DIAGONAL_DISTANCE_BETWEEN_WHEELS =  Math.sqrt(WHEEL_DISTANCE_FRONT_TO_BACK*WHEEL_DISTANCE_FRONT_TO_BACK+WHEEL_DISTANCE_LEFT_TO_RIGHT*WHEEL_DISTANCE_LEFT_TO_RIGHT); /*cm*/
+		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
 		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
 		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = 300000; //-20000; /*encoder ticks*/
