@@ -18,7 +18,7 @@ public final class SwerveDriveTeleoperated extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.swerveDrive.resetEncoders();
+		Robot.swerveDrive.resetAngleEncoders();
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public final class SwerveDriveTeleoperated extends Command {
 			if(Math.abs(z) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_TWIST) {
 				z = 0.0;
 			}
-//			z = 0.0; // TODO Remove when ready for rotation.
+			z = 0.0; // TODO Remove when ready for rotation.
 			
 			Robot.swerveDrive.drive(-y, x, z);
 

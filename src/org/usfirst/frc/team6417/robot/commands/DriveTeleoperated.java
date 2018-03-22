@@ -28,7 +28,7 @@ public final class DriveTeleoperated extends Command {
 		}
 		/* print the joystick values to sign them, comment
 		 * out this line after checking the joystick directions. */
-		System.out.println("JoyY:" + forward + "  turn:" + turn );
+//		System.out.println("JoyY:" + forward + "  turn:" + turn );
 		/* drive the robot, when driving forward one side will be red.  
 		 * This is because DifferentialDrive assumes 
 		 * one side must be negative */	

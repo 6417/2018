@@ -4,16 +4,15 @@ import org.usfirst.frc.team6417.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public final class SwerveDriveSetPosToZero extends Command {
-
+public final class SwerveDriveResetVelocityEncoder extends Command {
 	
-	public SwerveDriveSetPosToZero() {
+	public SwerveDriveResetVelocityEncoder() {
 		requires(Robot.swerveDrive);
 	}
 	
 	@Override
-	protected void execute() {
-		Robot.swerveDrive.resetAngleEncoders();
+	protected void initialize() {
+		Robot.swerveDrive.resetVelocityEncoders();
 	}
 	
 	@Override

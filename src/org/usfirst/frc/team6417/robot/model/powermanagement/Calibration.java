@@ -11,4 +11,13 @@ package org.usfirst.frc.team6417.robot.model.powermanagement;
 public final class Calibration {
 	public static final PowerManagementPoint PL = new PowerManagementPoint(0.1, 1.0, 0.9, 1.0);
 	public static final PowerManagementPoint PD = new PowerManagementPoint(1.0, 0.6, 0.5, 0.7);
+	
+	public static final double NORMAL_CONTINUOUS_LOAD = 54; // Ampere
+	public static final double MAX_CONTINUOUS_LOAD = 180; // Ampere
+
+	public static final double DRIVE_CONTINUOUS_LOAD = 0.5 * NORMAL_CONTINUOUS_LOAD; // Ampere
+	public static final double GRIPPER_CONTINUOUS_LOAD = 0.2 * NORMAL_CONTINUOUS_LOAD; // Ampere
+	public static final double LIFTING_UNIT_CONTINUOUS_LOAD = 0.2 * NORMAL_CONTINUOUS_LOAD; // Ampere
+	public static final double LIFTING_UNIT_WAGON_CONTINUOUS_LOAD = 0.1 * NORMAL_CONTINUOUS_LOAD; // Ampere
+
 }

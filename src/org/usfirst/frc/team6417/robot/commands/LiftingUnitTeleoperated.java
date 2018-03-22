@@ -22,7 +22,7 @@ public final class LiftingUnitTeleoperated extends Command {
 		if(y == 0.0) {
 			Robot.liftingUnit.holdPosition();
 		} else {
-			Robot.liftingUnit.move(y);
+			Robot.liftingUnit.move(-y);
 		}
 	}
 	

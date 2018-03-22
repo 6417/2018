@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6417.robot;
 
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
+import org.usfirst.frc.team6417.robot.commands.CalibrationBehavior;
 import org.usfirst.frc.team6417.robot.commands.TestBehavior;
 import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
 import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
 	
 	private Command autonomousBehavior;
 	private Command testBehavior;
+	private Command calibrationBehavior;
 	
 	public static SwerveWheelDrive swerveDriveWheel;
 
@@ -66,7 +68,8 @@ public class Robot extends TimedRobot {
 				swerveDriveWheel = new SwerveWheelDrive("BL",
 														RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 														RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT,
-														RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT);
+														RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
+														RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
 			}
 			if(RobotMap.SUBSYSTEM.IS_CAMERA_IN_USE) {
 				//CameraServer.getInstance().startAutomaticCapture();
@@ -88,7 +91,8 @@ public class Robot extends TimedRobot {
 
 			autonomousBehavior = new AutonomousBehavior();
 			testBehavior = new TestBehavior();
-
+			calibrationBehavior = new CalibrationBehavior();
+			
 			oi = OI.getInstance();
 			
 			
@@ -136,6 +140,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousBehavior.start();
+//		calibrationBehavior.start();
 	}
 
 	/**
@@ -169,7 +174,9 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void testInit() {
-		testBehavior.start();
+		System.out.println("Robot.testInit()");
+//		calibrationBehavior.start();
+//		testBehavior.start();
 	}
 
 	/**

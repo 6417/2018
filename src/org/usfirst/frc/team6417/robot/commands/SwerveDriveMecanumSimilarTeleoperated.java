@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  * Simple implementation of a parallel wheel swerve-drive
  */
-public final class SwerveDriveParallelTeleoperated extends Command {
+public final class SwerveDriveMecanumSimilarTeleoperated extends Command {
 	
-	public SwerveDriveParallelTeleoperated() {
+	public SwerveDriveMecanumSimilarTeleoperated() {
 		requires(Robot.swerveDrive);
 	}
 	
@@ -22,16 +22,17 @@ public final class SwerveDriveParallelTeleoperated extends Command {
 
 	@Override
 	protected void execute() {
-			double y = OI.getInstance().joystickOne.getY();
-			double directionInRadians = OI.getInstance().joystickOne.getX();
-
+			double y = OI.getInstance().joystickOne.getMagnitude();;//OI.getInstance().joystickOne.getY();
+			double directionInRadians = 0;//OI.getInstance().joystickOne
+//			double value 
+			
 			if(Math.abs(y) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_Y) {
 				y = 0.0;
 			}
 			if(Math.abs(directionInRadians) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_TWIST) {
 				directionInRadians = 0.0;
 			}
-			Robot.swerveDrive.driveParallel(-y, directionInRadians);
+			Robot.swerveDrive.driveMecanumSimilar(-y, directionInRadians);
 	}
 	
 	@Override
