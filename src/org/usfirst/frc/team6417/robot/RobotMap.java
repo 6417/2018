@@ -92,7 +92,9 @@ public class RobotMap {
 	public static class VELOCITY {
 		public static final double STOP_VELOCITY = 0.0;
 
-		public static final double GRIPPER_PUSH_VELOCITY = -0.01;
+//		public static final double GRIPPER_PUSH_VELOCITY = -0.01;
+		public static final double GRIPPER_PUSH_VELOCITY = -0.4;
+		public static final double GRIPPER_PULL_VELOCITY = 0.6;		
 
 		public static final double LIFTING_UNIT_MOTOR_UP_VELOCITY = -1;
 		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = 0.75;
