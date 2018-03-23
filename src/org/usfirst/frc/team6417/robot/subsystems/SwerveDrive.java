@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team6417.robot.RobotMap;
+import org.usfirst.frc.team6417.robot.Util;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -67,6 +68,14 @@ public final class SwerveDrive extends Subsystem {
 	
 	
 	public void drive(double vy, double vx, double rotationClockwise) {
+		if(Util.eq(vy, 0.0, 0.01) && Util.eq(vx, 0.0, 0.01) && Util.eq(rotationClockwise, 0.0, 0.01)) {
+//			System.out.println("SwerveDrive.drive with vy=0");
+		    backRight.drive (0, 0);
+		    backLeft.drive (0, 0);
+		    frontRight.drive (0, 0);
+		    frontLeft.drive (0, 0);	    
+			return;
+		}
 //		System.out.println("SwerveDrive.drive()");
 	    double a = vx - rotationClockwise * (L / r);
 	    double b = vx + rotationClockwise * (L / r);
@@ -98,7 +107,7 @@ public final class SwerveDrive extends Subsystem {
 	    SmartDashboard.putNumber("FL-V vel", frontLeftSpeed);
 	    SmartDashboard.putNumber("FR-V vel", frontRightSpeed);
 	    SmartDashboard.putNumber("BL-V vel", backLeftSpeed);
-	    SmartDashboard.putNumber("BR-V vel", -backRightSpeed);
+	    SmartDashboard.putNumber("BR-V vel", backRightSpeed);
 	    SmartDashboard.putNumber("FL-A angle", frontLeftAngle);
 	    SmartDashboard.putNumber("FR-A angle", frontRightAngle);
 	    SmartDashboard.putNumber("BL-A angle", backLeftAngle);
@@ -174,6 +183,13 @@ public final class SwerveDrive extends Subsystem {
 		backRight.drive(velocity, angle);
 	}
 
+	public void gotoAngle(double angle) {
+		frontLeft.gotoAngle(angle);
+		frontRight.gotoAngle(angle);
+		backLeft.gotoAngle(angle);
+		backRight.gotoAngle(angle);
+		
+	}
 	public boolean isAnglesOnTarget() {
 	    return (frontLeft.onTarget() && 
 	    		frontRight.onTarget() && 

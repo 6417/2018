@@ -40,4 +40,8 @@ public class Util {
 		return (a == b ? true : Math.abs(a - b) < epsilon);
 	}
 	
+	public static boolean eq(double a, double b, double epsilon) {
+		return (a == b ? true : Math.abs(a - b) < epsilon);
+	}
+	
 }

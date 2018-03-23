@@ -89,6 +89,14 @@ public final class SwerveWheelDrive extends Subsystem {
 
 	public void gotoAngle(double absoluteAngleInRadians) {
 		int position = calculateEncoderTicksForWormGearByAngleOfAngleGear(absoluteAngleInRadians);
+		
+		currentTarget = position;
+		if(getAngleTicks() <= currentTarget) {
+			currentAngleMotorRotationDirection = ANGLE_ROTATION_DIRECTION.CLOCKWISE;
+		}else {
+			currentAngleMotorRotationDirection = ANGLE_ROTATION_DIRECTION.COUNTER_CLOCKWISE;
+		}
+		
 		debugAngle(absoluteAngleInRadians,position);
 		angleMotor.set(ControlMode.Position, position);
 	}
@@ -126,7 +134,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		return angleMotor.getSelectedSensorPosition(MotorController.kSlotIdx);
 	}
 
-	public boolean onTarget() {
+	public boolean onTarget() {		
 		boolean isOnTarget = false;
 		switch(currentAngleMotorRotationDirection) {
 		case CLOCKWISE:{
