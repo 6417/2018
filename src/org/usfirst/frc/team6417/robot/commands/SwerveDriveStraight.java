@@ -24,43 +24,31 @@ public final class SwerveDriveStraight extends Command {
 	@Override
 	protected void initialize() {
 		isFinished = false;
-		initialValue = Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0);
+		initialValue = Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0);
 		Robot.swerveDrive.drive(velocity, 0, 0);
+		System.out.println("SwerveDriveStraight.initialize()");
 	}
 	
 	@Override
 	protected void execute() {
+		System.out.println("SwerveDriveStraight.execute(p os:"+Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0)+", "+velocity+", isFWD:"+isFwd+")");
 		if(isFwd) {
-			if(Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0) >= initialValue + distanceInTicks) {
-				Robot.swerveDrive.frontLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				Robot.swerveDrive.frontRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				Robot.swerveDrive.backLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				Robot.swerveDrive.backRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			if(Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0) <= initialValue - distanceInTicks) {
 				isFinished = true;
 			}
 		}else {
-			if(Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0) <= initialValue - distanceInTicks) {
-				Robot.swerveDrive.frontLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				Robot.swerveDrive.frontRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				Robot.swerveDrive.backLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				Robot.swerveDrive.backRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			if(Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0) >= initialValue + distanceInTicks) {
 				isFinished = true;
 			}
 		}
-	
-//		SmartDashboard.putNumber("FL-V - pos", Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0));
-//		SmartDashboard.putNumber("NavX.Angle", Robot.navX.get().getAngle());		
-//		SmartDashboard.putNumber("NavX.compass", Robot.navX.get().getCompassHeading());		
-//		SmartDashboard.putNumber("NavX.DispX", Robot.navX.get().getDisplacementY());		
-////		System.out.println("SwerveDriveStraight.execute("+(System.currentTimeMillis() - startTimestamp)+")");
-//		if((System.currentTimeMillis() - startTimestamp) > 30000) {
-//			Robot.swerveDrive.driveParallel(0, 0);
-////			System.out.println("SwerveDriveStraight.execute done");
-//			isFinished = true;
-//		} else {
-//			Robot.swerveDrive.driveParallel(0.5,0);// -Robot.navX.get().getDisplacementX());
-////			System.out.println("SwerveDriveStraight.execute. Correcting displacement "+(-Robot.navX.get().getDisplacementX()));
-//		}
+
+		if(isFinished) {
+			Robot.swerveDrive.frontLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			Robot.swerveDrive.frontRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			Robot.swerveDrive.backLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+			Robot.swerveDrive.backRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
+		}
+		
 	}	
 	
 	@Override

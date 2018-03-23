@@ -3,18 +3,18 @@ package org.usfirst.frc.team6417.robot;
 import org.usfirst.frc.team6417.robot.commands.GripperPull;
 import org.usfirst.frc.team6417.robot.commands.GripperPush;
 import org.usfirst.frc.team6417.robot.commands.GripperStop;
+import org.usfirst.frc.team6417.robot.commands.LiftRobotUpTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitFindEndpointDown;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFindEndpointFront;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
 import org.usfirst.frc.team6417.robot.commands.PrepareRobotElevationBehavior;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveMecanumSimilarTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveResetVelocityEncoder;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelAngleCalibration;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelStop;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelTeleoperated;
+import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {	
 	public final Joystick joystickOne = new Joystick(RobotMap.CONTROLLER.DIRECTION_CONTROLLER);
 	public final Joystick liftingUnitController = new Joystick(RobotMap.CONTROLLER.LIFTING_UNIT_CONTROLLER);
+	public final Joystick liftUpController = new Joystick(RobotMap.CONTROLLER.LIFT_UP_ROBOT_CONTROLLER);
 	
 	private JoystickButton gripperPullButton;
 	private JoystickButton gripperPushButton;
@@ -43,6 +44,8 @@ public class OI {
 	private JoystickButton swerveDriveParallelTeleopButton;
 	private JoystickButton swerveDriveMecanumSimilarTeleopButton;
 	private JoystickButton sverveDriveVelocityEncoderResetButton;
+	private JoystickButton startLiftingUnitFarBackButton;
+	private JoystickButton liftUpRobotButton;
 
 	private static OI INSTANCE;
 	
@@ -78,13 +81,18 @@ public class OI {
 			liftingUnitGoToSwitchButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
 			liftingUnitGoToGroundButton = new JoystickButton(liftingUnitController, 3);
 			liftingUnitGoToGroundButton.whenPressed(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS));
-//			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
-//			liftingUnitTeleoperated.whenPressed(new LiftingUnitTeleoperated());
+			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
+			liftingUnitTeleoperated.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.GAME_START));
 			
 			liftingUnitFindEndpointDownButton = new JoystickButton(liftingUnitController, 7);
 			liftingUnitFindEndpointDownButton.whenPressed(new LiftingUnitFindEndpointDown());
 //			liftingUnitResetButton = new JoystickButton(liftingUnitController, 5);
 //			liftingUnitResetButton.whenPressed(new LiftingUnitReset());
+			
+			startLiftingUnitFarBackButton = new JoystickButton(liftUpController, 1);
+			startLiftingUnitFarBackButton.whenPressed(new PrepareRobotElevationBehavior());
+			liftUpRobotButton = new JoystickButton(liftUpController, 2);
+			liftUpRobotButton.whenPressed(new LiftRobotUpTeleoperated());
 		}
 		if(RobotMap.SUBSYSTEM.IS_DIFFERENTIAL_DRIVE_IN_USE) {
 		// nothing to do. the drive uses the internal default command.
@@ -92,17 +100,17 @@ public class OI {
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 			swerveWheelCheckButton = new JoystickButton(joystickOne, 8);
 			swerveWheelCheckButton.whenPressed(new SwerveDriveAngleOnSingleWheel());
-			swerveWheelForwardButton = new JoystickButton(joystickOne, 7);
-			swerveWheelForwardButton.whenPressed(new SwerveDriveSetPosToZero());					
+//			swerveWheelForwardButton = new JoystickButton(joystickOne, 7);
+//			swerveWheelForwardButton.whenPressed(new SwerveDriveSetPosToZero());					
 			swerveDriveTeleopButton = new JoystickButton(joystickOne, 4);
 			swerveDriveTeleopButton.whenPressed(new SwerveDriveTeleoperated());
-			swerveDriveParallelTeleopButton = new JoystickButton(joystickOne, 5);
-			swerveDriveParallelTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
-			swerveDriveMecanumSimilarTeleopButton = new JoystickButton(joystickOne, 6);
+//			swerveDriveParallelTeleopButton = new JoystickButton(joystickOne, 5);
+//			swerveDriveParallelTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
+//			swerveDriveMecanumSimilarTeleopButton = new JoystickButton(joystickOne, 6);
 //			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
-			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveWheelAngleCalibration());
+//			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveWheelAngleCalibration());
 			
-			sverveDriveVelocityEncoderResetButton = new JoystickButton(joystickOne, 2);
+			sverveDriveVelocityEncoderResetButton = new JoystickButton(joystickOne, 7);
 			sverveDriveVelocityEncoderResetButton.whenPressed(new SwerveDriveResetVelocityEncoder());
 			
 		}

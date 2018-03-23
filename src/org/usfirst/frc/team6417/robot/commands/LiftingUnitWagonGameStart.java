@@ -4,16 +4,15 @@ import org.usfirst.frc.team6417.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public final class SwerveDriveResetVelocityEncoder extends Command {
+public final class LiftingUnitWagonGameStart extends Command {
 	
-	public SwerveDriveResetVelocityEncoder() {
-		requires(Robot.swerveDrive);
+	public LiftingUnitWagonGameStart() {
+		requires(Robot.liftingUnitWagon);
 	}
 	
 	@Override
 	protected void execute() {
-		System.out.println("SwerveDriveResetVelocityEncoder.execute()");
-		Robot.swerveDrive.resetVelocityEncoders();
+		Robot.liftingUnitWagon.gameStart();
 	}
 	
 	@Override

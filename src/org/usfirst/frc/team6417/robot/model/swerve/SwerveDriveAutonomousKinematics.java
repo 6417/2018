@@ -15,6 +15,7 @@ public final class SwerveDriveAutonomousKinematics {
 	}
 	
 	public double calculateAngle(POS_IN_STATION actualPosInStation, GOAL_SIDE actualSwitchGoal) {
+		System.out.println("calculateAngle station:"+actualPosInStation+" -> goal:"+actualSwitchGoal);
 		double angle = 0;
 		switch(actualPosInStation) {
 			case LEFT_SIDE:{
@@ -42,7 +43,7 @@ public final class SwerveDriveAutonomousKinematics {
 			case CENTER:{
 				switch(actualSwitchGoal) {
 					case LEFT:{
-						angle = -0.125/2.0;
+						angle = -0.125;
 						break;
 					}
 					case STRAIGHT:{
@@ -50,7 +51,7 @@ public final class SwerveDriveAutonomousKinematics {
 						break;
 					}
 					case RIGHT:{
-						angle = 0.125/2.0;
+						angle = 0.125 / 1.2;
 						break;
 					}
 					case UNKNOWN:
@@ -111,13 +112,13 @@ public final class SwerveDriveAutonomousKinematics {
 		case CENTER:{
 			switch(actualSwitchGoal) {
 				case LEFT:{
-					return 90000;
+					return 91500;
 				}
 				case STRAIGHT:{
-					return 5000;
+					return 83000;
 				}
 				case RIGHT:{
-					return 90000;
+					return 91500;
 				}
 				case UNKNOWN:
 				default:
@@ -146,6 +147,7 @@ public final class SwerveDriveAutonomousKinematics {
 		return 0;
 	}
 
+	
 	public static void main(String[] args) {
 		SwerveDriveAutonomousKinematics test = new SwerveDriveAutonomousKinematics();
 		System.out.println("Station left goal left: "+test.calculateAngle(

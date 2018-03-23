@@ -5,6 +5,7 @@ import org.usfirst.frc.team6417.robot.MotorControllerFactory;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -203,9 +204,10 @@ public final class SwerveWheelDrive extends Subsystem {
 				 MotorController.kTimeoutMs);
 	}
 	public void resetVelocityEncoder() {
-		velocityMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
+		ErrorCode res = velocityMotor.setSelectedSensorPosition(RobotMap.ENCODER.INITIAL_VALUE, 
 				 MotorController.kSlotIdx, 
 				 MotorController.kTimeoutMs);
+		System.out.println(getName()+"-resetVelocityEncoder: "+res);
 	}
 
 }

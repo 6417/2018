@@ -22,6 +22,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	public static final Event BACK = new Event("BACK");
 	public static final Event FULL_BACK = new Event("FULL_BACK");
 	public static final Event STOP = new Event("STOP");
+	public static final Event GAME_START = new Event("GAME_START");
 
 	private final MotorController motor;
 	
@@ -78,6 +79,7 @@ public final class LiftingUnitWagon extends Subsystem {
 
 		State stop = currentState = new Stop();
 		State front = new Front();
+		State gameStart = new GameStart();
 		State back = new Back();
 		State fullBack = new FullBack();
 		
@@ -92,6 +94,10 @@ public final class LiftingUnitWagon extends Subsystem {
 		back.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 		stop.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 		stop.addTransition(LiftingUnitWagon.BACK, back);
+		stop.addTransition(GAME_START, gameStart);
+		gameStart.addTransition(FRONT, front);
+		gameStart.addTransition(GAME_START, gameStart);
+		front.addTransition(GAME_START, gameStart);
 	}
 	
 	@Override
@@ -222,6 +228,11 @@ public final class LiftingUnitWagon extends Subsystem {
 		return powerManagementStrategy.calculatePower();
 	}
 	
+	private boolean isInGameStartPosition() {
+		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_GAME_START_POSITION_SAVE_IN_TICKS;
+	}
+
+	
 //	class Back extends State {
 //		
 //		@Override
@@ -271,6 +282,19 @@ public final class LiftingUnitWagon extends Subsystem {
 		}
 
 	}
+	
+	class GameStart extends State {
+		@Override
+		public void init() {
+			moveToPos(RobotMap.ROBOT.LIFTING_UNIT_WAGON_GAME_START_POSITION_SAVE_IN_TICKS);
+		}
+		
+		@Override
+		public boolean isFinished() {
+			return isInGameStartPosition();
+		}
+
+	}	
 
 	class Back extends State {
 		@Override
@@ -309,6 +333,13 @@ public final class LiftingUnitWagon extends Subsystem {
 			return true;
 		}
 		
+	}
+
+	public void gameStart() {
+		motor.setSelectedSensorPosition(RobotMap.ROBOT.LIFTING_UNIT_WAGON_GAME_START_POSITION_SAVE_IN_TICKS, 
+				 MotorController.kSlotIdx, 
+				 MotorController.kTimeoutMs);
+		isCalibrated = true;
 	}
 
 }

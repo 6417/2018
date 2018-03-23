@@ -5,6 +5,8 @@ import org.usfirst.frc.team6417.robot.commands.CalibrationBehavior;
 import org.usfirst.frc.team6417.robot.commands.TestBehavior;
 import org.usfirst.frc.team6417.robot.model.powermanagement.Calibration;
 import org.usfirst.frc.team6417.robot.model.powermanagement.PowerExtremals;
+import org.usfirst.frc.team6417.robot.model.swerve.SwerveDriveAutonomousKinematics.GOAL_SIDE;
+import org.usfirst.frc.team6417.robot.model.swerve.SwerveDriveAutonomousKinematics.POS_IN_STATION;
 import org.usfirst.frc.team6417.robot.service.powermanagement.AdaptivePowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.service.powermanagement.PowerManagementStrategy;
 import org.usfirst.frc.team6417.robot.subsystems.Drive;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 	// Subsystems
@@ -63,6 +66,12 @@ public class Robot extends TimedRobot {
 			}
 			if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 				swerveDrive = new SwerveDrive();
+				
+				// These values are used in autonomous:
+				SmartDashboard.putNumber("pos-in-station", POS_IN_STATION.CENTER.ordinal());
+				SmartDashboard.putNumber("left-switch-side-option", GOAL_SIDE.STRAIGHT.ordinal());
+				SmartDashboard.putNumber("right-switch-side-option", GOAL_SIDE.STRAIGHT.ordinal());
+
 			}
 			if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 				swerveDriveWheel = new SwerveWheelDrive("BL",

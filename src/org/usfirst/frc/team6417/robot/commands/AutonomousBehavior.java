@@ -10,9 +10,12 @@ public final class AutonomousBehavior extends CommandGroup {
 	
 	 public AutonomousBehavior() {
 	    	addSequential(new GetFieldInformation());
+	    	addSequential(new DefineGameStrategy());
+	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
+	    		addSequential(new LiftingUnitWagonGameStart());
+	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-		    	addParallel(new SwerveDriveResetVelocityEncoder());
-//	    		addSequential(new SwerveDriveRotateWheelOnlyToAngle());
+		    	addSequential(new SwerveDriveResetVelocityEncoder());
 	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 		    	addParallel(new LiftingUnitMoveToSavePosition());
@@ -23,15 +26,14 @@ public final class AutonomousBehavior extends CommandGroup {
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 		    	addSequential(new SverveDriveToSwitchAutonomous());
-//		    	addSequential(new SwerveDriveStraight(2000));
+		    	addSequential(new SwerveDriveStraight(3000, true));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
 	    		addSequential(new GripperMoveTimed(2500, Gripper.PUSH));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-	    		addSequential(new SwerveDriveRotateWheelOnlyToAngle(0));
-//		    	addSequential(new SwerveDriveStraight(2000, false));
-//		    	addSequential(new SwerveDriveStraight(20, true));
+//		    	addSequential(new SwerveDriveStraight(3000, false));
+//		    	addSequential(new SwerveDriveStraight(1000, true));
 	    	}
 	 }
 }

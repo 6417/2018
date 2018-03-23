@@ -43,6 +43,7 @@ public final class SwerveDriveTeleoperated extends Command {
 				double m = 0.3;
 				x *= m;
 				y *= m;
+				z *= m;
 			}
 			
 			Robot.swerveDrive.drive(-y, x, z);

@@ -171,6 +171,8 @@ public final class LiftingUnit extends Subsystem {
 		return vel;
 	}
 	
+	
+	
 	private void internalMove(double velocity) {
 //		System.out.println("LiftingUnit.internalMove("+velocity+")");
 		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
@@ -424,6 +426,52 @@ public final class LiftingUnit extends Subsystem {
 				stopMoveToEndpointDown();
 			}
 			return isCalibrated;
+		}
+	}
+
+	
+	private void internalMoveWithoutHoldingPosition(double velocity) {
+//		System.out.println("LiftingUnit.internalMove("+velocity+")");
+		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel given", velocity);
+
+		double velocity2 = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
+		double calcVel = calcVel(velocity, getCurrentPosition());
+		
+//		velocity = this.powerManagementStrategy.calculatePower() * velocity;
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound", velocity2);
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound x", calcVel);
+		
+		SmartDashboard.putBoolean(endpointFrontSensor.getName(), !endpointFrontSensor.get());
+		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", getCurrentPosition());
+		
+		if(velocity < 0) {
+			if(isInEndpointTop()) {
+				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+//				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
+				holdPosition();
+//			} else if(Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS)) {
+//				setHoldPosition(false);
+//				motorA.set(ControlMode.PercentOutput, velocity);
+			}else {
+				setHoldPosition(false);
+				motorA.set(ControlMode.PercentOutput, calcVel);
+			}
+		}else if(velocity > 0) {
+			if(isInEndpointBottom()) {
+				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
+				holdPosition();
+//			} else if (Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS)) {
+//				setHoldPosition(false);
+//				motorA.set(ControlMode.PercentOutput, velocity);
+			}else {
+				setHoldPosition(false);
+				motorA.set(ControlMode.PercentOutput, calcVel);
+			}
+		}else {
+			//holdPosition();
+			setHoldPosition(false);
+			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		}
 	}
 

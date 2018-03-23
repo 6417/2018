@@ -42,8 +42,9 @@ public class RobotMap {
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS + LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS;
 
 		public static final int LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS = 10000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS = -835000;
+		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS = -842000;
 		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS = -810000;
+		public static final int LIFTING_UNIT_WAGON_GAME_START_POSITION_SAVE_IN_TICKS = -462320;
 		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS = LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS - LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS;
 		public static final int LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS = 0;
 		public static final int LIFTING_UNIT_WAGON_FRONT_POSITION_BREAK_IN_TICKS = LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS + LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS;
@@ -80,9 +81,9 @@ public class RobotMap {
 	}
 	
 	public static class SUBSYSTEM {
-		public static boolean IS_GRIPPER_IN_USE = false;
-		public static boolean IS_LIFTING_UNIT_IN_USE = false;
-		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
+		public static boolean IS_GRIPPER_IN_USE = true;
+		public static boolean IS_LIFTING_UNIT_IN_USE = true;
+		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = true;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
@@ -184,6 +185,7 @@ public class RobotMap {
 	public static class CONTROLLER {
 		public static final int DIRECTION_CONTROLLER = 0;
 		public static final int LIFTING_UNIT_CONTROLLER = 1;
+		public static final int LIFT_UP_ROBOT_CONTROLLER = 2;
 	}
 
 	public static class LIFTING_UNIT_CONTROLLER {
