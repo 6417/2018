@@ -8,7 +8,8 @@ import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFindEndpointFront;
 import org.usfirst.frc.team6417.robot.commands.PrepareRobotElevationBehavior;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveParallelTeleoperated;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveMecanumSimilarTeleoperated;
+import org.usfirst.frc.team6417.robot.commands.SwerveDriveResetVelocityEncoder;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveSetPosToZero;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelAngleCalibration;
@@ -41,6 +42,7 @@ public class OI {
 	private JoystickButton swerveDriveTeleopButton;
 	private JoystickButton swerveDriveParallelTeleopButton;
 	private JoystickButton swerveDriveMecanumSimilarTeleopButton;
+	private JoystickButton sverveDriveVelocityEncoderResetButton;
 
 	private static OI INSTANCE;
 	
@@ -53,8 +55,8 @@ public class OI {
 	
 	private OI() {
 		if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
-			gripperPushButton = new JoystickButton(liftingUnitController, 6);
-			gripperPullButton = new JoystickButton(liftingUnitController, 5);
+			gripperPushButton = new JoystickButton(liftingUnitController, 5);
+			gripperPullButton = new JoystickButton(liftingUnitController, 6);
 
 			gripperPullButton.whenPressed(new GripperPull());
 			gripperPullButton.whenReleased(new GripperStop());
@@ -95,10 +97,14 @@ public class OI {
 			swerveDriveTeleopButton = new JoystickButton(joystickOne, 4);
 			swerveDriveTeleopButton.whenPressed(new SwerveDriveTeleoperated());
 			swerveDriveParallelTeleopButton = new JoystickButton(joystickOne, 5);
-			swerveDriveParallelTeleopButton.whenPressed(new SwerveDriveParallelTeleoperated());
+			swerveDriveParallelTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
 			swerveDriveMecanumSimilarTeleopButton = new JoystickButton(joystickOne, 6);
 //			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveMecanumSimilarTeleoperated());
 			swerveDriveMecanumSimilarTeleopButton.whenPressed(new SwerveDriveWheelAngleCalibration());
+			
+			sverveDriveVelocityEncoderResetButton = new JoystickButton(joystickOne, 2);
+			sverveDriveVelocityEncoderResetButton.whenPressed(new SwerveDriveResetVelocityEncoder());
+			
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
 			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);

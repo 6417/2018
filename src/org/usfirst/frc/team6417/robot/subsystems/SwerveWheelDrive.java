@@ -36,8 +36,16 @@ public final class SwerveWheelDrive extends Subsystem {
 			int angleMotorPort, 
 			int velocityMotorPort,
 			int positionSensorPort,
-			int zeroPointThreshold) {
-		this(name, angleMotorPort, velocityMotorPort, positionSensorPort, true, false, zeroPointThreshold);
+			int zeroPointThreshold,
+			boolean isInvertVelocitySensor) {
+		this(name, 
+				angleMotorPort, 
+				velocityMotorPort, 
+				positionSensorPort, 
+				true, 
+				false, 
+				zeroPointThreshold, 
+				isInvertVelocitySensor);
 	}
 	
 	public SwerveWheelDrive(String name,
@@ -46,7 +54,8 @@ public final class SwerveWheelDrive extends Subsystem {
 							int positionSensorPort,
 							boolean isInvertSensor,
 							boolean isInvertVelocityMotor,
-							int zeroPointThreshold) {
+							int zeroPointThreshold,
+							boolean isInvertVelocitySensor) {
 		super(name);
 
 		this.zeroPointThreshold = zeroPointThreshold;
@@ -63,6 +72,7 @@ public final class SwerveWheelDrive extends Subsystem {
 		velocityMotor = factory.createCIM(name+RobotMap.ROBOT.DRIVE_VELOCITY+"/"+velocityMotorPort, velocityMotorPort);
 		velocityMotor.configOpenloopRamp(0.01, 0);
 		velocityMotor.setInverted(isInvertVelocityMotor);
+		velocityMotor.setSensorPhase(isInvertVelocitySensor);
 		resetVelocityEncoder();
 
 		positionSensor0 = new AnalogInput(positionSensorPort);
@@ -95,14 +105,14 @@ public final class SwerveWheelDrive extends Subsystem {
 	}
 
 	public void drive(double speed, double angle) {
-//		velocityMotor.set(speed);
+		velocityMotor.set(speed);
 		debugVel(speed);
 		gotoAngle(angle);
 	}
 
 	private void debugVel(double vel) {
 		SmartDashboard.putNumber(velocityMotor.getName()+" vel", vel);
-		SmartDashboard.putNumber(velocityMotor.getName()+" pos", velocityMotor.getSelectedSensorPosition(0));		
+		SmartDashboard.putNumber(velocityMotor.getName()+" 123 pos", velocityMotor.getSelectedSensorPosition(0));		
 	}
 	private void debugAngle(double angle, int pos) {
 		SmartDashboard.putNumber(angleMotor.getName()+" pos nom", pos);

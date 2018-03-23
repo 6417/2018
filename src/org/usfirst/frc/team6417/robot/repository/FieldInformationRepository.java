@@ -3,6 +3,12 @@ package org.usfirst.frc.team6417.robot.repository;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class FieldInformationRepository {
+	public enum SIDE {
+		LEFT,
+		RIGHT,
+		UNKNOWN
+	}
+
 	private String fieldInfo = "XXX";
 	
 	private static FieldInformationRepository INSTANCE;
@@ -37,6 +43,10 @@ public final class FieldInformationRepository {
 
 	private boolean compareFieldInformation(int index) {
 		return "L".compareTo(fieldInfo.substring(index, 1)) == 0;
+	}
+	
+	public SIDE getFirstSwitchSideOfAlliance() {
+		return isFirstSwitchLeft() ? SIDE.LEFT : SIDE.RIGHT;
 	}
 	
 }

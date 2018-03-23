@@ -36,7 +36,14 @@ public final class SwerveDriveTeleoperated extends Command {
 			if(Math.abs(z) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_TWIST) {
 				z = 0.0;
 			}
-			z = 0.0; // TODO Remove when ready for rotation.
+			if(OI.getInstance().joystickOne.getRawButton(11)) {
+				z = 0.0; // TODO Remove when ready for rotation.
+			}
+			if(OI.getInstance().joystickOne.getTrigger()) {
+				double m = 0.3;
+				x *= m;
+				y *= m;
+			}
 			
 			Robot.swerveDrive.drive(-y, x, z);
 

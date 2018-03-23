@@ -341,7 +341,7 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	public boolean isAboveSafetyAltitude() {
-		System.out.println("LiftingUnit.isAboveSafetyAltitude Pos: "+getCurrentPosition()+", Target: "+RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS+", eps: "+RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON+" -> "+((getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON)));
+//		System.out.println("LiftingUnit.isAboveSafetyAltitude Pos: "+getCurrentPosition()+", Target: "+RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS+", eps: "+RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON+" -> "+((getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS + RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON)));
 //		return Util.smallerThen(getCurrentPosition(), 
 //								RobotMap.ROBOT.LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS, 
 //								RobotMap.ENCODER.PULSE_VERSA_PLANETARY_EPSILON);

@@ -110,7 +110,7 @@ public final class MotorControllerFactory {
 		 motor.configContinuousCurrentLimit(10, 0);
 		 motor.configPeakCurrentLimit(15, 0);
 		 motor.configPeakCurrentDuration(100, 0);
-		 motor.enableCurrentLimit(true);
+		 motor.enableCurrentLimit(false);
 		// /* Motor is configured to ramp from neutral to full within 2 seconds */
 		// motor.configOpenloopRamp(0.7, 0);
 	}

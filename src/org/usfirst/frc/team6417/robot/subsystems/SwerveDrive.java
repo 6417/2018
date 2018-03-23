@@ -32,24 +32,28 @@ public final class SwerveDrive extends Subsystem {
 										 RobotMap.AIO.DRIVE_FRONT_LEFT_POSITION_SENSOR_PORT,
 										 false,
 										 false,
-										 RobotMap.SENSOR.DRIVE_FRONT_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
+										 RobotMap.SENSOR.DRIVE_FRONT_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
+										 false);
 		frontRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_FRONT_RIGHT_NAME, 
 				 						  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
 										  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
 										  RobotMap.AIO.DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT,
-										  RobotMap.SENSOR.DRIVE_FRONT_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
+										  RobotMap.SENSOR.DRIVE_FRONT_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
+										  true);
 		backLeft = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_LEFT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT, 
 										 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
-										 RobotMap.SENSOR.DRIVE_BACK_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
+										 RobotMap.SENSOR.DRIVE_BACK_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
+										 false);
 		backRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_RIGHT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_RIGHT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
 										 RobotMap.AIO.DRIVE_BACK_RIGHT_POSITION_SENSOR_PORT,
 										 true,
 										 false,
-										 RobotMap.SENSOR.DRIVE_BACK_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD);
+										 RobotMap.SENSOR.DRIVE_BACK_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
+										 true);
 	}
 	
 	@Override
@@ -60,6 +64,7 @@ public final class SwerveDrive extends Subsystem {
 //		setDefaultCommand(new SwerveDriveRotateAll());
 //		setDefaultCommand(new SwerveDriveWheelTeleoperated());
 	}
+	
 	
 	public void drive(double vy, double vx, double rotationClockwise) {
 //		System.out.println("SwerveDrive.drive()");
@@ -117,9 +122,48 @@ public final class SwerveDrive extends Subsystem {
 		backLeft.drive(velocity, angle);
 		backRight.drive(velocity, -angle);
 	}
+	
+	double oldAngle = 0;
+	
+	public void driveJulian(double x, double y) {
+		double steps = frontRight.angleMotor.getSelectedSensorPosition(0);
+		double q = 360 / 512 * steps;
+		double winkel = 60 + q;//Math.atan2(y, x) / 180 * Math.PI;
+		double a = winkel - Math.floor(winkel / 180.0)*180.0;
+		double b = a / Math.floor(a);
+		double c = Math.floor(winkel / 180.0);
+		
+		double rotation = b * 2.0 - 1.0;
+		double velocity = (((c+b) % 2) * 2) - 1;
 
+		System.out.println("SwerveDrive.driveJulian(angle: "+rotation+", vel: "+velocity+")");
+//		frontLeft.drive(velocity, rotation);
+		frontRight.drive(velocity, rotation);
+//		backLeft.drive(velocity, rotation);
+//		backRight.drive(velocity, rotation);
+	}
+
+	public void driveChristian(double x, double y, double twist){
+		double maxDriveSpeed = 1;
+		double maxTurnSpeed = 1;
+		
+		double angle = ((Math.atan2(y, x) + ((3 * Math.PI)/4)) % 360);
+		double radius = (Math.sqrt((x*x)+(y*y)));
+		
+		double velocityLeft = (((radius*maxDriveSpeed)+(twist*maxTurnSpeed))/(maxTurnSpeed+maxDriveSpeed));
+		double velocityRight = (((radius*maxDriveSpeed)-(twist*maxTurnSpeed))/(maxTurnSpeed+maxDriveSpeed));
+		
+		frontLeft.drive(velocityLeft, angle);
+		frontRight.drive(velocityRight, angle);
+		backLeft.drive(velocityLeft, angle);
+		backRight.drive(velocityRight, -angle);
+	}
+	
+	public void driveJKCG() {}
+	
 	public void driveMecanumSimilar(double velocity, double angle) {
 		angle *= (RobotMap.MATH.PI);
+		
 		
 		SmartDashboard.putNumber(getName()+"-V", velocity);
 		SmartDashboard.putNumber(getName()+"-A", angle);

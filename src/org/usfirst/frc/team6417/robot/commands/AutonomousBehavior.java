@@ -12,26 +12,26 @@ public final class AutonomousBehavior extends CommandGroup {
 	    	addSequential(new GetFieldInformation());
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 		    	addParallel(new SwerveDriveResetVelocityEncoder());
+//	    		addSequential(new SwerveDriveRotateWheelOnlyToAngle());
 	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 		    	addParallel(new LiftingUnitMoveToSavePosition());
+	    		addSequential(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
 	    		addSequential(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
-	    		addParallel(new SwerveDriveRotateWheelOnlyToAngle());
-		    	addSequential(new SwerveDriveStraight(30000));
-		    	addSequential(new SwerveDriveRotateWheelOnlyToAngle());
-		    	addSequential(new SwerveDriveStraight(10000));
-	    	}
-	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
-	    		addSequential(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
+		    	addSequential(new SverveDriveToSwitchAutonomous());
+//		    	addSequential(new SwerveDriveStraight(2000));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_GRIPPER_IN_USE) {
 	    		addSequential(new GripperMoveTimed(2500, Gripper.PUSH));
-//	    		addSequential(new GripperStop());
 	    	}
-	    	
+	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
+	    		addSequential(new SwerveDriveRotateWheelOnlyToAngle(0));
+//		    	addSequential(new SwerveDriveStraight(2000, false));
+//		    	addSequential(new SwerveDriveStraight(20, true));
+	    	}
 	 }
 }

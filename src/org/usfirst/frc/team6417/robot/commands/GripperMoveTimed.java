@@ -26,7 +26,7 @@ public final class GripperMoveTimed extends Command {
 	
 	@Override	
 	protected void execute() {
-		if(millies > System.currentTimeMillis() - startTimestamp) {
+		if(millies < System.currentTimeMillis() - startTimestamp) {
 			isFinished = true;
 			Robot.gripper.onEvent(Gripper.STOP);
 		}else {
@@ -36,7 +36,7 @@ public final class GripperMoveTimed extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return isFinished;//Robot.gripper.isFinished();
+		return isFinished;
 	}
 
 }

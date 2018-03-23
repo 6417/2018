@@ -22,17 +22,19 @@ public final class SwerveDriveMecanumSimilarTeleoperated extends Command {
 
 	@Override
 	protected void execute() {
-			double y = OI.getInstance().joystickOne.getMagnitude();;//OI.getInstance().joystickOne.getY();
-			double directionInRadians = 0;//OI.getInstance().joystickOne
-//			double value 
-			
-			if(Math.abs(y) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_Y) {
-				y = 0.0;
-			}
-			if(Math.abs(directionInRadians) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_TWIST) {
-				directionInRadians = 0.0;
-			}
-			Robot.swerveDrive.driveMecanumSimilar(-y, directionInRadians);
+		double x = OI.getInstance().joystickOne.getX();
+		double y = OI.getInstance().joystickOne.getY();
+		double twist = OI.getInstance().joystickOne.getZ();
+		
+		if(Math.abs(x) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_X) {
+			x = 0.0;
+		}
+		if(Math.abs(y) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_Y) {
+			y = 0.0;
+		}
+//			Robot.swerveDrive.driveMecanumSimilar(-y, directionInRadians);
+//		Robot.swerveDrive.driveChristian(x, y, twist);
+		Robot.swerveDrive.driveJulian(x, -y);
 	}
 	
 	@Override

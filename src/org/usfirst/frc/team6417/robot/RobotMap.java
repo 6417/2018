@@ -28,7 +28,7 @@ public class RobotMap {
 		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
 		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = -300000; //-20000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -440000;// 857283; //-40000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -380000;// 857283; //-40000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -480000;// 900000;// -60000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -500000; // 1050000; //-80000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -1500000;// 1350000;//1357283; //-100000; /*encoder ticks*/
@@ -80,9 +80,9 @@ public class RobotMap {
 	}
 	
 	public static class SUBSYSTEM {
-		public static boolean IS_GRIPPER_IN_USE = true;
-		public static boolean IS_LIFTING_UNIT_IN_USE = true;
-		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
+		public static boolean IS_GRIPPER_IN_USE = false;
+		public static boolean IS_LIFTING_UNIT_IN_USE = false;
+		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = false;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = true;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
@@ -92,12 +92,11 @@ public class RobotMap {
 	public static class VELOCITY {
 		public static final double STOP_VELOCITY = 0.0;
 
-//		public static final double GRIPPER_PUSH_VELOCITY = -0.01;
 		public static final double GRIPPER_PUSH_VELOCITY = -0.4;
 		public static final double GRIPPER_PULL_VELOCITY = 0.6;		
 
 		public static final double LIFTING_UNIT_MOTOR_UP_VELOCITY = -1;
-		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = 0.75;
+		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = 0.5;
 		public static final double LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY = 0.05;
 		public static final double LIFTING_UNIT_MOTOR_SLOW_UP_VELOCITY = -0.25;
 		
@@ -112,7 +111,6 @@ public class RobotMap {
 
 	public static class SENSOR {
 		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_THRESHOLD = 650000;//750000;
-//		public static final int LIFTING_UNIT_WAGON_ENDPOSITION_LOWER_THRESHOLD = 467;
 
 		public static final int DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD = 2100;
 		public static final int DRIVE_WHEEL_ZEROPOINT_LOWER_THRESHOLD = 1000;
@@ -229,8 +227,8 @@ public class RobotMap {
 		 * contains Deadzones for different Joysticks
 		 */
 		public static class DEADZONES {
-			public static final double JOYSTICK1_X = 0.01;
-			public static final double JOYSTICK1_Y = 0.01;
+			public static final double JOYSTICK1_X = 0.1;
+			public static final double JOYSTICK1_Y = 0.1;
 			public static final double JOYSTICK1_TWIST = 0.08;
 
 			public static final double JOYSTICK2_X = 0.05;
