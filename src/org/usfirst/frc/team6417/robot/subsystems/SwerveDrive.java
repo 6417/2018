@@ -119,6 +119,65 @@ public final class SwerveDrive extends Subsystem {
 	    frontLeft.drive (frontLeftSpeed, frontLeftAngle);	    
 	}
 	
+	public void drivePhaseShifted(double vy, double vx, double rotationClockwise) {
+		rotationClockwise *= -1;
+		if(Util.eq(vy, 0.0, 0.01) && Util.eq(vx, 0.0, 0.01) && Util.eq(rotationClockwise, 0.0, 0.01)) {
+		    backRight.drive (0, 0);
+		    backLeft.drive (0, 0);
+		    frontRight.drive (0, 0);
+		    frontLeft.drive (0, 0);	    
+			return;
+		}
+
+	    double a = vx - rotationClockwise * (L / r);
+	    double b = vx + rotationClockwise * (L / r);
+	    double c = vy - rotationClockwise * (W / r);
+	    double d = vy + rotationClockwise * (W / r);
+
+	    double backRightSpeed = Math.sqrt ((a * a) + (c * c));
+	    double backLeftSpeed = Math.sqrt ((a * a) + (d * d));
+	    double frontRightSpeed = Math.sqrt ((b * b) + (c * c));
+	    double frontLeftSpeed = Math.sqrt ((b * b) + (d * d));
+
+	    double backRightAngle = Math.atan2 (a, c) * RobotMap.MATH.PI;
+	    double backLeftAngle = Math.atan2 (a, d) * RobotMap.MATH.PI;
+	    double frontRightAngle = Math.atan2 (b, c) * RobotMap.MATH.PI;
+	    double frontLeftAngle = Math.atan2 (b, d) * RobotMap.MATH.PI;
+
+	    double phaseShift = RobotMap.MATH.PI * RobotMap.MATH.PI;
+	    backRightAngle += phaseShift;
+	    backLeftAngle += phaseShift;
+	    frontRightAngle += phaseShift;
+	    frontLeftAngle += phaseShift;
+
+	    // Scale all velocities to the 0..1 range
+	    double max=frontLeftSpeed; 
+	    if(frontRightSpeed>max) {max=frontRightSpeed;} 
+	    if(backLeftSpeed>max) {max=backLeftSpeed;}
+	    if(backRightSpeed>max) {max=backRightSpeed;}
+	    if(max>1.0){
+	    	frontLeftSpeed/=max; 
+	    	frontRightSpeed/=max; 
+	    	backLeftSpeed/=max; 
+	    	backRightSpeed/=max;
+	    }
+	    
+	    SmartDashboard.putNumber("FL-V vel", frontLeftSpeed);
+	    SmartDashboard.putNumber("FR-V vel", frontRightSpeed);
+	    SmartDashboard.putNumber("BL-V vel", backLeftSpeed);
+	    SmartDashboard.putNumber("BR-V vel", backRightSpeed);
+	    SmartDashboard.putNumber("FL-A angle", frontLeftAngle);
+	    SmartDashboard.putNumber("FR-A angle", frontRightAngle);
+	    SmartDashboard.putNumber("BL-A angle", backLeftAngle);
+	    SmartDashboard.putNumber("BR-A angle", -backRightAngle);
+	    
+	    backRight.drive (backRightSpeed, -backRightAngle);
+	    backLeft.drive (backLeftSpeed, backLeftAngle);
+	    frontRight.drive (frontRightSpeed, frontRightAngle);
+	    frontLeft.drive (frontLeftSpeed, frontLeftAngle);	    
+	}
+
+	
 	public void driveParallel(double velocity, double angle) {
 //		System.out.println("SwerveDrive.driveParallel()");
 		angle *= (RobotMap.MATH.PI);

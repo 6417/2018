@@ -81,7 +81,7 @@ public class RobotMap {
 	}
 	
 	public static class SUBSYSTEM {
-		public static boolean IS_GRIPPER_IN_USE = true;
+		public static boolean IS_GRIPPER_IN_USE = false;
 		public static boolean IS_LIFTING_UNIT_IN_USE = true;
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;

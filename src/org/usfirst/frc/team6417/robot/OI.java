@@ -102,6 +102,9 @@ public class OI {
 		// nothing to do. the drive uses the internal default command.
 		}
 		if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
+//			swerveWheelCheckButton = new JoystickButton(joystickOne, 2);
+//			swerveWheelCheckButton.whenPressed(new SwerveDriveAngleOnSingleWheel());
+
 			swerveWheelCheckButton = new JoystickButton(joystickOne, 8);
 			swerveWheelCheckButton.whenPressed(new SwerveDriveAngleOnSingleWheel());
 //			swerveWheelForwardButton = new JoystickButton(joystickOne, 7);

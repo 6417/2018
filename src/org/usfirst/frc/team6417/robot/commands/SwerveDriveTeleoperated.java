@@ -46,7 +46,11 @@ public final class SwerveDriveTeleoperated extends Command {
 				z *= m;
 			}
 			
-			Robot.swerveDrive.drive(-y, x, z);
+			if(OI.getInstance().joystickOne.getRawButton(2)) {
+				Robot.swerveDrive.drivePhaseShifted(-y, x, z);
+			}else{
+				Robot.swerveDrive.drive(-y, x, z);
+			}
 
 //			Robot.swerveDrive.drive (
 //					OI.getInstance().joystickOne.getRawAxis (1),
