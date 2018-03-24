@@ -146,6 +146,7 @@ public final class LiftingUnit extends Subsystem {
 		internalMove(velocity);
 	}
 	
+	
 	double calcVel(double vel, int pos) {
 		if(vel < 0) {
 			if(pos < RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS) {
@@ -430,8 +431,11 @@ public final class LiftingUnit extends Subsystem {
 	}
 
 	
-	private void internalMoveWithoutHoldingPosition(double velocity) {
-//		System.out.println("LiftingUnit.internalMove("+velocity+")");
+	public void moveNoHoldPosition(double velocity) {
+		if(!isCalibrated) {
+			System.out.println(getName()+" not calibrated");
+			return;
+		}
 		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel given", velocity);
 
@@ -448,29 +452,16 @@ public final class LiftingUnit extends Subsystem {
 		if(velocity < 0) {
 			if(isInEndpointTop()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-//				moveToAbsolutePos(RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS);
-				holdPosition();
-//			} else if(Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS)) {
-//				setHoldPosition(false);
-//				motorA.set(ControlMode.PercentOutput, velocity);
 			}else {
-				setHoldPosition(false);
 				motorA.set(ControlMode.PercentOutput, calcVel);
 			}
 		}else if(velocity > 0) {
 			if(isInEndpointBottom()) {
 				motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
-				holdPosition();
-//			} else if (Util.inRange(getCurrentPosition(), RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS, RobotMap.ROBOT.LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS)) {
-//				setHoldPosition(false);
-//				motorA.set(ControlMode.PercentOutput, velocity);
 			}else {
-				setHoldPosition(false);
 				motorA.set(ControlMode.PercentOutput, calcVel);
 			}
 		}else {
-			//holdPosition();
-			setHoldPosition(false);
 			motorA.set(RobotMap.VELOCITY.STOP_VELOCITY);
 		}
 	}

@@ -90,6 +90,7 @@ public final class LiftingUnitWagon extends Subsystem {
 		back.addTransition(LiftingUnitWagon.STOP, stop);
 		fullBack.addTransition(LiftingUnitWagon.STOP, stop);
 		fullBack.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
+		fullBack.addTransition(BACK, back);
 		front.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 		back.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);
 		stop.addTransition(LiftingUnitWagon.FULL_BACK, fullBack);

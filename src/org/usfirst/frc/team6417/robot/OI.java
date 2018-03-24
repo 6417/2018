@@ -46,6 +46,7 @@ public class OI {
 	private JoystickButton sverveDriveVelocityEncoderResetButton;
 	private JoystickButton startLiftingUnitFarBackButton;
 	private JoystickButton liftUpRobotButton;
+	private JoystickButton liftingUnitWagonFromFarBackToBackButton;
 
 	private static OI INSTANCE;
 	
@@ -72,6 +73,9 @@ public class OI {
 //			
 			liftingUnitWagonForwardButton.whenPressed(new LiftingUnitWagonFindEndpointFront());//new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
 //			liftingUnitWagonBackwardButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
+			
+			liftingUnitWagonFromFarBackToBackButton = new JoystickButton(liftUpController, 3);
+			liftingUnitWagonFromFarBackToBackButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 			liftingUnitHoldPositionButton = new JoystickButton(liftingUnitController, 1);

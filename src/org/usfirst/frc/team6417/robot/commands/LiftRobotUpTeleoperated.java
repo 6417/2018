@@ -22,7 +22,9 @@ public final class LiftRobotUpTeleoperated extends Command {
 		y *= -1;
 		
 		if(y > 0.0) {
-			Robot.liftingUnit.move(y);
+			Robot.liftingUnit.moveNoHoldPosition(y);
+		}else {
+			System.out.println("LU not allowed go go up only down");
 		}
 		
 	}
