@@ -8,6 +8,7 @@ import org.usfirst.frc.team6417.robot.commands.LiftingUnitFindEndpointDown;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitMoveToPosition;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonFindEndpointFront;
 import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonMove;
+import org.usfirst.frc.team6417.robot.commands.LiftingUnitWagonTeleoperated;
 import org.usfirst.frc.team6417.robot.commands.PrepareRobotElevationBehavior;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveResetVelocityEncoder;
@@ -47,6 +48,7 @@ public class OI {
 	private JoystickButton startLiftingUnitFarBackButton;
 	private JoystickButton liftUpRobotButton;
 	private JoystickButton liftingUnitWagonFromFarBackToBackButton;
+	private JoystickButton liftingUnitTeleop;
 
 	private static OI INSTANCE;
 	
@@ -76,6 +78,9 @@ public class OI {
 			
 			liftingUnitWagonFromFarBackToBackButton = new JoystickButton(liftUpController, 3);
 			liftingUnitWagonFromFarBackToBackButton.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.BACK));
+			
+			liftingUnitTeleop = new JoystickButton(liftUpController, 4);
+			liftingUnitTeleop.whenPressed(new LiftingUnitWagonTeleoperated());
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 			liftingUnitHoldPositionButton = new JoystickButton(liftingUnitController, 1);

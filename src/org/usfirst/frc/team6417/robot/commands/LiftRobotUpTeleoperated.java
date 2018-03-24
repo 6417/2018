@@ -7,14 +7,15 @@ import org.usfirst.frc.team6417.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 public final class LiftRobotUpTeleoperated extends Command {
-	
+	int interval = 100;
+	int counter = 0;
 	public LiftRobotUpTeleoperated() {
 		requires(Robot.liftingUnit);
 	}
 	
 	@Override
 	protected void execute() {
-		double y = OI.getInstance().liftingUnitController.getY();
+		double y = OI.getInstance().liftUpController.getY();
 		if(Math.abs(y) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_Y) {
 			y = 0.0;
 		}
@@ -24,7 +25,11 @@ public final class LiftRobotUpTeleoperated extends Command {
 		if(y > 0.0) {
 			Robot.liftingUnit.moveNoHoldPosition(y);
 		}else {
-			System.out.println("LU not allowed go go up only down");
+			if(counter % interval == 0) {
+				System.out.println("LU not allowed go go up only down");
+				counter = 0;
+			}
+			counter++;
 		}
 		
 	}
