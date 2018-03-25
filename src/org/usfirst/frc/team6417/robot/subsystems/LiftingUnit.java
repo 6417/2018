@@ -436,18 +436,11 @@ public final class LiftingUnit extends Subsystem {
 			System.out.println(getName()+" not calibrated");
 			return;
 		}
-		velocity = Util.limit(velocity, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_UP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_MOTOR_DOWN_VELOCITY);
+		velocity = Util.limit(velocity, RobotMap.VELOCITY.STOP_VELOCITY, RobotMap.VELOCITY.LIFTING_UNIT_ROBOT_LIFTUP_VELOCITY);
 		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel given", velocity);
 
-		double velocity2 = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
+//		double velocity2 = motionPathVelocityCalculator.calculateVelocity(velocity, getCurrentPosition());
 		double calcVel = calcVel(velocity, getCurrentPosition());
-		
-//		velocity = this.powerManagementStrategy.calculatePower() * velocity;
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound", velocity2);
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" vel bound x", calcVel);
-		
-		SmartDashboard.putBoolean(endpointFrontSensor.getName(), !endpointFrontSensor.get());
-		SmartDashboard.putNumber(RobotMap.ROBOT.LIFTING_UNIT_NAME+" pos", getCurrentPosition());
 		
 		if(velocity < 0) {
 			if(isInEndpointTop()) {
