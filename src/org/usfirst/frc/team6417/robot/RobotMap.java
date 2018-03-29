@@ -100,7 +100,7 @@ public class RobotMap {
 		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = 0.5;
 		public static final double LIFTING_UNIT_MOTOR_VERY_SLOW_DOWN_VELOCITY = 0.05;
 		public static final double LIFTING_UNIT_MOTOR_SLOW_UP_VELOCITY = -0.25;
-		public static final double LIFTING_UNIT_ROBOT_LIFTUP_VELOCITY = 1;
+		public static final double LIFTING_UNIT_ROBOT_LIFTUP_VELOCITY = 0.5;
 		
 		public static final double LIFTING_UNIT_WAGON_MOTOR_FORWARD_VELOCITY = 1.0;//0.25;
 		public static final double LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY = -1.0;//-0.3;
