@@ -38,7 +38,7 @@ public final class Gripper extends Subsystem {
 		rightMotor = factory.create775Pro(RobotMap.ROBOT.GRIPPER_RIGHT_NAME, RobotMap.MOTOR.GRIPPER_RIGHT_PORT);
 		rightMotor.configOpenloopRamp(0, MotorController.kTimeoutMs);
 		
-		leftMotor.follow(rightMotor);
+//		leftMotor.follow(rightMotor);
 		
 		State stopped = currentState = new Stopped();
 		State pushing = new Pushing();
@@ -48,6 +48,7 @@ public final class Gripper extends Subsystem {
 		stopped.addTransition(Gripper.PULL, pulling);
 		stopped.addTransition(Gripper.STOP, stopped);
 		pushing.addTransition(Gripper.STOP, stopped);
+		pushing.addTransition(Gripper.PUSH, pushing);
 		pulling.addTransition(Gripper.STOP, stopped);
 	}
 
@@ -72,6 +73,7 @@ public final class Gripper extends Subsystem {
 		//vel = powerManagementStrategy.calculatePower() * vel;		
 		//Only master-motor must be set
 		rightMotor.set(vel);
+		leftMotor.set(vel);
 		SmartDashboard.putNumber(getName()+" vel", vel);
 	}
 
