@@ -3,6 +3,7 @@ package org.usfirst.frc.team6417.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.usfirst.frc.team6417.robot.MotorController;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.Util;
 
@@ -34,19 +35,22 @@ public final class SwerveDrive extends Subsystem {
 										 false,
 										 false,
 										 RobotMap.SENSOR.DRIVE_FRONT_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
-										 false);
+										 false,
+										 MotorController.kMotorInvert);
 		frontRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_FRONT_RIGHT_NAME, 
 				 						  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_ANGLE_PORT, 
-										  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
+				 						  RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, 
 										  RobotMap.AIO.DRIVE_FRONT_RIGHT_POSITION_SENSOR_PORT,
 										  RobotMap.SENSOR.DRIVE_FRONT_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
-										  true);
+										  true,
+											 MotorController.kMotorInvert);
 		backLeft = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_LEFT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT, 
 										 RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
 										 RobotMap.SENSOR.DRIVE_BACK_LEFT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
-										 false);
+										 false,
+										 MotorController.kMotorInvert);
 		backRight = new SwerveWheelDrive(RobotMap.ROBOT.DRIVE_BACK_RIGHT_NAME, 
 				 						 RobotMap.MOTOR.DRIVE_BACK_RIGHT_ANGLE_PORT, 
 										 RobotMap.MOTOR.DRIVE_BACK_RIGHT_VELOCITY_PORT, 
@@ -54,6 +58,7 @@ public final class SwerveDrive extends Subsystem {
 										 true,
 										 false,
 										 RobotMap.SENSOR.DRIVE_BACK_RIGHT_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
+										 true,
 										 true);
 	}
 	

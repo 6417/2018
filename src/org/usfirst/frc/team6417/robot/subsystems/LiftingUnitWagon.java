@@ -51,8 +51,13 @@ public final class LiftingUnitWagon extends Subsystem {
 		
 		final MotorControllerFactory factory = new MotorControllerFactory();
 		motor = factory.create777ProWithPositionControl(RobotMap.ROBOT.LIFTING_UNIT_WAGON_MOTOR_NAME + "/"+RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT, RobotMap.MOTOR.LIFTING_UNIT_WAGON_PORT);
-		motor.setInverted(true);
-		motor.setSensorPhase(false);
+		//Robot 1: 
+		motor.setInverted(false);
+		motor.setSensorPhase(true);		
+		//Robot 2: 
+		//motor.setInverted(true);
+		//motor.setSensorPhase(false);
+		
 //		motor.setNeutralMode(NeutralMode.Brake);
 		motor.configOpenloopRamp(1, MotorController.kTimeoutMs);
 		motor.configClosedloopRamp(0, MotorController.kTimeoutMs);
@@ -126,7 +131,9 @@ public final class LiftingUnitWagon extends Subsystem {
 			return;
 		}
 		
-		motor.set(ControlMode.Position, getCurrentPosition());
+		if(RobotMap.ROBOT.LIFTING_UNIT_WAGON_IS_POSITION_ON) {
+			motor.set(ControlMode.Position, getCurrentPosition());
+		}
 		setHoldPosition(true);
 	}
 
@@ -149,7 +156,9 @@ public final class LiftingUnitWagon extends Subsystem {
 			return;
 		}
 		
-		motor.set(ControlMode.Position, positionInTicks);
+		if(RobotMap.ROBOT.LIFTING_UNIT_WAGON_IS_POSITION_ON) {
+			motor.set(ControlMode.Position, positionInTicks);
+		}
 	}
 	
 	

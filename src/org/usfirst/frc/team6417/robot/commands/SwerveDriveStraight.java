@@ -26,12 +26,12 @@ public final class SwerveDriveStraight extends Command {
 		isFinished = false;
 		initialValue = Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0);
 		Robot.swerveDrive.drive(velocity, 0, 0);
-		System.out.println("SwerveDriveStraight.initialize()");
+//		System.out.println("SwerveDriveStraight.initialize()");
 	}
 	
 	@Override
 	protected void execute() {
-		System.out.println("SwerveDriveStraight.execute(p os:"+Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0)+", "+velocity+", isFWD:"+isFwd+")");
+//		System.out.println("SwerveDriveStraight.execute(p os:"+Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0)+", "+velocity+", isFWD:"+isFwd+")");
 		if(isFwd) {
 			if(Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0) <= initialValue - distanceInTicks) {
 				isFinished = true;

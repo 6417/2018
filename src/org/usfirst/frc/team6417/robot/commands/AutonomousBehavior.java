@@ -11,7 +11,7 @@ public final class AutonomousBehavior extends CommandGroup {
 	 public AutonomousBehavior() {
 	    	addSequential(new GetFieldInformation());
 	    	addSequential(new DefineGameStrategy());
-	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
+	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE && RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
 	    		addSequential(new LiftingUnitWagonGameStart());
 	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {

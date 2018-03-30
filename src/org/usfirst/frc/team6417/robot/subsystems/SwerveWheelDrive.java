@@ -38,7 +38,8 @@ public final class SwerveWheelDrive extends Subsystem {
 			int velocityMotorPort,
 			int positionSensorPort,
 			int zeroPointThreshold,
-			boolean isInvertVelocitySensor) {
+			boolean isInvertVelocitySensor,
+			boolean isInvertAngleMotor) {
 		this(name, 
 				angleMotorPort, 
 				velocityMotorPort, 
@@ -46,7 +47,8 @@ public final class SwerveWheelDrive extends Subsystem {
 				true, 
 				false, 
 				zeroPointThreshold, 
-				isInvertVelocitySensor);
+				isInvertVelocitySensor,
+				isInvertAngleMotor);
 	}
 	
 	public SwerveWheelDrive(String name,
@@ -56,13 +58,15 @@ public final class SwerveWheelDrive extends Subsystem {
 							boolean isInvertSensor,
 							boolean isInvertVelocityMotor,
 							int zeroPointThreshold,
-							boolean isInvertVelocitySensor) {
+							boolean isInvertVelocitySensor,
+							boolean isAngleInverted) {
 		super(name);
 
 		this.zeroPointThreshold = zeroPointThreshold;
 		MotorControllerFactory factory = new MotorControllerFactory();
 		angleMotor = factory.create775ProWithEncoder(name+RobotMap.ROBOT.DRIVE_ANGLE+"/"+angleMotorPort, angleMotorPort);
 		angleMotor.setSensorPhase(isInvertSensor);
+		angleMotor.setInverted(isAngleInverted);
 		
 		angleMotor.config_kP(MotorController.kPIDLoopIdx, 0.2, MotorController.kTimeoutMs);
 		angleMotor.config_kD(MotorController.kPIDLoopIdx, 1.0, MotorController.kTimeoutMs);

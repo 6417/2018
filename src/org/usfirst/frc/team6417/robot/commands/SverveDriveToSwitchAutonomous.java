@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public final class SverveDriveToSwitchAutonomous extends Command {
 	private final SwerveDriveAutonomousKinematics kinematics = new SwerveDriveAutonomousKinematics();
 	private boolean hasAlreadyExecuted = false;
-	private double velocity = 0.2;
+	private double velocity = 0.3;
 	private int distanceInTicks = 100000;
 
 	private boolean isFinished = false;
@@ -43,12 +43,12 @@ public final class SverveDriveToSwitchAutonomous extends Command {
 		GOAL_SIDE selectedSwitchSideOption = GameStrategyRepository.getInstance().getSelectedSwitchSideOption();
 		POS_IN_STATION actualPosInStation = GameStrategyRepository.getInstance().getPositionInStation(); 
 
-System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics(station:"+actualPosInStation+" -> goal:"+selectedSwitchSideOption+")");
+//System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics(station:"+actualPosInStation+" -> goal:"+selectedSwitchSideOption+")");
 		double omega = kinematics.calculateAngle(actualPosInStation, selectedSwitchSideOption);
 		distanceInTicks = kinematics.calculateDistanceInTicks(actualPosInStation, selectedSwitchSideOption);
 		distanceInTicks += Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0);
 		Robot.swerveDrive.drive(velocity, omega, 0);
-		System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics()");
+//		System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics()");
 	}
 	
 	@Override

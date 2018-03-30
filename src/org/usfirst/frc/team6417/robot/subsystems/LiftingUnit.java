@@ -132,7 +132,9 @@ public final class LiftingUnit extends Subsystem {
 
 //		System.out.println("LiftingUnit.moveToAbsolutePos("+targetPosition+")");
 		setHoldPosition(true);
-		motorA.set(ControlMode.Position, targetPosition);
+		if(RobotMap.ROBOT.LIFTING_UNIT_IS_HOLD_POSITION_ON) {
+			motorA.set(ControlMode.Position, targetPosition);
+		}
 //		motorA.set(ControlMode.MotionMagic, targetPosition);
 		
 	}
@@ -303,7 +305,9 @@ public final class LiftingUnit extends Subsystem {
 		SmartDashboard.putNumber("LU ticks to target", ticksToTarget);
 		SmartDashboard.putNumber("LU error", error);
 		
-		motorA.set(ControlMode.Position, ticksToTarget);
+		if(RobotMap.ROBOT.LIFTING_UNIT_IS_HOLD_POSITION_ON) {
+			motorA.set(ControlMode.Position, ticksToTarget);
+		}
 	}
 
 	private double calculateMotorRotations(double chainWheelRotations) {

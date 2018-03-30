@@ -1,5 +1,7 @@
 package org.usfirst.frc.team6417.robot.model.swerve;
 
+import org.usfirst.frc.team6417.robot.RobotMap;
+
 public final class SwerveDriveAutonomousKinematics {
 	public enum POS_IN_STATION {
 		LEFT_SIDE,
@@ -43,7 +45,7 @@ public final class SwerveDriveAutonomousKinematics {
 			case CENTER:{
 				switch(actualSwitchGoal) {
 					case LEFT:{
-						angle = -0.125;
+						angle = -RobotMap.MATH.PI/2;//-0.125;
 						break;
 					}
 					case STRAIGHT:{

@@ -27,27 +27,29 @@ public class RobotMap {
 		public static final double DIST_PER_PULSE = ROBOT.WHEEL_CIRCUMFERENCE / ENCODER.PULSE_PER_ROTATION; /*cm*/
 		
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS = 0; /*encoder ticks*/
-		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = -300000; //-20000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -380000;// 857283; //-40000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -480000;// 900000;// -60000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -500000; // 1050000; //-80000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -1500000;// 1350000;//1357283; //-100000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_HANGING_ALTITUDE_IN_TICKS = -1500000;// 857283; //-40000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_EXCHANGE_LOW_ALTITUDE_IN_TICKS = -300000/3*2; //-20000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS = -380000/3*2;// 857283; //-40000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_LOW_ALTITUDE_IN_TICKS = -480000/3*2;// 900000;// -60000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_MIDDLE_ALTITUDE_IN_TICKS = -500000/3*2; // 1050000; //-80000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS = -235000;//-1500000;// 1350000;//1357283; //-100000; /*encoder ticks*/
+		public static final int LIFTING_UNIT_HANGING_ALTITUDE_IN_TICKS = LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS;// 857283; //-40000; /*encoder ticks*/
 		public static final double LIFTING_UNIT_CHAIN_WHEEL_RADIUS_IN_METER = 0.028535;
 		public static final int LIFTING_UNIT_ALTITUDE_TOLERANCE = 1024;// 857283; //-40000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_SAFETY_ALTITUDE_IN_TICKS = -24000;//-8000; /*encoder ticks*/
+		public static final boolean LIFTING_UNIT_IS_HOLD_POSITION_ON = true;
 		
 		public static final int LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS = 150000; /*encoder ticks*/
 		public static final int LIFTING_UNIT_GROUND_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_GROUND_ALTITUDE_IN_TICKS - LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS;
 		public static final int LIFTING_UNIT_SCALE_HIGH_ALTITUDE_BREAK_IN_TICKS = LIFTING_UNIT_SCALE_HIGH_ALTITUDE_IN_TICKS + LIFTING_UNIT_BREAK_DISTANCE_IN_TICKS;
 
 		public static final int LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS = 10000; /*encoder ticks*/
-		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS = -842000;
-		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS = -810000;
+		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_IN_TICKS = -850000;//-842000;
+		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS = -680000;//-800000;//-810000;
 		public static final int LIFTING_UNIT_WAGON_GAME_START_POSITION_SAVE_IN_TICKS = -462320;
 		public static final int LIFTING_UNIT_WAGON_BACK_POSITION_BREAK_IN_TICKS = LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS - LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS;
 		public static final int LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS = 0;
 		public static final int LIFTING_UNIT_WAGON_FRONT_POSITION_BREAK_IN_TICKS = LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS + LIFTING_UNIT_WAGON_BREAK_DISTANCE_IN_TICKS;
+		public static final boolean LIFTING_UNIT_WAGON_IS_POSITION_ON = true;
 
 		// public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 125.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear *
 		public static final double SWERVE_ANGLE_GEAR_RATIO = 1.0 / 160.0; /* One rotation of worm-gear leads to 1/125 rotation of the angle-gear */		
@@ -87,14 +89,14 @@ public class RobotMap {
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = true;
 		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
-		public static boolean IS_CAMERA_IN_USE = false;
+		public static boolean IS_CAMERA_IN_USE = true;
 	}	
 	
 	public static class VELOCITY {
 		public static final double STOP_VELOCITY = 0.0;
 
-		public static final double GRIPPER_PUSH_VELOCITY = -0.4;
-		public static final double GRIPPER_PULL_VELOCITY = 0.6;		
+		public static final double GRIPPER_PUSH_VELOCITY = 0.4;
+		public static final double GRIPPER_PULL_VELOCITY = -0.5;		
 
 		public static final double LIFTING_UNIT_MOTOR_UP_VELOCITY = -1;
 		public static final double LIFTING_UNIT_MOTOR_DOWN_VELOCITY = 0.5;
