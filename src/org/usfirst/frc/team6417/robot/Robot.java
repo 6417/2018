@@ -1,5 +1,7 @@
 package org.usfirst.frc.team6417.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team6417.robot.commands.AutonomousBehavior;
 import org.usfirst.frc.team6417.robot.commands.CalibrationBehavior;
 import org.usfirst.frc.team6417.robot.commands.TestBehavior;
@@ -17,6 +19,10 @@ import org.usfirst.frc.team6417.robot.subsystems.NavX;
 import org.usfirst.frc.team6417.robot.subsystems.SwerveDrive;
 import org.usfirst.frc.team6417.robot.subsystems.SwerveWheelDrive;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -79,10 +85,23 @@ public class Robot extends TimedRobot {
 														RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT,
 														RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
 														RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
-														true);
+														true,
+														false);
 			}
 			if(RobotMap.SUBSYSTEM.IS_CAMERA_IN_USE) {
-				//CameraServer.getInstance().startAutomaticCapture();
+				new Thread (() -> {
+					UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+					camera.setResolution(320, 240);
+					CvSink cvSink = CameraServer.getInstance().getVideo();
+					CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 320, 240);
+					Mat source = new Mat();
+					Mat output = new Mat();
+					while(!Thread.interrupted()) {
+						cvSink.grabFrame(source);
+						Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+						outputStream.putFrame(output);
+					}
+					}).start();
 			}
 
 
