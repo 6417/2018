@@ -15,7 +15,7 @@ public final class LiftRobotUpTeleoperated extends Command {
 	
 	@Override
 	protected void execute() {
-		double y = OI.getInstance().liftUpController.getY();
+		double y = OI.getInstance().liftingUnitController.getY();
 		if(Math.abs(y) <= RobotMap.JOYSTICK.DEADZONES.JOYSTICK1_Y) {
 			y = 0.0;
 		}
