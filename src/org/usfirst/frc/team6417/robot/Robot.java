@@ -79,15 +79,6 @@ public class Robot extends TimedRobot {
 				SmartDashboard.putNumber("right-switch-side-option", GOAL_SIDE.STRAIGHT.ordinal());
 
 			}
-			if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
-				swerveDriveWheel = new SwerveWheelDrive("BL",
-														RobotMap.MOTOR.DRIVE_BACK_LEFT_ANGLE_PORT, 
-														RobotMap.MOTOR.DRIVE_BACK_LEFT_VELOCITY_PORT,
-														RobotMap.AIO.DRIVE_BACK_LEFT_POSITION_SENSOR_PORT,
-														RobotMap.SENSOR.DRIVE_WHEEL_ZEROPOINT_UPPER_THRESHOLD,
-														true,
-														false);
-			}
 			if(RobotMap.SUBSYSTEM.IS_CAMERA_IN_USE) {
 				new Thread (() -> {
 					UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();

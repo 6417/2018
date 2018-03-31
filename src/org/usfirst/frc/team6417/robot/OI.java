@@ -10,8 +10,6 @@ import org.usfirst.frc.team6417.robot.commands.PrepareRobotElevationBehavior;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveAngleOnSingleWheel;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveResetVelocityEncoder;
 import org.usfirst.frc.team6417.robot.commands.SwerveDriveTeleoperated;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelStop;
-import org.usfirst.frc.team6417.robot.commands.SwerveDriveWheelTeleoperated;
 import org.usfirst.frc.team6417.robot.subsystems.LiftingUnitWagon;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -80,11 +78,6 @@ public class OI {
 			sverveDriveVelocityEncoderResetButton = new JoystickButton(joystickOne, 7);
 			sverveDriveVelocityEncoderResetButton.whenPressed(new SwerveDriveResetVelocityEncoder());
 			
-		}
-		if(RobotMap.SUBSYSTEM.IS_SWERVE_WHEEL_IN_USE) {
-			swerveWheelForwardButton = new JoystickButton(joystickOne, 2);
-			swerveWheelForwardButton.whenPressed(new SwerveDriveWheelTeleoperated());
-			swerveWheelForwardButton.whenReleased(new SwerveDriveWheelStop());
 		}
 
 	}

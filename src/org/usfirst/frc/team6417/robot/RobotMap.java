@@ -88,7 +88,6 @@ public class RobotMap {
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
 		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
 		public static boolean IS_SWERVE_DRIVE_IN_USE = true;
-		public static boolean IS_SWERVE_WHEEL_IN_USE = false;
 		public static boolean IS_CAMERA_IN_USE = false;
 	}	
 	
