@@ -59,7 +59,7 @@ public class OI {
 		}
 		if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
 			liftingUnitHoldPositionButton = new JoystickButton(liftingUnitController, 1);
-			liftingUnitHoldPositionButton.whenPressed(new PrepareRobotElevationBehavior());
+			liftingUnitHoldPositionButton.whenPressed(new PrepareRobotElevationBehavior(liftingUnitController));
 			liftingUnitTeleoperated = new JoystickButton(liftingUnitController, 4);
 			liftingUnitTeleoperated.whenPressed(new LiftingUnitWagonMove(LiftingUnitWagon.GAME_START));
 			
