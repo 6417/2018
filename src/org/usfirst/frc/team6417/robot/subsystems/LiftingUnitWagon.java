@@ -311,6 +311,10 @@ public final class LiftingUnitWagon extends Subsystem {
 				 MotorController.kTimeoutMs);
 		isCalibrated = true;
 	}
+	
+	public void setSpeed(double speed) {
+		motor.set(speed);
+	}
 
 }
 

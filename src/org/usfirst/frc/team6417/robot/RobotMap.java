@@ -86,9 +86,12 @@ public class RobotMap {
 		public static boolean IS_GRIPPER_IN_USE = true;
 		public static boolean IS_LIFTING_UNIT_IN_USE = true;
 		public static boolean IS_LIFTING_UNIT_WAGON_IN_USE = true;
-		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = false;
-		public static boolean IS_SWERVE_DRIVE_IN_USE = true;
+		public static boolean IS_DIFFERENTIAL_DRIVE_IN_USE = true;
+		public static boolean IS_SWERVE_DRIVE_IN_USE = false;
 		public static boolean IS_CAMERA_IN_USE = false;
+		
+		public static boolean GET_TO_CLIMB_TIME = true;
+		public static boolean GET_TO_CLIMB_POSITION = false;
 	}	
 	
 	public static class VELOCITY {
