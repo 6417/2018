@@ -12,7 +12,6 @@ public final class DefineGameStrategy extends Command {
 	protected void execute() {
 		SwerveDriveAutonomousKinematics.GOAL_SIDE selectedSwitchSideOption = SwerveDriveAutonomousKinematics.GOAL_SIDE.STRAIGHT;
 		// This is the pilot's selection of the goal depending on the selected side of the switch by the FIS
-		
 		switch(FieldInformationRepository.getInstance().getFirstSwitchSideOfAlliance()) {
 			case LEFT:
 				selectedSwitchSideOption = GameStrategyRepository.getInstance().getGoalForLeftOption();
@@ -24,7 +23,6 @@ public final class DefineGameStrategy extends Command {
 			default:
 		}
 		
-		System.out.println("DefineGameStrategy.execute("+selectedSwitchSideOption+")");
 		GameStrategyRepository.getInstance().setSelectedSwitchSideOption(selectedSwitchSideOption);
 	}
 	

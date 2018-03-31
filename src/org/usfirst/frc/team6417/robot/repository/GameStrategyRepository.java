@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class GameStrategyRepository {
 	private static GameStrategyRepository instance = null;
+	private GOAL_SIDE selectedSwitchSideOption = GOAL_SIDE.UNKNOWN;
 	
 	public static GameStrategyRepository getInstance() {
 		if(instance == null) {
@@ -16,7 +17,6 @@ public final class GameStrategyRepository {
 		return instance;		
 	}
 
-	private GOAL_SIDE selectedSwitchSideOption = GOAL_SIDE.UNKNOWN;
 	
 	public POS_IN_STATION getPositionInStation() {
 		return POS_IN_STATION.values()[(int)SmartDashboard.getNumber("pos-in-station", SwerveDriveAutonomousKinematics.POS_IN_STATION.CENTER.ordinal())];

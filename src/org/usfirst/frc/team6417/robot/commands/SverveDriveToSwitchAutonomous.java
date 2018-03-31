@@ -3,8 +3,8 @@ package org.usfirst.frc.team6417.robot.commands;
 import org.usfirst.frc.team6417.robot.Robot;
 import org.usfirst.frc.team6417.robot.RobotMap;
 import org.usfirst.frc.team6417.robot.model.swerve.SwerveDriveAutonomousKinematics;
-import org.usfirst.frc.team6417.robot.model.swerve.SwerveDriveAutonomousKinematics.GOAL_SIDE;
 import org.usfirst.frc.team6417.robot.model.swerve.SwerveDriveAutonomousKinematics.POS_IN_STATION;
+import org.usfirst.frc.team6417.robot.repository.FieldInformationRepository;
 import org.usfirst.frc.team6417.robot.repository.GameStrategyRepository;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -24,43 +24,41 @@ public final class SverveDriveToSwitchAutonomous extends Command {
 	
 	protected void calculateKinematics() {
 		if(hasAlreadyExecuted) {
-//			System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics(already executed)");
 			return;
 		}
 		isFinished = false;
 		hasAlreadyExecuted = true;
 		
-//		SwerveDriveAutonomousKinematics.GOAL_SIDE selectedSwitchSideOption;
-//		// This is the pilot's selection of the goal depending on the selected side of the switch by the FIS
-//		SwerveDriveAutonomousKinematics.GOAL_SIDE leftSwitchSideOption = GameStrategyRepository.getInstance().getGoalForLeftOption(); 
-//		SwerveDriveAutonomousKinematics.GOAL_SIDE rightSwitchSideOption = GameStrategyRepository.getInstance().getGoalForRightOption(); 
-//
-//		if(FieldInformationRepository.getInstance().isFirstSwitchLeft()) {
-//			selectedSwitchSideOption = leftSwitchSideOption;
-//		}else {
-//			selectedSwitchSideOption = rightSwitchSideOption;
-//		}
-		GOAL_SIDE selectedSwitchSideOption = GameStrategyRepository.getInstance().getSelectedSwitchSideOption();
+		SwerveDriveAutonomousKinematics.GOAL_SIDE selectedSwitchSideOption;
+		// This is the pilot's selection of the goal depending on the selected side of the switch by the FIS
+		SwerveDriveAutonomousKinematics.GOAL_SIDE leftSwitchSideOption = GameStrategyRepository.getInstance().getGoalForLeftOption(); 
+		SwerveDriveAutonomousKinematics.GOAL_SIDE rightSwitchSideOption = GameStrategyRepository.getInstance().getGoalForRightOption(); 
+
+		if(FieldInformationRepository.getInstance().isFirstSwitchLeft()) {
+			selectedSwitchSideOption = leftSwitchSideOption;
+		}else {
+			selectedSwitchSideOption = rightSwitchSideOption;
+		}
+
 		POS_IN_STATION actualPosInStation = GameStrategyRepository.getInstance().getPositionInStation(); 
 
-//System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics(station:"+actualPosInStation+" -> goal:"+selectedSwitchSideOption+")");
 		double omega = kinematics.calculateAngle(actualPosInStation, selectedSwitchSideOption);
 		distanceInTicks = kinematics.calculateDistanceInTicks(actualPosInStation, selectedSwitchSideOption);
-		distanceInTicks += Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0);
+		distanceInTicks += Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0);
+
 		Robot.swerveDrive.drive(velocity, omega, 0);
-//		System.out.println("SverveDriveToSwitchAutonomous.calculateKinematics()");
 	}
 	
 	@Override
 	protected void execute() {
 		calculateKinematics();
 		
-		if(Robot.swerveDrive.frontRight.velocityMotor.getSelectedSensorPosition(0) >= distanceInTicks) {
+		if(Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0)-1024 >= distanceInTicks) {
 			Robot.swerveDrive.frontLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 			Robot.swerveDrive.frontRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 			Robot.swerveDrive.backLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 			Robot.swerveDrive.backRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-			Robot.swerveDrive.gotoAngle(0);
+//			Robot.swerveDrive.gotoAngle(0);
 			isFinished = true;
 		}
 	}

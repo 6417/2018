@@ -117,7 +117,7 @@ public final class SwerveDriveAutonomousKinematics {
 					return 91500;
 				}
 				case STRAIGHT:{
-					return 83000;
+					return 183000;
 				}
 				case RIGHT:{
 					return 91500;
@@ -133,7 +133,7 @@ public final class SwerveDriveAutonomousKinematics {
 					return 120000;
 				}
 				case STRAIGHT:{
-					return 5000;
+					return 120000;//5000;
 				}
 				case RIGHT:{
 					return 90000;

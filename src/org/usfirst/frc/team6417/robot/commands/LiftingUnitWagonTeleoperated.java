@@ -5,6 +5,7 @@ import org.usfirst.frc.team6417.robot.Robot;
 import org.usfirst.frc.team6417.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class LiftingUnitWagonTeleoperated extends Command {
 	
@@ -24,6 +25,8 @@ public final class LiftingUnitWagonTeleoperated extends Command {
 		} else {
 			Robot.liftingUnitWagon.move(-y);
 		}
+		
+		SmartDashboard.putNumber("LUW-POS", Robot.liftingUnitWagon.motor.getSelectedSensorPosition(0));
 	}
 	
 	@Override

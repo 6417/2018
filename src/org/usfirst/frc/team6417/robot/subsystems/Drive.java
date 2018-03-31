@@ -18,7 +18,7 @@ public final class Drive extends Subsystem {
 	
 	// TODO nils Remove if all 4 motors are connected to the robot
 	private boolean isAll4MotorsConnected = true;
-	private boolean isRobot1 = false;
+	private boolean isRobot1 = true;
 	
 	public Drive(PowerManagementStrategy powerManagementStrategy) {
 		super("Drive");
@@ -26,7 +26,9 @@ public final class Drive extends Subsystem {
 		
 		MotorController leftFrontMotor = new MotorController("FLV/"+RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT, RobotMap.MOTOR.DRIVE_FRONT_LEFT_VELOCITY_PORT); 
 		MotorController rightFrontMotor = new MotorController("FRV/"+RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT, RobotMap.MOTOR.DRIVE_FRONT_RIGHT_VELOCITY_PORT);
-		
+		if(isRobot1) {
+			rightFrontMotor.setInverted(true);
+		}
 		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 		
 		if(isAll4MotorsConnected) {

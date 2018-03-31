@@ -24,7 +24,7 @@ public final class LiftingUnitWagon extends Subsystem {
 	public static final Event STOP = new Event("STOP");
 	public static final Event GAME_START = new Event("GAME_START");
 
-	private final MotorController motor;
+	public final MotorController motor;
 	
 	private final DigitalInput frontEndpointPositionDetector;
 
@@ -42,7 +42,7 @@ public final class LiftingUnitWagon extends Subsystem {
 			RobotMap.ROBOT.LIFTING_UNIT_WAGON_FRONT_POSITION_IN_TICKS,
 			RobotMap.VELOCITY.STOP_VELOCITY
 			);
-	private boolean isCalibrated = false;
+	private boolean isCalibrated = true;
 	private boolean isHoldingPosition;
 
 	public LiftingUnitWagon(PowerManagementStrategy powerManagementStrategy) {
@@ -115,7 +115,6 @@ public final class LiftingUnitWagon extends Subsystem {
 		return !frontEndpointPositionDetector.get();
 	}
 	public boolean isInEndpositionBack() {
-//		System.out.println("LiftingUnitWagon.isInEndpositionBack("+getCurrentPosition()+" "+RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS+")");
 		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_BACK_POSITION_SAVE_IN_TICKS;
 	}
 	public boolean isInEndpoint() {
@@ -222,7 +221,6 @@ public final class LiftingUnitWagon extends Subsystem {
 	public void onEvent(Event event) {
 		currentState = currentState.transition(event);
 		currentState.init();
-//		System.out.println("LiftingUnitWagon.onEvent("+event+", "+currentState+")");
 	}
 	
 	public void tick() {
@@ -241,44 +239,6 @@ public final class LiftingUnitWagon extends Subsystem {
 	private boolean isInGameStartPosition() {
 		return getCurrentPosition() <= RobotMap.ROBOT.LIFTING_UNIT_WAGON_GAME_START_POSITION_SAVE_IN_TICKS;
 	}
-
-	
-//	class Back extends State {
-//		
-//		@Override
-//		public void init() {
-//			if(!isCalibrated) {
-//				return;
-//			}
-//			motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
-//		}
-//		@Override
-//		public void tick() {
-//			if(!isCalibrated) {
-//				return;
-//			}
-//			
-//			if(isInEndPosition()) {
-//				motor.set(RobotMap.VELOCITY.STOP_VELOCITY);
-//			}else {
-//				motor.set(p() * RobotMap.VELOCITY.LIFTING_UNIT_WAGON_MOTOR_BACKWARD_VELOCITY);
-//			}
-//			SmartDashboard.putNumber("LUW ticks", motor.getSelectedSensorPosition(MotorController.kSlotIdx));			
-//		}
-//		@Override
-//		public boolean isFinished() {
-//			if(!isCalibrated) {
-//				return true;
-//			}
-//
-//			return isInEndPosition();
-//		}
-//		
-//		private boolean isInEndPosition() {
-//			return motor.getSelectedSensorPosition(MotorController.kSlotIdx) >= RobotMap.SENSOR.LIFTING_UNIT_WAGON_ENDPOSITION_FRONT_THRESHOLD; 
-//		}
-//		
-//	}
 	
 	class Front extends State {
 		@Override
