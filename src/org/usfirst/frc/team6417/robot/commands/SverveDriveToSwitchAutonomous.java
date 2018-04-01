@@ -14,6 +14,8 @@ public final class SverveDriveToSwitchAutonomous extends Command {
 	private boolean hasAlreadyExecuted = false;
 	private double velocity = 0.3;
 	private int distanceInTicks = 100000;
+	
+	int counter = 0;
 
 	private boolean isFinished = false;
 
@@ -52,7 +54,10 @@ public final class SverveDriveToSwitchAutonomous extends Command {
 	@Override
 	protected void execute() {
 		calculateKinematics();
-		
+		if(counter % 100 == 0) {
+			System.out.println("SverveDriveToSwitchAutonomous.execute()");
+		}
+		counter++;
 		if(Robot.swerveDrive.frontLeft.velocityMotor.getSelectedSensorPosition(0)-1024 >= distanceInTicks) {
 			Robot.swerveDrive.frontLeft.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);
 			Robot.swerveDrive.frontRight.velocityMotor.set(RobotMap.VELOCITY.STOP_VELOCITY);

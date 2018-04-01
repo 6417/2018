@@ -131,6 +131,7 @@ public class RobotMap {
 	public static class DIO {
 		public static final int LIFTING_UNIT_WAGON_POSITION_FRONT_PORT = 0;
 		public static final int LIFTING_UNIT_POSITION_DOWN_PORT = 1;
+		public static final int LIFTING_UNIT_WAGON_POSITION_FAR_BACK_PORT = 4;
 	}
 	
 	public static class AIO {

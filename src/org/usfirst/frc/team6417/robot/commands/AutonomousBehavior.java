@@ -14,15 +14,15 @@ public final class AutonomousBehavior extends CommandGroup {
 		    	addSequential(new SwerveDriveResetVelocityEncoder());
 	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE && RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
-	    		addSequential(new LiftingUnitWagonGameStart());
+//	    		addSequential(new LiftingUnitWagonGameStart());
 	    	}	    	
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_IN_USE) {
-	    		addSequential(new LiftingUnitMoveToSavePosition());
+//	    		addSequential(new LiftingUnitMoveToSavePosition());
 //		    	addParallel(new LiftingUnitMoveToSavePosition());
 //	    		addSequential(new LiftingUnitMoveToPosition(RobotMap.ROBOT.LIFTING_UNIT_SWITCH_ALTITUDE_IN_TICKS));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_LIFTING_UNIT_WAGON_IN_USE) {
-	    		addSequential(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
+//	    		addSequential(new LiftingUnitWagonMove(LiftingUnitWagon.FRONT));
 	    	}
 	    	if(RobotMap.SUBSYSTEM.IS_SWERVE_DRIVE_IN_USE) {
 		    	addSequential(new SverveDriveToSwitchAutonomous());

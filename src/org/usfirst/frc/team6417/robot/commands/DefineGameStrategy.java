@@ -22,7 +22,7 @@ public final class DefineGameStrategy extends Command {
 			case UNKNOWN:
 			default:
 		}
-		
+		System.out.println("DefineGameStrategy.execute()");
 		GameStrategyRepository.getInstance().setSelectedSwitchSideOption(selectedSwitchSideOption);
 	}
 	

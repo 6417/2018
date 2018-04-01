@@ -11,6 +11,7 @@ public final class GetFieldInformation extends Command {
 	protected void execute() {
 		final String gameData = DriverStation.getInstance().getGameSpecificMessage();		
 		FieldInformationRepository.getInstance().setFieldInfo(gameData);
+		System.out.println("GetFieldInformation.execute()");
 	}
 	
 	@Override
